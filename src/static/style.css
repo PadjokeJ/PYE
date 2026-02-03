@@ -19,7 +19,7 @@ body {
   body {
     --background: var(--main);
     --background-2: #44444f;
-    --shadow: #111122;
+    --shadow: #0b0b0b;
     --main: var(--background);
   }
 }

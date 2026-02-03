@@ -9,7 +9,7 @@ def get_users() -> dict:
 def get_login(user: str, pw: bytes) -> bool:
   users = get_users()
   
-  data = users[user]
+  data = users[password.hash(bytes(user, "utf-8"))]
   salt = bytes(data["salt"], "utf-8")
   pwdh = data["hash"]
   if password.hash(password.salt(pw, salt)[0]) == pwdh:
@@ -19,5 +19,4 @@ def get_login(user: str, pw: bytes) -> bool:
 def get_type(user: str) -> str:
   users = get_users()
 
-  return users[user]["type"]
-
+  return users[password.hash(bytes(user, "utf-8"))]["type"]

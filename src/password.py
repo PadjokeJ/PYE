@@ -11,7 +11,7 @@ def generate_random_salt(salt_length: int) -> bytes:
   
   return bytes(salt, "utf-8")
 
-def salt(password: bytes, salt: bytes) -> tuple(bytes, bytes):
+def salt(password: bytes, salt: bytes) -> tuple:
    pwd = bytearray(password)
    arr = bytearray(salt)
    salted = pwd + arr
@@ -22,4 +22,3 @@ def salt(password: bytes, salt: bytes) -> tuple(bytes, bytes):
 
 def hash(password: bytes) -> str:
   return hashlib.sha256(password).hexdigest()
-
