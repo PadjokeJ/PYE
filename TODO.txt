@@ -1,8 +1,6 @@
 
 - Admins :
-  - Add accounts
   - Delete accounts
-  - Auto generate acc id
 
 Teacher :
   - Add students to classes

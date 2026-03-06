@@ -105,6 +105,29 @@ def admin():
 
   return render_template("admin.html")
 
+@app.route("/add-user", methods=["GET", "POST"])
+@login_required
+def create_user():
+  if flask_login.current_user.type != "Admin":
+    return redirect("/home")
+  
+  if request.method == "GET":
+    return redirect("/admin?success")
+
+  print(request.form)
+  
+  name = request.form["name"]
+  surname = request.form["surname"]
+
+  utype = request.form["type"]
+
+  email = request.form["email"]
+  passw = request.form["password"]
+
+  database.create_user(name, surname, utype, passw, email)
+
+  return redirect("/admin?success")
+
 if __name__ == "__main__":
   app.run(host="0.0.0.0", port=8080, debug=True)
 

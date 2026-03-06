@@ -7,9 +7,29 @@
 
 {% block content %}
 <div class="island">
-  <div id="form">
-    <button id="add-user">Add User</button>
-  </div>
+  <form id="form" action="/add-user" method="post">
+    <label for="name">Name<span style="color: #ff0000">*</span></label>
+    <input type="text" name="name" required></input>
+
+    <label for="surname">Surname<span style="color: #ff0000">*</span></label>
+    <input type="text" name="surname" required></input>
+
+    <label for="type">User type<span style="color: #ff0000">*</span></label>
+    <select name="type" required>
+      <option value="Student">Student</option>
+      <option value="Teacher">Teacher</option>
+      <option value="Parent">Parent</option>
+      <option value="Admin">Admin</option>
+    </select>
+
+    <label for="email">Email<span style="color: #ff0000">*</span></label>
+    <input type="email" name="email" required></input>
+
+    <label for="surname">Password<span style="color: #ff0000">*</span></label>
+    <input type="text" name="password" id="pw" required></input>
+    <a class="button" href="#" onclick="function hexS() { return Math.floor((Math.random() * 0.9 + 0.1) * 4294967295).toString(16); };function gen(){ document.getElementById('pw').value = hexS() + '-' + hexS() }; gen();">Generate</a>
+    <input id="submit" type="submit" name="submit" value="Add User">
+  </form>
 </div>
 {% endblock %}
 

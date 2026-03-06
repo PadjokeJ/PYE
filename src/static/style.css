@@ -46,7 +46,8 @@ body {
   box-shadow: 5px 5px 10px 2px var(--shadow);
 }
 
-.login-input {
+input,
+.button {
   min-width: 300px;
   margin: 5px;
   padding: 5px;
@@ -56,23 +57,40 @@ body {
   background-color: var(--background-2);
 }
 
-.login-input#submit {
+input#submit,
+.button {
   box-shadow: inset var(--shadow) -2px -2px 5px 1px, var(--shadow) 1px 1px 3px; 
   cursor: pointer;
 }
 
-.login-input#submit:hover {
-  filter: brightness(95%);
+input#submit:hover,
+.button:hover {
+  filter: brightness(90%);
+}
+
+.button {
+  text-align: center;
+  text-decoration: none;
+}
+
+select {
+  min-width: 300px;
+  margin: 5px;
+  padding: 5px;
+  border: none;
+  border-radius: 20px;
+  box-shadow: inset var(--shadow) 2px 2px 2px;
+  background-color: var(--background-2);
 }
 
 button {
   box-shadow: inset var(--shadow) -2px -2px 5px 1px, var(--shadow) 1px 1px 3px; 
   border: none;
   border-radius: 20px;
-  padding: 10px;
+  padding: 5px;
 }
 
-.login-label {
+label {
   margin-left: 20px;
   margin-top: 10px;
   font-size: 15px;
@@ -95,7 +113,7 @@ nav {
 
 #form {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-self: center;
 
   padding: 20px;
