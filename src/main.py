@@ -32,6 +32,7 @@ def user_loader(email):
   user = User()
   user.id = email
   user.type = database.get_type(password.hash(bytes(email, "utf-8")))
+  user.reset = database.get_deprecation(password.hash(bytes(email, "utf-8")))
   return user
 
 @login_manager.request_loader
@@ -55,6 +56,7 @@ def login():
     user = User()
     user.id = email
     user.type = database.get_type(password.hash(bytes(email, "utf-8")))
+    user.reset = database.get_deprecation(password.hash(bytes(email, "utf-8")))
     flask_login.login_user(user)
     return redirect("/home")
   return redirect("/login?wrong")
@@ -97,6 +99,17 @@ def feedback():
     return render_template("feedback.html")
   return redirect("/home")
 
+@app.route("/reset/<token>")
+@login_required
+def reset_pass(token=None):
+  if token == None:
+    return redirect("/logout")
+
+  if flask_login.current_user.reset == False:
+    return redirect("/home")
+
+  return render_template("reset.html")
+
 @app.route("/admin")
 @login_required
 def admin():
@@ -113,8 +126,6 @@ def create_user():
   
   if request.method == "GET":
     return redirect("/admin?success")
-
-  print(request.form)
   
   name = request.form["name"]
   surname = request.form["surname"]

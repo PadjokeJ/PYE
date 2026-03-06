@@ -70,3 +70,6 @@ def create_user(name: str, surname: str, utype: str, pw: str, email: str):
 
   with open("db/users.json", 'w') as f:
     json.dump(data, f)
+
+def get_deprecation(usrhash: str) -> bool:
+  return "deprecated" in get_users()[usrhash]

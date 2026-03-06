@@ -1,4 +1,8 @@
 
+- Diverse :
+  - Change database
+  - Implement reset password functionality fully
+
 - Admins :
   - Delete accounts
 
