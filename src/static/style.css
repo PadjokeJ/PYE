@@ -50,7 +50,8 @@ body {
   box-shadow: 5px 5px 10px 2px var(--shadow);
 }
 
-.login-input {
+input,
+.button {
   min-width: 300px;
   margin: 5px;
   padding: 5px;
@@ -60,11 +61,40 @@ body {
   background-color: var(--background-2);
 }
 
-.login-input#submit {
-  box-shadow: inset var(--shadow) -2px -2px 5px 1px; 
+input#submit,
+.button {
+  box-shadow: inset var(--shadow) -2px -2px 5px 1px, var(--shadow) 1px 1px 3px; 
+  cursor: pointer;
 }
 
-.login-label {
+input#submit:hover,
+.button:hover {
+  filter: brightness(90%);
+}
+
+.button {
+  text-align: center;
+  text-decoration: none;
+}
+
+select {
+  min-width: 300px;
+  margin: 5px;
+  padding: 5px;
+  border: none;
+  border-radius: 20px;
+  box-shadow: inset var(--shadow) 2px 2px 2px;
+  background-color: var(--background-2);
+}
+
+button {
+  box-shadow: inset var(--shadow) -2px -2px 5px 1px, var(--shadow) 1px 1px 3px; 
+  border: none;
+  border-radius: 20px;
+  padding: 5px;
+}
+
+label {
   margin-left: 20px;
   margin-top: 10px;
   font-size: 15px;
@@ -73,6 +103,58 @@ body {
 nav {
   background-color: var(--background);
   box-shadow: var(--shadow) 0 0 30px;
-  padding: 15px;
+
+  display: flex;
+}
+
+.island {
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+
+  display: flex;
+}
+
+#form {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+
+  padding: 20px;
+  width: 400px;
+
+  box-shadow: var(--shadow) 5px 5px 40px;
+  border-radius: 20px;
+}
+
+.tab {
+  height: 100%;
+  display: inline-block;
+  padding: 20px;
+  margin-right: 10px;
+  margin-left: 10px;
+
+  box-shadow: inset var(--shadow) 0 0 0;
+  transition: box-shadow ease 0.2s;
+
+  border: 0;
+  border-radius: 20px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top-width: 0;
+}
+
+.tab:hover {
+  box-shadow: inset var(--shadow) 2px 2px 10px;
+}
+
+.tab#active {
+  box-shadow: var(--shadow) 2px 2px 20px;
+}
+
+#logout {
+  right: 0;
+  position: absolute;
+  padding: 20px;
 }
 

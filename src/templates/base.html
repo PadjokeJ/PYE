@@ -22,11 +22,15 @@
             
   <body>
     <nav>
+      <a class="tab" id="{% block homeactive %}{% endblock %}" href="/home">Home</a>
       {% if current_user.type == "Parent" or current_user.type == "Teacher" %}
-        <a href="/grades">Grades</a>
-        <a href="/feedback">Feedback</a>
+        <a class="tab" id="{% block gradesactive %}{% endblock %}" href="/grades">Grades</a>
+        <a class="tab" id="{% block fbactive %}{% endblock %}" href="/feedback">Feedback</a>
       {% endif %}
-      <a href="/logout">Logout</a>
+      {% if current_user.type == "Admin" %}
+        <a class="tab" id="{% block admactive %}{% endblock %}" href="/admin">Admin</a>
+      {% endif %}
+      <a id="logout" href="/logout">Logout</a>
     </nav>
     <div id="content">
       {% block content %}{% endblock %}

@@ -31,7 +31,12 @@ def user_loader(email):
   
   user = User()
   user.id = email
+<<<<<<< HEAD
   user.type = database.get_type(email)
+=======
+  user.type = database.get_type(password.hash(bytes(email, "utf-8")))
+  user.reset = database.get_deprecation(password.hash(bytes(email, "utf-8")))
+>>>>>>> admin
   return user
 
 @login_manager.request_loader
@@ -54,7 +59,12 @@ def login():
   if password.hash(bytes(email, "utf-8")) in database.get_users() and database.get_login(email, bytes(request.form["password"], "utf-8")):
     user = User()
     user.id = email
+<<<<<<< HEAD
     user.type = database.get_type(email)
+=======
+    user.type = database.get_type(password.hash(bytes(email, "utf-8")))
+    user.reset = database.get_deprecation(password.hash(bytes(email, "utf-8")))
+>>>>>>> admin
     flask_login.login_user(user)
     return redirect("/home")
   return redirect("/login?wrong")
@@ -96,6 +106,46 @@ def feedback():
   if flask_login.current_user.type == "Parent" or flask_login.current_user.type == "Teacher":
     return render_template("feedback.html")
   return redirect("/home")
+
+@app.route("/reset/<token>")
+@login_required
+def reset_pass(token=None):
+  if token == None:
+    return redirect("/logout")
+
+  if flask_login.current_user.reset == False:
+    return redirect("/home")
+
+  return render_template("reset.html")
+
+@app.route("/admin")
+@login_required
+def admin():
+  if flask_login.current_user.type != "Admin":
+    return redirect("/home")
+
+  return render_template("admin.html")
+
+@app.route("/add-user", methods=["GET", "POST"])
+@login_required
+def create_user():
+  if flask_login.current_user.type != "Admin":
+    return redirect("/home")
+  
+  if request.method == "GET":
+    return redirect("/admin?success")
+  
+  name = request.form["name"]
+  surname = request.form["surname"]
+
+  utype = request.form["type"]
+
+  email = request.form["email"]
+  passw = request.form["password"]
+
+  database.create_user(name, surname, utype, passw, email)
+
+  return redirect("/admin?success")
 
 if __name__ == "__main__":
   app.run(host="0.0.0.0", port=8080, debug=True)

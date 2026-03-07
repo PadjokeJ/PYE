@@ -1,8 +1,10 @@
 
+- Diverse :
+  - Change database
+  - Implement reset password functionality fully
+
 - Admins :
-  - Add accounts
   - Delete accounts
-  - Auto generate acc id
 
 Teacher :
   - Add students to classes
