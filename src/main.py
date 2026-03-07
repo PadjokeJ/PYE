@@ -31,12 +31,9 @@ def user_loader(email):
   
   user = User()
   user.id = email
-<<<<<<< HEAD
   user.type = database.get_type(email)
-=======
-  user.type = database.get_type(password.hash(bytes(email, "utf-8")))
-  user.reset = database.get_deprecation(password.hash(bytes(email, "utf-8")))
->>>>>>> admin
+  user.reset = database.get_deprecation(email)
+
   return user
 
 @login_manager.request_loader
@@ -59,12 +56,8 @@ def login():
   if password.hash(bytes(email, "utf-8")) in database.get_users() and database.get_login(email, bytes(request.form["password"], "utf-8")):
     user = User()
     user.id = email
-<<<<<<< HEAD
     user.type = database.get_type(email)
-=======
-    user.type = database.get_type(password.hash(bytes(email, "utf-8")))
-    user.reset = database.get_deprecation(password.hash(bytes(email, "utf-8")))
->>>>>>> admin
+    user.reset = database.get_deprecation(email)
     flask_login.login_user(user)
     return redirect("/home")
   return redirect("/login?wrong")

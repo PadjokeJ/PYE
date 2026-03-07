@@ -1,6 +1,9 @@
 import json
 import password
 
+def hash(user: str) -> str:
+  return password.hash(bytes(user.lower(), "utf-8"))
+
 def get_users() -> dict:
   with open("db/users.json", 'r') as f:
     users = json.load(f)
@@ -9,7 +12,7 @@ def get_users() -> dict:
 def get_login(user: str, pw: bytes) -> bool:
   users = get_users()
   
-  data = users[password.hash(bytes(user.lower(), "utf-8"))]
+  data = users[hash(user)]
   salt = bytes(data["salt"], "utf-8")
   pwdh = data["hash"]
   if password.hash(password.salt(pw, salt)[0]) == pwdh:
@@ -19,7 +22,7 @@ def get_login(user: str, pw: bytes) -> bool:
 def get_type(user: str) -> str:
   users = get_users()
 
-  return users[password.hash(bytes(user.lower(), "utf-8"))]["type"]
+  return users[hash(user)]["type"]
 
 def get_student_id(name: str) -> str:
   with open("db/student_ids.json", 'r') as f:
@@ -43,7 +46,7 @@ def create_user(name: str, surname: str, utype: str, pw: str, email: str):
   n = name.lower()
   s = surname.lower()
 
-  uid = password.hash(bytes(email, "utf-8"))
+  uid = hash(user)
   passw = bytes(pw, "utf-8")
 
   print(passw)
@@ -71,5 +74,5 @@ def create_user(name: str, surname: str, utype: str, pw: str, email: str):
   with open("db/users.json", 'w') as f:
     json.dump(data, f)
 
-def get_deprecation(usrhash: str) -> bool:
-  return "deprecated" in get_users()[usrhash]
+def get_deprecation(user: str) -> bool:
+  return "deprecated" in get_users()[hash(user)]
