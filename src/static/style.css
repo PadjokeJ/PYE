@@ -9,6 +9,7 @@ html, body {
   height: 100%;
   margin: 0;
 }
+
 body {
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   color: var(--main);
@@ -19,10 +20,6 @@ body {
   body {
     --background: var(--main);
     --background-2: #44444f;
-<<<<<<< HEAD
-    --shadow: #0b0b0b;
-=======
->>>>>>> 8f3d7cadfcc5c02c842d6a93c7478c12a8f1728c
     --main: var(--background);
   }
 }
