@@ -2,7 +2,7 @@
   --background: #ffffff;
   --background-2: #eaeaea;
   --main: #222233;
-  --shadow: #eeeeee;
+  --shadow: #00000055;
 }
 
 html, body {
@@ -19,7 +19,10 @@ body {
   body {
     --background: var(--main);
     --background-2: #44444f;
+<<<<<<< HEAD
     --shadow: #0b0b0b;
+=======
+>>>>>>> 8f3d7cadfcc5c02c842d6a93c7478c12a8f1728c
     --main: var(--background);
   }
 }
@@ -44,7 +47,7 @@ body {
   padding: 10px;
   border-radius: 20px;
   background-color: var(--background);
-  box-shadow: 0 0 10px 2px var(--shadow);
+  box-shadow: 5px 5px 10px 2px var(--shadow);
 }
 
 .login-input {
@@ -53,13 +56,23 @@ body {
   padding: 5px;
   border: none;
   border-radius: 20px;
-  box-shadow: 1px 1px 5px 1px var(--shadow);
+  box-shadow: inset var(--shadow) 2px 2px 2px;
   background-color: var(--background-2);
+}
+
+.login-input#submit {
+  box-shadow: inset var(--shadow) -2px -2px 5px 1px; 
 }
 
 .login-label {
   margin-left: 20px;
   margin-top: 10px;
   font-size: 15px;
+}
+
+nav {
+  background-color: var(--background);
+  box-shadow: var(--shadow) 0 0 30px;
+  padding: 15px;
 }
 

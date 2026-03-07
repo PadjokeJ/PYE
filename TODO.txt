@@ -1,0 +1,15 @@
+
+- Admins :
+  - Add accounts
+  - Delete accounts
+  - Auto generate acc id
+
+Teacher :
+  - Add students to classes
+  - Add comments to students
+  - Add grades to students
+
+- Students :
+  - Progress bar
+  - Teacher Comments
+
