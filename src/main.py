@@ -9,16 +9,20 @@ import json
 import password
 import database
 
-load_dotenv("local.env")
-
-app = Flask(__name__)
-app.secret_key = bytes(str(getenv("SECRET")), "utf-8")
-
-login_manager = flask_login.LoginManager()
-login_manager.init_app(app)
-
 class User(flask_login.UserMixin):
   pass
+
+load_dotenv("local.env")
+
+# APP
+app = Flask(__name__)
+app.secret_key = bytes(str(getenv("SECRET")), "utf-8")
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://"
+database.init(app)
+
+# Login manager
+login_manager = flask_login.LoginManager()
+login_manager.init_app(app)
 
 @login_manager.user_loader
 def user_loader(email):

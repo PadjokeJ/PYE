@@ -1,5 +1,17 @@
+from flask_sqlalchemy import SQLAlchemy
+
+from sqlalchemy.orm import DeclarativeBase
+
 import json
 import password
+
+class Base(DeclarativeBase):
+  ...
+
+db = SQLAlchemy(model_class=Base)
+
+def init(app):
+  db.init_app(app)
 
 def hash(user: str) -> str:
   return password.hash(bytes(user.lower(), "utf-8"))
