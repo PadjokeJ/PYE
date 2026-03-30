@@ -1,5 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.orm import DeclarativeBase
 
 import json
@@ -8,10 +10,22 @@ import password
 class Base(DeclarativeBase):
   ...
 
+class User(Base):
+  __tablename__ = "user"
+
+  email: Mapped[str] = mapped_column(primary_key=True)
+  salt: Mapped[str] = mapped_column(String)
+  hashed: Mapped[str] = mapped_column(String)
+  role: Mapped[str] = mapped_column(String)
+  reset: Mapped[bool] = mapped_column()
+
 db = SQLAlchemy(model_class=Base)
 
 def init(app):
   db.init_app(app)
+
+def create():
+  db.create_all()
 
 def hash(user: str) -> str:
   return password.hash(bytes(user.lower(), "utf-8"))
