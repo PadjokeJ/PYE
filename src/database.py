@@ -75,12 +75,9 @@ def create_user(name: str, surname: str, utype: str, pw: str, email: str):
   uid = hash(user)
   passw = bytes(pw, "utf-8")
 
-  print(passw)
-
   data = get_users()
 
   salt = password.generate_random_salt(64)
-  print(salt)
   pwdh, salt = password.salt(passw, salt)
 
   hpw = password.hash(pwdh)
