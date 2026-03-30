@@ -17,7 +17,7 @@ load_dotenv("local.env")
 # APP
 app = Flask(__name__)
 app.secret_key = bytes(str(getenv("SECRET")), "utf-8")
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://psql:1234@postgres:5432/pyedb"
+app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql+psycopg2://psql:{getenv("PSQL_PW")}@postgres:5432/pyedb"
 
 # Login manager
 login_manager = flask_login.LoginManager()
