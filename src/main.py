@@ -12,7 +12,7 @@ import database
 class User(flask_login.UserMixin):
   pass
 
-load_dotenv("local.env")
+load_dotenv(".env")
 
 # APP
 app = Flask(__name__)
@@ -61,7 +61,7 @@ def login():
     return render_template("login.html")
   
   email = request.form["email"]
-  if password.hash(bytes(email, "utf-8")) in database.get_users() and database.get_login(email, bytes(request.form["password"], "utf-8")):
+  if database.user_exists(email) and database.get_login(email, bytes(request.form["password"], "utf-8")):
     user = User()
     user.id = email
     user.type = database.get_type(email)

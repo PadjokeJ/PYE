@@ -10,14 +10,16 @@ import password
 class Base(DeclarativeBase):
   ...
 
-class User(Base):
-  __tablename__ = "user"
+class UsersTable(Base):
+  __tablename__ = "users"
 
   email: Mapped[str] = mapped_column(primary_key=True)
   salt: Mapped[str] = mapped_column(String)
   hashed: Mapped[str] = mapped_column(String)
   role: Mapped[str] = mapped_column(String)
   reset: Mapped[bool] = mapped_column()
+  name: Mapped[str] = mapped_column(String)
+  firstname: Mapped[str] = mapped_column(String)
 
 db = SQLAlchemy(model_class=Base)
 
@@ -30,25 +32,26 @@ def create():
 def hash(user: str) -> str:
   return password.hash(bytes(user.lower(), "utf-8"))
 
-def get_users() -> dict:
-  with open("db/users.json", 'r') as f:
-    users = json.load(f)
-  return users
+def get_users():
+  return db.session.execute(db.select(UsersTable).order_by(UsersTable.email))
+
+def get_user(email: str) -> User:
+  return db.session.query(UsersTable).get(email)
+
+def user_exists(email: str) -> bool:
+  return get_user(email) != None
 
 def get_login(user: str, pw: bytes) -> bool:
-  users = get_users()
+  data = get_user(user)
   
-  data = users[hash(user)]
-  salt = bytes(data["salt"], "utf-8")
-  pwdh = data["hash"]
+  salt = bytes(data.salt, "utf-8")
+  pwdh = data.hashed
   if password.hash(password.salt(pw, salt)[0]) == pwdh:
     return True
   return False
   
 def get_type(user: str) -> str:
-  users = get_users()
-
-  return users[hash(user)]["type"]
+  return get_user(user).role
 
 def get_student_id(name: str) -> str:
   with open("db/student_ids.json", 'r') as f:
@@ -72,30 +75,28 @@ def create_user(name: str, surname: str, utype: str, pw: str, email: str):
   n = name.lower()
   s = surname.lower()
 
-  uid = hash(user)
   passw = bytes(pw, "utf-8")
-
-  data = get_users()
 
   salt = password.generate_random_salt(64)
   pwdh, salt = password.salt(passw, salt)
 
   hpw = password.hash(pwdh)
 
-  user = {
-    "salt": str(salt)[2:-1],
-    "hash": hpw,
-    "type": utype,
-    "deprecated": True
-  }
-
-  data[uid] = user
+  user = UsersTable(
+      email=email,
+      salt=str(salt)[2:-1],
+      hashed=hpw,
+      role=utype,
+      reset=True,
+      name=surname,
+      firstname=name
+    )
 
   if utype == "Student":
-    ...
+    ... # TODO add students data
 
-  with open("db/users.json", 'w') as f:
-    json.dump(data, f)
+  db.session.add(user)
+  db.session.commit()
 
 def get_deprecation(user: str) -> bool:
-  return "deprecated" in get_users()[hash(user)]
+  return get_user(user).reset
