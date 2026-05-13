@@ -106,6 +106,7 @@ def update_password(email: str, pw: str):
 
   hpw = password.hash(pwdh)
 
+  # TODO remove reset status of user
   # TODO update password of user "email"
 
 def get_deprecation(user: str) -> bool:
