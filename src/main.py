@@ -65,6 +65,11 @@ def login():
     user.type = database.get_type(email)
     user.reset = database.get_deprecation(email)
     flask_login.login_user(user)
+    if user.reset:
+      token = str(password.random_salt(64))[2:-1]
+
+      flask_login.current_user.token = token
+      return redirect("/reset/" + token)
     return redirect("/home")
   return redirect("/login?wrong")
 
@@ -113,6 +118,19 @@ def reset_pass(token=None):
     return redirect("/logout")
 
   if flask_login.current_user.reset == False:
+    return redirect("/home")
+
+  if flask_login.current_user.token != token:
+    return redirect("/logout")
+
+  if request.method == "POST":
+    if request.form["password"] != request.form["confirm"]:
+      return redirect("/reset/" + token)
+    
+    flask_login.current_user.reset = False
+    flask_login.current_user.token = None
+
+    database.update_password(flask_login.current_user.email, request.form["password"])
     return redirect("/home")
 
   return render_template("reset.html")

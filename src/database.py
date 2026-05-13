@@ -98,5 +98,15 @@ def create_user(name: str, surname: str, utype: str, pw: str, email: str):
   db.session.add(user)
   db.session.commit()
 
+def update_password(email: str, pw: str):
+  passw = bytes(pw, "utf-8")
+
+  salt = password.generate_random_salt(64)
+  pwdh, salt = password.salt(passw, salt)
+
+  hpw = password.hash(pwdh)
+
+  # TODO update password of user "email"
+
 def get_deprecation(user: str) -> bool:
   return get_user(user).reset
