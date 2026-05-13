@@ -30,11 +30,9 @@ with app.app_context():
 
 @login_manager.user_loader
 def user_loader(email):
-  users = database.get_users()
-  
   if email == None:
     return
-  if password.hash(bytes(email, "utf-8")) not in users:
+  if not database.user_exists(email):
     return
   
   user = User()
