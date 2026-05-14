@@ -159,6 +159,30 @@ def create_user():
 
   return redirect("/admin?success")
 
+@app.route("/new-course")
+@login_required
+def dash_create_course():
+  if flask_login.current_user.type != "Teacher":
+    return redirect("/home")
+  
+  return render_template("new_course.html")
+
+@app.route("/add-course", methods=["GET", "POST"])
+@login_required
+def create_course():
+  if flask_login.current_user.type != "Teacher":
+    return redirect("/home")
+  
+  if request.method == "GET":
+    return redirect("/new-course?success")
+  
+  name = request.form["name"]
+  grade = request.form["grade"]
+
+  # TODO : database.create_course(teacher, name, grade)
+
+  return redirect("/new-course?success")
+
 if __name__ == "__main__":
   app.run(host="0.0.0.0", port=8080, debug=True)
 

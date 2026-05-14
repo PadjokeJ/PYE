@@ -1,0 +1,22 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Course creation dashboard{% endblock %}
+{% block ogtitle %}Course creation dashboard{% endblock %}
+
+{% block acactive %}active{% endblock %}
+
+{% block content %}
+<div class="island">
+  <form id="form" action="/add-course" method="post">
+    <label for="name">Course name<span style="color: #ff0000">*</span></label>
+    <input type="text" name="name" required></input>
+
+    <label for="grade">Student Grade<span style="color: #ff0000">*</span></label>
+    <input type="text" name="grade" pattern="^([1-9]H|1[0-1]H)$" required></input>
+
+    <input id="submit" type="submit" name="submit" value="Add course">
+  </form>
+</div>
+{% endblock %}
+

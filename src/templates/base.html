@@ -27,6 +27,12 @@
         <a class="tab" id="{% block gradesactive %}{% endblock %}" href="/grades">Grades</a>
         <a class="tab" id="{% block fbactive %}{% endblock %}" href="/feedback">Feedback</a>
       {% endif %}
+      {% if current_user.type == "Teacher" or current_user.type == "Student" %}
+        <a class="tab" id="{% block cactive %}{% endblock %}" href="/courses">Courses</a>
+      {% endif %}
+      {% if current_user.type == "Teacher" %}
+        <a class="tab" id"{% block acactive %}{% endblock %}" href="/new-course">Create course</a>
+      {% endif %}
       {% if current_user.type == "Admin" %}
         <a class="tab" id="{% block admactive %}{% endblock %}" href="/admin">Admin</a>
       {% endif %}

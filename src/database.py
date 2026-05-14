@@ -136,9 +136,9 @@ def create_user(name: str, surname: str, utype: str, pw: str, email: str):
     )
 
   if utype == "Student":
-    user.student_data = StudentData()
+    user.student_data = StudentData(user_email=email)
   if utype == "Teacher":
-    user.teacher_data = Teacher()
+    user.teacher_data = Teacher(user_email=email)
 
   db.session.add(user)
   db.session.commit()
