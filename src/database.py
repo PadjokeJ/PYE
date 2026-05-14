@@ -35,7 +35,7 @@ def hash(user: str) -> str:
 def get_users():
   return db.session.execute(db.select(UsersTable).order_by(UsersTable.email))
 
-def get_user(email: str) -> User:
+def get_user(email: str) -> UsersTable:
   return db.session.query(UsersTable).get(email)
 
 def user_exists(email: str) -> bool:
@@ -106,8 +106,12 @@ def update_password(email: str, pw: str):
 
   hpw = password.hash(pwdh)
 
-  # TODO remove reset status of user
-  # TODO update password of user "email"
+  user = get_user(email)
+  user.salt = str(salt)[2:-1]
+  user.hashed = hpw
+  user.reset = False
+
+  db.session.commit()
 
 def get_deprecation(user: str) -> bool:
   return get_user(user).reset
