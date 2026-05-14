@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Courses{% endblock %}
+{% block ogtitle %}Courses{% endblock %}
+
+{% block cactive %}active{% endblock %}
+
+{% block content %}
+  <h1>My courses:</h1>
+  <ul>
+  {% for c in courses %}
+  <li><a href="/courses/{{ c.id }}">{{ c.name }} -- {{ c.grade }}</a></li>
+  {% endfor %}
+  </ul>
+{% endblock %}
+

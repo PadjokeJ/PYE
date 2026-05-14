@@ -183,6 +183,28 @@ def create_course():
 
   return redirect("/new-course?success")
 
+@app.route("/courses")
+@login_required
+def course_access():
+  courses = database.get_courses(flask_login.current_user.id)
+
+  return render_template("courses.html", courses=courses)
+
+@app.route("/courses/<course_id>")
+@login_required
+def get_course(course_id):
+  courses = database.get_courses(flask_login.current_user.id)
+#  app.logger.info("courses: %s", courses)
+#  for c in courses:
+#    app.logger.info("checking course %s", c.id)
+#    if c.id == course_id:
+#      return render_template("course.html")
+#  return redirect("/courses")
+  course = database.get_course(str(course_id))
+  if (course == None):
+    return redirect("/courses")
+  return render_template("course.html", course=course)
+
 if __name__ == "__main__":
   app.run(host="0.0.0.0", port=8080, debug=True)
 

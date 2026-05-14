@@ -98,24 +98,6 @@ def get_login(user: str, pw: bytes) -> bool:
 def get_type(user: str) -> str:
   return get_user(user).role
 
-def get_student_id(name: str) -> str:
-  with open("db/student_ids.json", 'r') as f:
-    students = json.load(f)
-  return students[name.lower()]
- 
-def get_students() -> dict:
-  with open("db/students.json", 'r') as f:
-    students = json.load(f)
-  return students
-
-def student_data(sid: str) -> dict:
-  students = get_students()
-  return students[sid]
-
-def student_name_to_data(name: str) -> dict:
-  sid = get_student_id(name)
-  return student_data(sid)
-
 def create_user(name: str, surname: str, utype: str, pw: str, email: str):
   n = name.lower()
   s = surname.lower()
@@ -164,9 +146,32 @@ def get_deprecation(user: str) -> bool:
   return get_user(user).reset
 
 def create_course(owner: str, name: str, grade: str):
+  user = get_user(owner)
   subject = Subject(
-    teacher_id=owner,
+    teacher=user.teacher_data,
     name=name,
     grade=grade
   )
+  db.session.add(subject)
+  db.session.commit()
+
+def get_courses(email: str) -> list:
+  user_role = get_type(email)
+  query = db.session.query(Subject)
+
+  if (user_role == "Teacher"):
+    return query.filter(Subject.teacher.has(user_email=email)).all()
+  elif (user_role == "Student"):
+    student = get_user(email).student_data
+    courses = student.courses.all()
+    l = []
+    for c in courses:
+      l.append(c.subject)
+
+    return l
+
+  return list()
+
+def get_course(id: str) -> Subject:
+  return db.session.get(Subject, id)
 

@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %} -- PYE</title>
-    <link rel="icon" type="image/x-icon" href="images/favicon.webp">
-    <link rel="stylesheet" id="pagestyle" href="static/style.css">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.webp">
+    <link rel="stylesheet" id="pagestyle" href="/static/style.css">
     
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
@@ -23,10 +23,6 @@
   <body>
     <nav>
       <a class="tab" id="{% block homeactive %}{% endblock %}" href="/home">Home</a>
-      {% if current_user.type == "Parent" or current_user.type == "Teacher" %}
-        <a class="tab" id="{% block gradesactive %}{% endblock %}" href="/grades">Grades</a>
-        <a class="tab" id="{% block fbactive %}{% endblock %}" href="/feedback">Feedback</a>
-      {% endif %}
       {% if current_user.type == "Teacher" or current_user.type == "Student" %}
         <a class="tab" id="{% block cactive %}{% endblock %}" href="/courses">Courses</a>
       {% endif %}

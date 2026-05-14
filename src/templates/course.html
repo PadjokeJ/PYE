@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Courses -- {{ course.name }}{% endblock %}
+{% block ogtitle %}Courses -- {{ course.name }}{% endblock %}
+
+{% block cactive %}active{% endblock %}
+
+{% block content %}
+<div>
+  <h1>{{ course.name }} -- {{ course.grade }}</h1>
+  <i>{{ course.teacher.user.name }} {{ course.teacher.user.firstname }}</i>
+</div>
+
+<div>
+  {% if current_user.type == "Teacher" %}
+  <h2>Students:</h2>
+  <ul>
+    {% for c in course.students %}
+    <li>{{ c.student.user.firstname }} {{ c.student.user.name }}: {{ c.progress }}</li>
+    {% endfor %}
+  </ul>
+
+  {% endif %}
+  {% if current_user.type == "Student" %}
+  {% for c in course.students %}
+  {% if c.student.user.email == current_user.id %}
+  <progress value="{{ c.progress }}" max="100"></progress>
+  <ul>
+    {% for com in c.comments %}
+    <li><i>com</i></li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% endfor %}
+  {% endif %}
+</div>
+{% endblock %}
+
