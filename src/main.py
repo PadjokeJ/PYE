@@ -179,7 +179,7 @@ def create_course():
   name = request.form["name"]
   grade = request.form["grade"]
 
-  # TODO : database.create_course(teacher, name, grade)
+  database.create_course(flask_login.current_user.id, name, grade)
 
   return redirect("/new-course?success")
 

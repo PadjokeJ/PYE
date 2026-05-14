@@ -46,6 +46,8 @@ class Subject(Base):
   __tablename__ = "subject"
 
   id: Mapped[int] = mapped_column(Integer, primary_key=True)
+  name: Mapped[str] = mapped_column(String)
+  grade: Mapped[str] = mapped_column(String)
   teacher_id: Mapped[int] = mapped_column(ForeignKey("teacher.id"))
   students: Mapped[List["StudentCourse"]] = relationship(back_populates="subject")
   teacher: Mapped["Teacher"] = relationship(back_populates="subjects")
@@ -160,3 +162,11 @@ def update_password(email: str, pw: str):
 
 def get_deprecation(user: str) -> bool:
   return get_user(user).reset
+
+def create_course(owner: str, name: str, grade: str):
+  subject = Subject(
+    teacher_id=owner,
+    name=name,
+    grade=grade
+  )
+
