@@ -1,14 +1,54 @@
 from flask_sqlalchemy import SQLAlchemy
 
-from sqlalchemy import String
+from sqlalchemy import ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import relationship
+
+from sqlalchemy.types import JSON
+
+from typing import List, Optional
 
 import json
 import password
 
 class Base(DeclarativeBase):
   ...
+
+class Teacher(Base):
+  __tablename__ = "teacher"
+
+  id: Mapped[int] = mapped_column(Integer, primary_key=True)
+  user_email: Mapped[str] = mapped_column(ForeignKey("users.email"))
+  subjects: Mapped[List["Subject"]] = relationship(back_populates="teacher")
+  user: Mapped["UsersTable"] = relationship(back_populates="teacher_data")
+
+class StudentData(Base):
+  __tablename__ = "students"
+
+  id: Mapped[int] = mapped_column(Integer, primary_key=True)
+  courses: Mapped[List["StudentCourse"]] = relationship(back_populates="student")
+  user: Mapped["UsersTable"] = relationship(back_populates="student_data")
+  user_email: Mapped[str] = mapped_column(ForeignKey("users.email"))
+
+class StudentCourse(Base):
+  __tablename__ = "student_course"
+
+  id: Mapped[int] = mapped_column(Integer, primary_key=True)
+  data_id: Mapped[int] = mapped_column(ForeignKey("students.id"))
+  progress: Mapped[int] = mapped_column(Integer)
+  comments: Mapped[List[str]] = mapped_column(JSON)
+  student: Mapped["StudentData"] = relationship(back_populates="courses")
+  subject_id: Mapped[int] = mapped_column(ForeignKey("subject.id"))
+  subject: Mapped["Subject"] = relationship(back_populates="students")
+
+class Subject(Base):
+  __tablename__ = "subject"
+
+  id: Mapped[int] = mapped_column(Integer, primary_key=True)
+  teacher_id: Mapped[int] = mapped_column(ForeignKey("teacher.id"))
+  students: Mapped[List["StudentCourse"]] = relationship(back_populates="subject")
+  teacher: Mapped["Teacher"] = relationship(back_populates="subjects")
 
 class UsersTable(Base):
   __tablename__ = "users"
@@ -20,6 +60,9 @@ class UsersTable(Base):
   reset: Mapped[bool] = mapped_column()
   name: Mapped[str] = mapped_column(String)
   firstname: Mapped[str] = mapped_column(String)
+
+  student_data: Mapped[Optional["StudentData"]] = relationship(back_populates="user")
+  teacher_data: Mapped[Optional["Teacher"]] = relationship(back_populates="user")
 
 db = SQLAlchemy(model_class=Base)
 
@@ -93,7 +136,9 @@ def create_user(name: str, surname: str, utype: str, pw: str, email: str):
     )
 
   if utype == "Student":
-    ... # TODO add students data
+    user.student_data = StudentData()
+  if utype == "Teacher":
+    user.teacher_data = Teacher()
 
   db.session.add(user)
   db.session.commit()
