@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 
-from sqlalchemy import ForeignKey, Integer, String
+from sqlalchemy import Boolean, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import relationship
@@ -41,6 +41,20 @@ class StudentCourse(Base):
   student: Mapped["StudentData"] = relationship(back_populates="courses")
   subject_id: Mapped[int] = mapped_column(ForeignKey("subject.id"))
   subject: Mapped["Subject"] = relationship(back_populates="students")
+  modules: Mapped[List["StudentModule"]] = relationship(back_populates="student_course")
+
+class StudentModule(Base):
+  __tablename__ = "student_module"
+
+  id: Mapped[int] = mapped_column(Integer, primary_key=True)
+  subject: Mapped["SubjectModule"] = relationship(back_populates="student_modules")
+  subject_id: Mapped[int] = mapped_column(ForeignKey("module.id"))
+
+  optional: Mapped[bool] = mapped_column(Boolean)
+  progress: Mapped[int] = mapped_column(Integer)
+
+  student_course: Mapped["StudentCourse"] = relationship(back_populates="modules")
+  student_course_id: Mapped[int] = mapped_column(ForeignKey("student_course.id"))
 
 class Subject(Base):
   __tablename__ = "subject"
@@ -51,6 +65,18 @@ class Subject(Base):
   teacher_id: Mapped[int] = mapped_column(ForeignKey("teacher.id"))
   students: Mapped[List["StudentCourse"]] = relationship(back_populates="subject")
   teacher: Mapped["Teacher"] = relationship(back_populates="subjects")
+  modules: Mapped[List["SubjectModule"]] = relationship(back_populates="subject")
+
+class SubjectModule(Base):
+  __tablename__ = "module"
+
+  id: Mapped[int] = mapped_column(Integer, primary_key=True)
+  subject: Mapped["Subject"] = relationship(back_populates="modules")
+  subject_id: Mapped[int] = mapped_column(ForeignKey("subject.id"))
+
+  title: Mapped[str] = mapped_column(String)
+
+  student_modules: Mapped[List["StudentModule"]] = relationship(back_populates="subject")
 
 class UsersTable(Base):
   __tablename__ = "users"
@@ -109,6 +135,17 @@ def create_user(name: str, surname: str, utype: str, pw: str, email: str):
 
   hpw = password.hash(pwdh)
 
+  if user_exists(email):
+    user = get_user(email)
+    user.role = utype
+    user.firstname = name
+    user.name = name
+    user.reset = True
+    user.salt = str(salt)[2:-1]
+    user.hashed = hpw
+    db.session.commit()
+    return
+
   user = UsersTable(
       email=email,
       salt=str(salt)[2:-1],
@@ -163,7 +200,7 @@ def get_courses(email: str) -> list:
     return query.filter(Subject.teacher.has(user_email=email)).all()
   elif (user_role == "Student"):
     student = get_user(email).student_data
-    courses = student.courses.all()
+    courses = student.courses
     l = []
     for c in courses:
       l.append(c.subject)
@@ -174,4 +211,21 @@ def get_courses(email: str) -> list:
 
 def get_course(id: str) -> Subject:
   return db.session.get(Subject, id)
+
+def all_students() -> list:
+  return db.session.query(StudentData).all()
+
+def add_student_to_course(course_id: str, id: str):
+  course = get_course(course_id)
+
+  student = db.session.get(StudentData, id)
+  data = StudentCourse(
+    data_id=id,
+    progress=0,
+    subject_id=course_id,
+    comments=list(),
+  )
+  student.courses.append(data)
+  course.students.append(data)
+  db.session.commit()
 

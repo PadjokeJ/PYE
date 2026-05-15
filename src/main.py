@@ -194,6 +194,8 @@ def course_access():
 @login_required
 def get_course(course_id):
   courses = database.get_courses(flask_login.current_user.id)
+  # TODO : prevent anyone from accessing any course
+
 #  app.logger.info("courses: %s", courses)
 #  for c in courses:
 #    app.logger.info("checking course %s", c.id)
@@ -203,7 +205,16 @@ def get_course(course_id):
   course = database.get_course(str(course_id))
   if (course == None):
     return redirect("/courses")
-  return render_template("course.html", course=course)
+  return render_template("course.html", course=course, all_students=database.all_students())
+
+@app.route("/add-to-course/<course_id>", methods=["POST", "GET"])
+@login_required
+def add_to_course(course_id):
+
+  if request.method == "POST":
+    database.add_student_to_course(str(course_id), request.form["student"])
+    return redirect("/courses/" + str(course_id))
+  return redirect("/courses/" + str(course_id) + "?success")
 
 if __name__ == "__main__":
   app.run(host="0.0.0.0", port=8080, debug=True)

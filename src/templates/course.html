@@ -6,12 +6,11 @@
 {% block cactive %}active{% endblock %}
 
 {% block content %}
-<div>
+<div style="flex-direction: column;">
   <h1>{{ course.name }} -- {{ course.grade }}</h1>
   <i>{{ course.teacher.user.name }} {{ course.teacher.user.firstname }}</i>
-</div>
 
-<div>
+<div style="flex-direction: column;">
   {% if current_user.type == "Teacher" %}
   <h2>Students:</h2>
   <ul>
@@ -19,6 +18,15 @@
     <li>{{ c.student.user.firstname }} {{ c.student.user.name }}: {{ c.progress }}</li>
     {% endfor %}
   </ul>
+  <form method="post" action="/add-to-course/{{ course.id }}">
+    <label for="student">Select a student to add</label>
+    <select id="student" name="student">
+      {% for s in all_students %}
+      <option value="{{ s.id }}">{{ s.user.firstname }} {{ s.user.name }}</option>
+      {% endfor %}
+    </select>
+    <input id="submit" type="submit" name="submit" value="Add Student">
+  </form>
 
   {% endif %}
   {% if current_user.type == "Student" %}
@@ -33,6 +41,7 @@
   {% endif %}
   {% endfor %}
   {% endif %}
+</div>
 </div>
 {% endblock %}
 
