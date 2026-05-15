@@ -6,11 +6,13 @@
 {% block cactive %}active{% endblock %}
 
 {% block content %}
+  <div style="display: flex; align-items: center; width: 100%; flex-direction: column;">
   <h1>My courses:</h1>
-  <ul>
+  <ul style="margin: 0;">
   {% for c in courses %}
   <li><a href="/courses/{{ c.id }}">{{ c.name }} -- {{ c.grade }}</a></li>
   {% endfor %}
   </ul>
+  <div>
 {% endblock %}
 

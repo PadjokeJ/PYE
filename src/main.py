@@ -87,7 +87,7 @@ def root():
 @app.route("/home")
 @login_required
 def home():
-  return render_template("home.html")
+  return render_template("home.html", username=database.get_user(flask_login.current_user.id).firstname)
 
 @app.route("/grades")
 @login_required

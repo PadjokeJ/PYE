@@ -18,9 +18,9 @@ body {
 
 @media (prefers-color-scheme: dark) {
   body {
-    --background: var(--main);
+    --background: #222233;
     --background-2: #44444f;
-    --main: var(--background);
+    --main: #ffffff;
   }
 }
 
@@ -153,5 +153,31 @@ nav {
   right: 0;
   position: absolute;
   padding: 20px;
+}
+
+.course_progress {
+  display: flex;
+  padding: 10px;
+  margin: 0;
+  box-shadow: var(--shadow) 2px 2px 10px;
+  border-radius: 20px;
+  justify-content: center;
+}
+
+.left_grad:before {
+  box-shadow: 20px 0 20px -20px var(--main) inset;
+  content: " ";
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+
+.left_grad {
+  position: relative;
+  padding-left: 10px;
+  border-left: 2px solid;
+  height: 22px;
 }
 
