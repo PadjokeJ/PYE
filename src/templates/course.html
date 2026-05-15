@@ -20,24 +20,39 @@
   </ul>
   <form method="post" action="/add-to-course/{{ course.id }}">
     <label for="student">Select a student to add</label>
-    <select id="student" name="student">
+    <select id="student" name="student" required>
       {% for s in all_students %}
       <option value="{{ s.id }}">{{ s.user.firstname }} {{ s.user.name }}</option>
       {% endfor %}
     </select>
     <input id="submit" type="submit" name="submit" value="Add Student">
   </form>
+  <h2>Modules:</h2>
+  <form method="post" action="/add-course-module/{{ course.id }}">
+    <label for="title">Module title</label>
+    <input id="title" name="title" required>
+    <input id="submit" type="submit" name="submit" value="Add Module">
+  </form>
 
   {% endif %}
   {% if current_user.type == "Student" %}
   {% for c in course.students %}
   {% if c.student.user.email == current_user.id %}
+  <h2>Progress:</h2>
   <progress value="{{ c.progress }}" max="100"></progress>
+  <h2>Comments:</h2>
   <ul>
     {% for com in c.comments %}
     <li><i>com</i></li>
     {% endfor %}
   </ul>
+  <h2>Modules:</h2>
+  {% for mod in c.modules %}
+  {% if not mod.optional %}
+  <h3>{{ mod.subject.title }}</h3>
+  <progress value="{{ mod.progress }}" max="100" {% if mod.passed %}class="class-passed"{% endif %}></progress>
+  {% endif %}
+  {% endfor %}
   {% endif %}
   {% endfor %}
   {% endif %}

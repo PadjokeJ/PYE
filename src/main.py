@@ -192,7 +192,7 @@ def course_access():
 
 @app.route("/courses/<course_id>")
 @login_required
-def get_course(course_id):
+def get_course(course_id: str):
   courses = database.get_courses(flask_login.current_user.id)
   # TODO : prevent anyone from accessing any course
 
@@ -209,10 +209,18 @@ def get_course(course_id):
 
 @app.route("/add-to-course/<course_id>", methods=["POST", "GET"])
 @login_required
-def add_to_course(course_id):
+def add_to_course(course_id: str):
 
   if request.method == "POST":
     database.add_student_to_course(str(course_id), request.form["student"])
+    return redirect("/courses/" + str(course_id))
+  return redirect("/courses/" + str(course_id) + "?success")
+
+@app.route("/add-course-module/<course_id>", methods=["POST", "GET"])
+@login_required
+def add_course_module(course_id: str):
+  if request.method == "POST":
+    database.add_course_module(str(course_id), request.form["title"])
     return redirect("/courses/" + str(course_id))
   return redirect("/courses/" + str(course_id) + "?success")
 

@@ -52,6 +52,7 @@ class StudentModule(Base):
 
   optional: Mapped[bool] = mapped_column(Boolean)
   progress: Mapped[int] = mapped_column(Integer)
+  passed: Mapped[bool] = mapped_column(Boolean)
 
   student_course: Mapped["StudentCourse"] = relationship(back_populates="modules")
   student_course_id: Mapped[int] = mapped_column(ForeignKey("student_course.id"))
@@ -219,13 +220,48 @@ def add_student_to_course(course_id: str, id: str):
   course = get_course(course_id)
 
   student = db.session.get(StudentData, id)
+  
+  for s in course.students:
+    if str(s.student.id) == id:
+      return
+
   data = StudentCourse(
     data_id=id,
     progress=0,
     subject_id=course_id,
     comments=list(),
+    modules=list()
   )
+
+  for module in course.modules:
+    data.modules.append(StudentModule(
+      subject_id=module.id,
+      optional=False,
+      progress=0,
+      passed=False,
+      student_course_id=data.id
+    ))
+
   student.courses.append(data)
   course.students.append(data)
+  db.session.commit()
+
+def add_course_module(course_id: str, title: str):
+  course = get_course(course_id)
+  module = SubjectModule(
+    subject_id=course_id,
+    title=title,
+    student_modules=list()
+  )
+  course.modules.append(module)
+  for student in course.students:
+    smodule = StudentModule(
+      subject_id=module.id,
+      optional=False,
+      progress=0,
+      passed=False,
+      student_course_id=student.id
+    )
+    student.modules.append(smodule)
   db.session.commit()
 
