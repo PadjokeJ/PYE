@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 
 from sqlalchemy import Boolean, ForeignKey, Integer, String
+from sqlalchemy import or_
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import relationship
@@ -22,6 +23,8 @@ class Teacher(Base):
   user_email: Mapped[str] = mapped_column(ForeignKey("users.email"))
   subjects: Mapped[List["Subject"]] = relationship(back_populates="teacher")
   user: Mapped["UsersTable"] = relationship(back_populates="teacher_data")
+
+  super: Mapped[bool] = mapped_column(Boolean)
 
 class StudentData(Base):
   __tablename__ = "students"
@@ -147,12 +150,14 @@ def create_user(name: str, surname: str, utype: str, pw: str, email: str):
     user.hashed = hpw
     db.session.commit()
     return
+  
+  typ = "Teacher" if utype == "Direction" else utype
 
   user = UsersTable(
       email=email,
       salt=str(salt)[2:-1],
       hashed=hpw,
-      role=utype,
+      role=typ,
       reset=True,
       name=surname,
       firstname=name
@@ -160,11 +165,14 @@ def create_user(name: str, surname: str, utype: str, pw: str, email: str):
 
   if utype == "Student":
     user.student_data = StudentData(user_email=email)
-  if utype == "Teacher":
-    user.teacher_data = Teacher(user_email=email)
+  if typ == "Teacher":
+    user.teacher_data = Teacher(user_email=email, super=False)
 
   db.session.add(user)
   db.session.commit()
+
+  if utype == "Direction":
+    make_teacher_super(email)
 
 def update_password(email: str, pw: str):
   passw = bytes(pw, "utf-8")
@@ -198,11 +206,12 @@ def create_course(owner: str, name: str, grade: str):
   db.session.commit()
 
 def get_courses(email: str) -> list:
+  user = get_user(email)
   user_role = get_type(email)
   query = db.session.query(Subject)
 
   if (user_role == "Teacher"):
-    return query.filter(Subject.teacher.has(user_email=email)).all()
+    return query.filter(or_(Subject.teacher.has(user_email=email), user.teacher_data.super)).all()
   elif (user_role == "Student"):
     student = get_user(email).student_data
     courses = student.courses
@@ -304,5 +313,11 @@ def add_course_module(course_id: str, title: str):
 def hide_student_course(id: str, state: bool):
   sc = get_student_course(id)
   sc.hidden = not sc.hidden
+  db.session.commit()
+
+def make_teacher_super(user_id: str):
+  user = get_user(user_id)
+  user.teacher_data.super = True
+
   db.session.commit()
 
