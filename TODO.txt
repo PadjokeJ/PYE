@@ -2,13 +2,4 @@
   - Delete accounts
 
 Teacher :
-  - Add students to classes
   - Add comments to students
-  - Add grades to students
-
-- modules par cours (optionels)
-- pourcentage de réussite du module
-
-- bilans (par trimestre) -> résultat (aussi par cours)
-
-- validation du cours (fin de cycle) (sous module)
