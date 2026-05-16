@@ -3,3 +3,14 @@
 
 Teacher :
   - Add comments to students
+  - Remove students from course
+  - Prevent modifying other's
+
+Students :
+  - Hide past lessons (Toggle)
+  - Show when passed
+
+Direction:
+  - See all other courses
+
+

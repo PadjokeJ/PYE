@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Users dashboard{% endblock %}
+{% block ogtitle %}Users dashboard{% endblock %}
+
+{% block admactive %}active{% endblock %}
+
+{% block content %}
+
+<div style="display: flex; align-items: center; width: 100%; flex-direction: column;">
+  <h1>Modify users</h1>
+  <div style="display: grid; grid-template-columns: auto auto;">
+  {% for user in users %}
+    <form id="form" action="/update-user" method="POST" style="margin: 10px;">
+      <h2>{{ user.email }}</h2>
+      <label for="password">New password<span style="color: #ff0000">*</span></label>
+      <input type="text" name="password" id="password_{{ user.email }}" value="" required>
+      <a class="button" href="#" onclick="function hexS() { return Math.floor((Math.random() * 0.9 + 0.1) * 4294967295).toString(16); };function gen(){ document.getElementById('password_{{ user.email }}').value = hexS() + '-' + hexS() }; gen();">Generate</a>
+      <input style="display:none;" type="email" name="email" value="{{ user.email }}">
+      <input type="submit" name="reset" value="Reset password" class="button">
+    </form>
+  {% endfor %}
+  </div>
+</div>
+
+{% endblock %}
+

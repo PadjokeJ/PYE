@@ -138,6 +138,25 @@ def admin():
 
   return render_template("admin.html")
 
+@app.route("/users")
+@login_required
+def users_dash():
+  if flask_login.current_user.type != "Admin":
+    return redirect("/home")
+  return render_template("users.html", users=database.get_users())
+
+@app.route("/update-user", methods=["POST", "GET"])
+@login_required
+def user_pass():
+  email = request.form["email"]
+  if flask_login.current_user.type != "Admin":
+    return redirect("/home")
+  
+  if request.method == "GET":
+    return redirect("/users")
+  database.update_password(str(email), request.form["password"])
+  return redirect("/users?success")
+
 @app.route("/add-user", methods=["GET", "POST"])
 @login_required
 def create_user():
@@ -256,6 +275,17 @@ def add_course_module(course_id: str):
     database.add_course_module(str(course_id), request.form["title"])
     return redirect("/courses/" + str(course_id))
   return redirect("/courses/" + str(course_id) + "?success")
+
+@app.route("/hide-course/<course_id>", methods=["POST"])
+@login_required
+def hide_student_course(course_id: str):
+  student_course = database.get_student_course(str(course_id))
+  if flask_login.current_user.type != "Teacher" or flask_login.current_user.id != student_course.subject.teacher.user_email:
+    return redirect(f"/courses/{student_course.subject_id}/{student_course.id}")
+  
+  database.hide_student_course(str(course_id), request.form.get("hide") == "true")
+
+  return redirect(f"/courses/{student_course.subject_id}/{student_course.id}?success")
 
 if __name__ == "__main__":
   app.run(host="0.0.0.0", port=8080, debug=True)

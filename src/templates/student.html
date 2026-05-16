@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
-{% block title %}Home{% endblock %}
-{% block ogtitle %}Home{% endblock %}
+{% block title %}{{ student.student.user.firstname }} {{ student.subject.name }}{% endblock %}
+{% block ogtitle %}{{ student.student.user.firstname }} {{ student.subject.name }}{% endblock %}
 
 {% block cactive %}active{% endblock %}
 
@@ -9,8 +9,19 @@
 
 <div style="display: flex; align-items: center; width: 100%; flex-direction: column;">
 <a style="margin-top:20px;padding: 5px 20%;box-shadow: var(--shadow) 2px 2px 10px;border-radius: 15px;" href="/courses/{{ student.subject_id }}">Back</a>
-  <h1>{{ student.student.user.firstname }} {{ student.student.user.name }}</h1>
-  <i>{{ student.subject.title }}</i>
+  <h1 style="margin-bottom:0;">{{ student.student.user.firstname }} {{ student.student.user.name }}</h1>
+  <i>{{ student.subject.name }}</i>
+  <div style="margin-top:20px;">
+  <label for="hide">Hide course</label>
+  <input style="min-width:0;" type="checkbox" name="hide" value="hide" id="hide" {% if student.hidden %}checked{% endif %}>
+  <script>
+    document.getElementById("hide").addEventListener("input", () => {
+      fetch("/hide-course/{{ student.id }}?hide=" + document.getElementById("hide").checked, {
+        method: "POST"
+      });
+    })
+  </script>
+  </div>
   <div>
     {% for mod in student.modules %}
       <div>

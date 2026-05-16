@@ -37,6 +37,7 @@ class StudentCourse(Base):
   id: Mapped[int] = mapped_column(Integer, primary_key=True)
   data_id: Mapped[int] = mapped_column(ForeignKey("students.id"))
   progress: Mapped[int] = mapped_column(Integer)
+  hidden: Mapped[bool] = mapped_column(Boolean)
   comments: Mapped[List[str]] = mapped_column(JSON)
   student: Mapped["StudentData"] = relationship(back_populates="courses")
   subject_id: Mapped[int] = mapped_column(ForeignKey("subject.id"))
@@ -105,7 +106,7 @@ def hash(user: str) -> str:
   return password.hash(bytes(user.lower(), "utf-8"))
 
 def get_users():
-  return db.session.execute(db.select(UsersTable).order_by(UsersTable.email))
+  return db.session.query(UsersTable).all()
 
 def get_user(email: str) -> UsersTable:
   return db.session.query(UsersTable).get(email)
@@ -176,7 +177,10 @@ def update_password(email: str, pw: str):
   user = get_user(email)
   user.salt = str(salt)[2:-1]
   user.hashed = hpw
-  user.reset = False
+  if user.reset:
+    user.reset = False
+  else:
+    user.reset = True
 
   db.session.commit()
 
@@ -204,7 +208,8 @@ def get_courses(email: str) -> list:
     courses = student.courses
     l = []
     for c in courses:
-      l.append(c.subject)
+      if not c.hidden:
+        l.append(c.subject)
 
     return l
 
@@ -259,7 +264,8 @@ def add_student_to_course(course_id: str, id: str):
     progress=0,
     subject_id=course_id,
     comments=list(),
-    modules=list()
+    modules=list(),
+    hidden=False
   )
 
   for module in course.modules:
@@ -293,5 +299,10 @@ def add_course_module(course_id: str, title: str):
     )
     student.modules.append(smodule)
     update_progress(student)
+  db.session.commit()
+
+def hide_student_course(id: str, state: bool):
+  sc = get_student_course(id)
+  sc.hidden = not sc.hidden
   db.session.commit()
 
