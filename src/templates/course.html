@@ -80,7 +80,7 @@
       {% for mod in c.modules %}
         {% if not mod.optional %}
           <div style="margin: 8px; padding: 20px; border-radius: 25px; box-shadow: var(--shadow) 4px 4px 20px">
-          <h3 style="margin-top: 0;">{{ mod.subject.title }}</h3>
+            <h3 style="margin-top: 0;">{{ mod.subject.title }}{% if mod.passed %}: <i>passed!</i>{% endif %}</h3>
           <div class="course_progress">
           <progress value="{{ mod.progress }}" max="100" {% if mod.passed %}class="class-passed"{% endif %}></progress>
           <p style="margin: 0;margin-left: 5px;">{{ mod.progress }}%</p>

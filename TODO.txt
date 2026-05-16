@@ -5,6 +5,3 @@ Teacher :
   - Add comments to students
   - Prevent modifying other's
 
-Students :
-  - Show when passed
-
