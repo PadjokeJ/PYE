@@ -15,8 +15,8 @@
     <meta property="og:title" content="{% block ogtitle %}{% endblock %}">
     <meta property="og:site_name" content="PYE">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://pye.example.org/{{ request.endpoint }}">
-    <meta property="og:image" content="https://pye.example.org/images/favicon.webp">
+    <meta property="og:url" content="{{ request.base_url }}">
+    <meta property="og:image" content="{{ request.host_url }}images/favicon.webp">
     <meta property="og:description" content="PYE Homepage">
   </head>
             
@@ -27,7 +27,7 @@
         <a class="tab" id="{% block cactive %}{% endblock %}" href="/courses">Courses</a>
       {% endif %}
       {% if current_user.type == "Teacher" %}
-        <a class="tab" id"{% block acactive %}{% endblock %}" href="/new-course">Create course</a>
+        <a class="tab" id="{% block acactive %}{% endblock %}" href="/new-course">Create course</a>
       {% endif %}
       {% if current_user.type == "Admin" %}
         <a class="tab" id="{% block admactive %}{% endblock %}" href="/admin">Admin</a>

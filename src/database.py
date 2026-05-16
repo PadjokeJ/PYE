@@ -213,6 +213,35 @@ def get_courses(email: str) -> list:
 def get_course(id: str) -> Subject:
   return db.session.get(Subject, id)
 
+def get_student_course(id: str) -> StudentCourse:
+  return db.session.get(StudentCourse, id)
+
+def get_student_module(id: str) -> StudentModule:
+  return db.session.get(StudentModule, id)
+
+def modify_student_module(id: str, optional: bool, progress: int, passed: bool):
+  module = get_student_module(id)
+  
+  module.optional = optional
+  module.progress = progress
+  module.passed   = passed
+
+  db.session.commit()
+
+  update_progress(module.student_course)
+
+def update_progress(student_course: StudentCourse):
+  p = 0
+  i = 0
+  for module in student_course.modules:
+    if not module.optional:
+      p += module.progress
+      i += 1
+  
+  student_course.progress = p / i
+
+  db.session.commit()
+
 def all_students() -> list:
   return db.session.query(StudentData).all()
 
@@ -263,5 +292,6 @@ def add_course_module(course_id: str, title: str):
       student_course_id=student.id
     )
     student.modules.append(smodule)
+    update_progress(student)
   db.session.commit()
 

@@ -199,6 +199,47 @@ def get_course(course_id: str):
     return redirect("/courses")
   return render_template("course.html", course=course, all_students=database.all_students())
 
+@app.route("/courses/<course_id>/<stud_id>")
+@login_required
+def get_course_student(course_id: str, stud_id: str):
+  if not flask_login.current_user.type == "Teacher":
+    return redirect("/course/" + str(course_id))
+
+  course = database.get_course(str(course_id))
+  stud   = database.get_student_course(str(stud_id))
+
+  if not stud in course.students:
+    return redirect("/course/" + str(course_id))
+
+  return render_template("student.html", student=stud)
+
+@app.route("/student/module/<mod_id>", methods=["POST", "GET"])
+@login_required
+def update_student_module_progress(mod_id: str):
+  module = database.get_student_module(str(mod_id))
+
+  if request.method == "GET":
+    return redirect(f"/courses/{module.subject.subject.id}/{module.student_course_id}?success")
+
+  if not module.subject.subject.teacher.user.email == flask_login.current_user.id:
+    return redirect("/courses")
+
+  opt = True if "optional" in request.form.keys() and request.form["optional"] == "optional" else False
+
+  pro = 0
+  if "progress" in request.form.keys():
+    try:
+      pro = int(request.form["progress"])
+    except:
+      pro = 0
+
+  pas = True if "passed" in request.form.keys() and request.form["passed"] == "passed" else False
+
+  database.modify_student_module(str(mod_id), opt, pro, pas)
+
+  return redirect(f"/courses/{module.subject.subject.id}/{module.student_course_id}?success")
+
+
 @app.route("/add-to-course/<course_id>", methods=["POST", "GET"])
 @login_required
 def add_to_course(course_id: str):

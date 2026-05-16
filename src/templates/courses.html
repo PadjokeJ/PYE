@@ -10,7 +10,18 @@
   <h1>My courses:</h1>
   <ul style="margin: 0;">
   {% for c in courses %}
-  <li><a href="/courses/{{ c.id }}">{{ c.name }} -- {{ c.grade }}</a></li>
+  <li style="margin: 20px 0;">
+    <a href="/courses/{{ c.id }}" style="padding: 5px 50px;border-radius: 15px;box-shadow: var(--shadow) 2px 2px 10px; background-color: var(--background);">
+      {{ c.name }} -- {{ c.grade }}
+      {% if current_user.type == "Student" %}
+        {% for s in c.students %}
+          {% if s.student.user_email == current_user.id %}
+          : {{ s.progress }}%
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </a>
+  </li>
   {% endfor %}
   </ul>
   <div>

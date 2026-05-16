@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+{% block ogtitle %}Home{% endblock %}
+
+{% block cactive %}active{% endblock %}
+
+{% block content %}
+
+<div style="display: flex; align-items: center; width: 100%; flex-direction: column;">
+<a style="margin-top:20px;padding: 5px 20%;box-shadow: var(--shadow) 2px 2px 10px;border-radius: 15px;" href="/courses/{{ student.subject_id }}">Back</a>
+  <h1>{{ student.student.user.firstname }} {{ student.student.user.name }}</h1>
+  <i>{{ student.subject.title }}</i>
+  <div>
+    {% for mod in student.modules %}
+      <div>
+      <h2>{{ mod.subject.title }}</h2>
+      <form action="/student/module/{{ mod.id }}" method="POST" id="form">
+        <div style="align-items:center; display:flex;">
+          <label style="margin-top:0; width:30%;" for="progress">Progress: <span id="span-{{ mod.id }}">{{ mod.progress }}</span>%</label>
+        <input style="margin: 0 5px; min-width:0; width:70%;" type="range" name="progress" id="progress-{{ mod.id }}" value="{{ mod.progress }}">
+        </div>
+        <div style="align-items:center; display:flex;">
+        <label for="passed">Has passed</label>
+          <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="passed" name="passed" value="passed" {% if mod.passed %}checked{% endif %}>
+        </div>
+        <div style="align-items:center; display:flex;">
+        <label for="optional">Optional</label>
+          <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="optional" name="optional" value="optional" {% if mod.optional %}checked{% endif %}>
+        </div>
+        <input id="submit" type="submit" name="submit" value="Update module">
+      </form>
+      </div>
+      <script>
+    document.getElementById("progress-{{ mod.id }}").addEventListener("input", () => {
+      document.getElementById("span-{{ mod.id }}").innerHTML = document.getElementById("progress-{{ mod.id }}").value;
+    });
+      </script>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}
+
