@@ -194,16 +194,8 @@ def course_access():
 @login_required
 def get_course(course_id: str):
   courses = database.get_courses(flask_login.current_user.id)
-  # TODO : prevent anyone from accessing any course
-
-#  app.logger.info("courses: %s", courses)
-#  for c in courses:
-#    app.logger.info("checking course %s", c.id)
-#    if c.id == course_id:
-#      return render_template("course.html")
-#  return redirect("/courses")
   course = database.get_course(str(course_id))
-  if (course == None):
+  if (course == None or not course in courses):
     return redirect("/courses")
   return render_template("course.html", course=course, all_students=database.all_students())
 
