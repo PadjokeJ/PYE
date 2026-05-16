@@ -6,8 +6,6 @@ A website that allows for academic management.
 
 In order for the service to start, you need a `.env` file, in order to get started with a base, you can copy `dev.env`
 ```bash
-
-```bash
 cp dev.env .env
 ```
 You can then launch the service using docker
