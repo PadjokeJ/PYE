@@ -9,7 +9,7 @@ load_dotenv(".env")
 
 app = Flask(__name__)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://psql:"+ getenv("PSQL_PW") +"@localhost:5432/pyedb"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://psql:"+ getenv("PSQL_PW") +"@postgres:5432/pyedb"
 
 admin_email = getenv("ADMIN_EMAIL")
 admin_passw = getenv("ADMIN_PW")

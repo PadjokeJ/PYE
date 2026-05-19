@@ -2,6 +2,7 @@ services:
   pye:
     build: .
     restart: unless-stopped
+    hostname: pye
     ports:
       - "5000:8080"
     depends_on:
