@@ -35,9 +35,9 @@
     <input id="submit" type="submit" name="submit" value="Add Student">
   </form>
   <h2>Modules:</h2>
-  <ul>
+  <ul class="modules">
     {% for mod in course.modules|sort(attribute='title') %}
-    <li>
+    <li class="module"><h3 style="text-align: center;">{{ mod.title }}</h3>
       <ul>
         {% for category in mod.categories|sort(attribute='title') %}
           <li>{{ category.title }}</li>

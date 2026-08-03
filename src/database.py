@@ -263,6 +263,9 @@ def get_student_course(id: str) -> StudentCourse:
 def get_student_module(id: str) -> StudentModule:
   return db.session.get(StudentModule, id)
 
+def get_student_category(id: str) -> StudentCategory:
+  return db.session.get(StudentCategory, id)
+
 def modify_student_module(id: str, optional: bool, progress: int, passed: bool):
   module = get_student_module(id)
   
@@ -273,6 +276,15 @@ def modify_student_module(id: str, optional: bool, progress: int, passed: bool):
   db.session.commit()
 
   update_progress(module.student_course)
+
+def modify_student_category(id: str, optional: bool, progress: int, passed: bool):
+  cat = get_student_category(id)
+  
+  cat.optional = optional
+  cat.progress = progress
+  cat.passed   = passed
+
+  db.session.commit()
 
 def update_progress(student_course: StudentCourse):
   p = 0

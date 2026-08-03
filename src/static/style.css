@@ -193,3 +193,44 @@ progress:not(.class-passed)::-webkit-progress-value {
   background-color: red;
 }
 
+.modules {
+  padding: 0;
+}
+
+li.module {
+  display: block;
+
+  box-shadow: var(--shadow) 5px 5px 40px;
+  padding:20px;
+
+  margin-top:15px;
+  margin-bottom: 15px;
+  background-color: var(--background);
+  border-radius: 40px;
+}
+
+.student_outer {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+
+  box-shadow: var(--shadow) 5px 5px 40px;
+  border-radius: 40px;
+
+  background-color: var(--background);
+}
+
+.student_inner {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+
+  box-shadow: var(--shadow) 5px 5px 40px;
+  border-radius: 20px;
+  margin: 20px;
+
+  background-color: var(--background);
+
+  width: 400px;
+  padding: 20px;
+}
