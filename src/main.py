@@ -276,6 +276,14 @@ def add_course_module(course_id: str):
     return redirect("/courses/" + str(course_id))
   return redirect("/courses/" + str(course_id) + "?success")
 
+@app.route("/add-module-category/<course_id>/<module_id>/", methods=["POST", "GET"])
+@login_required
+def add_module_category(course_id: str, module_id: str):
+  if request.method == "POST":
+    database.add_module_category(str(module_id), str(course_id), request.form["title"])
+    return redirect("/courses/" + str(course_id))
+  return redirect("/courses/" + str(course_id) + "?success")
+
 @app.route("/hide-course/<course_id>", methods=["POST"])
 @login_required
 def hide_student_course(course_id: str):

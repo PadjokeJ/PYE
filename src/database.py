@@ -254,6 +254,9 @@ def get_courses(email: str) -> list:
 def get_course(id: str) -> Subject:
   return db.session.get(Subject, id)
 
+def get_module(id: str) -> SubjectModule:
+  return db.session.get(SubjectModule, id)
+
 def get_student_course(id: str) -> StudentCourse:
   return db.session.get(StudentCourse, id)
 
@@ -305,12 +308,24 @@ def add_student_to_course(course_id: str, id: str):
   )
 
   for module in course.modules:
+    student_categories = []
+    for category in module.categories:
+      mcat = StudentCategory(
+        category_id=category.id,
+        optional=False,
+        progress=0,
+        passed=False,
+      )
+      category.student_categories.append(mcat)
+      student_categories.append(mcat)
+
     data.modules.append(StudentModule(
       subject_id=module.id,
       optional=False,
       progress=0,
       passed=False,
-      student_course_id=data.id
+      student_course_id=data.id,
+      categories=student_categories
     ))
 
   student.courses.append(data)
@@ -322,7 +337,8 @@ def add_course_module(course_id: str, title: str):
   module = SubjectModule(
     subject_id=course_id,
     title=title,
-    student_modules=list()
+    student_modules=list(),
+    categories=list()
   )
   course.modules.append(module)
   for student in course.students:
@@ -335,6 +351,25 @@ def add_course_module(course_id: str, title: str):
     )
     student.modules.append(smodule)
     update_progress(student)
+  db.session.commit()
+
+def add_module_category(module_id: str, course_id: str, title: str):
+  module = get_module(module_id)
+  category = ModuleCategory(
+    parent_id=module.id,
+    title=title,
+    student_categories=list()
+  )
+  module.categories.append(category)
+  for student in module.student_modules:
+    scat = StudentCategory(
+      category_id=category.id,
+      optional=False,
+      progress=0,
+      passed=False,
+      student_module_id=student.id
+    )
+    student.categories.append(scat)
   db.session.commit()
 
 def hide_student_course(id: str, state: bool):

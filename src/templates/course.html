@@ -26,7 +26,7 @@
     {% endfor %}
   </ul>
   <form id="form" method="post" action="/add-to-course/{{ course.id }}">
-    <label style="margin-top:0;" for="student">Select a student to add</label>
+    <label style="margin-top: 0;" for="student">Select a student to add</label>
     <select id="student" name="student" required>
       {% for s in all_students %}
       <option value="{{ s.id }}">{{ s.user.firstname }} {{ s.user.name }}</option>
@@ -36,12 +36,25 @@
   </form>
   <h2>Modules:</h2>
   <ul>
-    {% for mod in course.modules %}
-    <li>{{ mod.title }}</li>
+    {% for mod in course.modules|sort(attribute='title') %}
+    <li>
+      <ul>
+        {% for category in mod.categories|sort(attribute='title') %}
+          <li>{{ category.title }}</li>
+        {% endfor %}
+      </ul>
+      <form id="form" method="post" action="/add-module-category/{{ course.id }}/{{ mod.id }}">
+        <h3>Create a new category for <i>{{ mod.title }}</i></h2>
+        <label style="margin-top: 0;" for="title">Category title</label>
+        <input id="title" name="title" required>
+        <input id="submit" type="submit" name="submit" value="Add Module">
+      </form>
+    </li>
     {% endfor %}
   </ul>
   <form id="form" method="post" action="/add-course-module/{{ course.id }}">
-    <label style="margin-top:0;" for="title">Module title</label>
+    <h3>Create a new module for {{ course.name }}</h3>
+    <label style="margin-top: 0;" for="title">Module title</label>
     <input id="title" name="title" required>
     <input id="submit" type="submit" name="submit" value="Add Module">
   </form>
@@ -51,7 +64,7 @@
     {% for c in course.students %}
     {% if c.hidden %}
     <li style="margin: 20px 0;">
-      <a style="padding: 5px 50px;border-radius: 15px;box-shadow: var(--shadow) 2px 2px 10px; background-color: var(--background);" href="{{ request.base_url }}/{{ c.id }}">
+      <a style="padding: 5px 50px; border-radius: 15px; box-shadow: var(--shadow) 2px 2px 10px; background-color: var(--background);" href="{{ request.base_url }}/{{ c.id }}">
         {{ c.student.user.firstname }} {{ c.student.user.name }}: {{ c.progress }}%
       </a>
     </li>
