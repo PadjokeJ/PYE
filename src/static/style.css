@@ -185,12 +185,12 @@ nav {
   height: 22px;
 }
 
-progress.class-passed::-webkit-progress-value {
-  background-color: lightgreen;
+progress.class-passed {
+  accent-color: #2a4;
 }
 
-progress:not(.class-passed)::-webkit-progress-value {
-  background-color: red;
+progress:not(.class-passed) {
+  accent-color: rgb(168, 24, 24);
 }
 
 .modules {
@@ -233,4 +233,10 @@ li.module {
 
   width: 400px;
   padding: 20px;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
 }

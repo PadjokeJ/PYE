@@ -21,7 +21,7 @@
   </head>
             
   <body>
-    <nav>
+    <nav class="no-print">
       <a class="tab" id="{% block homeactive %}{% endblock %}" href="/home">Home</a>
       {% if current_user.type == "Teacher" or current_user.type == "Student" %}
         <a class="tab" id="{% block cactive %}{% endblock %}" href="/courses">Courses</a>

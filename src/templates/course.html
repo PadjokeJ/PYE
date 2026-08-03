@@ -7,106 +7,116 @@
 
 {% block content %}
 <div style="display:flex; justify-content:center; width:100%;">
-<div style="flex-direction: column;">
-  <h1>{{ course.name }} -- {{ course.grade }}</h1>
-  <i class="left_grad">{{ course.teacher.user.name }} {{ course.teacher.user.firstname }}</i>
+  <div style="flex-direction: column;">
+    <h1>{{ course.name }} -- {{ course.grade }}</h1>
+    <i class="left_grad">{{ course.teacher.user.name }} {{ course.teacher.user.firstname }}</i>
 
-<div style="flex-direction: column;">
-  {% if current_user.type == "Teacher" %}
-  <h2>Students:</h2>
-  <ul>
-    {% for c in course.students %}
-    {% if not c.hidden %}
-    <li style="margin: 20px 0;">
-      <a style="padding: 5px 50px;border-radius: 15px;box-shadow: var(--shadow) 2px 2px 10px; background-color: var(--background);" href="{{ request.base_url }}/{{ c.id }}">
-        {{ c.student.user.firstname }} {{ c.student.user.name }}: {{ c.progress }}%
-      </a>
-    </li>
-    {% endif %}
-    {% endfor %}
-  </ul>
-  <form id="form" method="post" action="/add-to-course/{{ course.id }}">
-    <label style="margin-top: 0;" for="student">Select a student to add</label>
-    <select id="student" name="student" required>
-      {% for s in all_students %}
-      <option value="{{ s.id }}">{{ s.user.firstname }} {{ s.user.name }}</option>
-      {% endfor %}
-    </select>
-    <input id="submit" type="submit" name="submit" value="Add Student">
-  </form>
-  <h2>Modules:</h2>
-  <ul class="modules">
-    {% for mod in course.modules|sort(attribute='title') %}
-    <li class="module"><h3 style="text-align: center;">{{ mod.title }}</h3>
+    <div style="flex-direction: column;">
+      {% if current_user.type == "Teacher" %}
+      <h2>Students:</h2>
       <ul>
-        {% for category in mod.categories|sort(attribute='title') %}
-          <li>{{ category.title }}</li>
+        {% for c in course.students %}
+        {% if not c.hidden %}
+        <li style="margin: 20px 0;">
+          <a style="padding: 5px 50px;border-radius: 15px;box-shadow: var(--shadow) 2px 2px 10px; background-color: var(--background);"
+            href="{{ request.base_url }}/{{ c.id }}">
+            {{ c.student.user.firstname }} {{ c.student.user.name }}: {{ c.progress }}%
+          </a>
+        </li>
+        {% endif %}
         {% endfor %}
       </ul>
-      <form id="form" method="post" action="/add-module-category/{{ course.id }}/{{ mod.id }}">
-        <h3>Create a new category for <i>{{ mod.title }}</i></h2>
-        <label style="margin-top: 0;" for="title">Category title</label>
+      <form id="form" method="post" action="/add-to-course/{{ course.id }}">
+        <label style="margin-top: 0;" for="student">Select a student to add</label>
+        <select id="student" name="student" required>
+          {% for s in all_students %}
+          <option value="{{ s.id }}">{{ s.user.firstname }} {{ s.user.name }}</option>
+          {% endfor %}
+        </select>
+        <input id="submit" type="submit" name="submit" value="Add Student">
+      </form>
+      <h2>Modules:</h2>
+      <ul class="modules">
+        {% for mod in course.modules|sort(attribute='title') %}
+        <li class="module">
+          <h3 style="text-align: center;">{{ mod.title }}</h3>
+          <ul>
+            {% for category in mod.categories|sort(attribute='title') %}
+            <li>{{ category.title }}</li>
+            {% endfor %}
+          </ul>
+          <form id="form" method="post" action="/add-module-category/{{ course.id }}/{{ mod.id }}">
+            <h3>Create a new category for <i>{{ mod.title }}</i></h2>
+              <label style="margin-top: 0;" for="title">Category title</label>
+              <input id="title" name="title" required>
+              <input id="submit" type="submit" name="submit" value="Add Module">
+          </form>
+        </li>
+        {% endfor %}
+      </ul>
+      <form id="form" method="post" action="/add-course-module/{{ course.id }}">
+        <h3>Create a new module for {{ course.name }}</h3>
+        <label style="margin-top: 0;" for="title">Module title</label>
         <input id="title" name="title" required>
         <input id="submit" type="submit" name="submit" value="Add Module">
       </form>
-    </li>
-    {% endfor %}
-  </ul>
-  <form id="form" method="post" action="/add-course-module/{{ course.id }}">
-    <h3>Create a new module for {{ course.name }}</h3>
-    <label style="margin-top: 0;" for="title">Module title</label>
-    <input id="title" name="title" required>
-    <input id="submit" type="submit" name="submit" value="Add Module">
-  </form>
 
-  <h2>Previous students:</h2>
-  <ul>
-    {% for c in course.students %}
-    {% if c.hidden %}
-    <li style="margin: 20px 0;">
-      <a style="padding: 5px 50px; border-radius: 15px; box-shadow: var(--shadow) 2px 2px 10px; background-color: var(--background);" href="{{ request.base_url }}/{{ c.id }}">
-        {{ c.student.user.firstname }} {{ c.student.user.name }}: {{ c.progress }}%
-      </a>
-    </li>
-    {% endif %}
-    {% endfor %}
-  </ul>
-  {% endif %}
-  {% if current_user.type == "Student" %}
-  {% for c in course.students %}
-  {% if c.student.user.email == current_user.id %}
-  <h2>Progress:</h2>
-  <div class="course_progress">
-  <progress value="{{ c.progress }}" max="100" style="width: 90%;"></progress>
-  <p style="margin: 0; margin-left: 5px;">{{ c.progress }}%</p>
-  </div>
-  {% if c.comments|length > 0 %}
-  <h2>Comments:</h2>
-  <ul>
-    {% for com in c.comments %}
-    <li><i>com</i></li>
-    {% endfor %}
-  </ul>
-  {% endif %}
-    <h2>Modules:</h2>
-    <div style="display: grid; grid-template-columns: auto auto;">
-      {% for mod in c.modules %}
-        {% if not mod.optional %}
-          <div style="margin: 8px; padding: 20px; border-radius: 25px; box-shadow: var(--shadow) 4px 4px 20px">
-            <h3 style="margin-top: 0;">{{ mod.subject.title }}{% if mod.passed %}: <i>passed!</i>{% endif %}</h3>
-          <div class="course_progress">
-          <progress value="{{ mod.progress }}" max="100" {% if mod.passed %}class="class-passed"{% endif %}></progress>
-          <p style="margin: 0;margin-left: 5px;">{{ mod.progress }}%</p>
-          </div>
-          </div>
+      <h2>Previous students:</h2>
+      <ul>
+        {% for c in course.students %}
+        {% if c.hidden %}
+        <li style="margin: 20px 0;">
+          <a style="padding: 5px 50px; border-radius: 15px; box-shadow: var(--shadow) 2px 2px 10px; background-color: var(--background);"
+            href="{{ request.base_url }}/{{ c.id }}">
+            {{ c.student.user.firstname }} {{ c.student.user.name }}: {{ c.progress }}%
+          </a>
+        </li>
         {% endif %}
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% if current_user.type == "Student" %}
+      {% for c in course.students %}
+      {% if c.student.user.email == current_user.id %}
+      <h2>Progress:</h2>
+      <div class="course_progress">
+        <progress value="{{ c.progress }}" max="100" style="width: 90%;"></progress>
+        <p style="margin: 0; margin-left: 5px;">{{ c.progress }}%</p>
+      </div>
+      {% if c.comments|length > 0 %}
+      <h2>Comments:</h2>
+      <ul>
+        {% for com in c.comments %}
+        <li><i>com</i></li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      <h2>Modules:</h2>
+      <div style="display: grid; grid-template-columns: auto auto;">
+        {% for mod in c.modules %}
+        {% if not mod.optional %}
+        <div style="margin: 8px; padding: 20px; border-radius: 40px; box-shadow: var(--shadow) 4px 4px 20px">
+          <h3 style="margin-top: 0;">{{ mod.subject.title }}{% if mod.passed %}: <i>passed!</i>{% endif %}</h3>
+          <div class="course_progress">
+            <progress value="{{ mod.progress }}" max="100" {% if mod.passed %}class="class-passed" {% endif %}></progress>
+            <p style="margin: 0;margin-left: 5px;">{{ mod.progress }}%</p>
+          </div>
+          <div style="margin: 8px; padding: 10px; border-radius: 20px; box-shadow: var(--shadow) 4px 4px 20px">
+            {% for category in mod.categories %}
+            <div style="margin:5px;">
+              {{ category.category.title }}{% if category.passed %} -- <i>passed!</i>{% endif %}<br>
+              <progress value="{{ category.progress }}" max="100" {% if category.passed %}class="class-passed" {% endif %}></progress>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+      </div>
+      {% endif %}
       {% endfor %}
+      {% endif %}
     </div>
-  {% endif %}
-  {% endfor %}
-  {% endif %}
-</div>
-</div>
+  </div>
 </div>
 {% endblock %}
-
