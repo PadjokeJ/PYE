@@ -61,6 +61,23 @@ class StudentModule(Base):
   student_course: Mapped["StudentCourse"] = relationship(back_populates="modules")
   student_course_id: Mapped[int] = mapped_column(ForeignKey("student_course.id"))
 
+  categories: Mapped[List["StudentCategory"]] = relationship(back_populates="student_module")
+
+class StudentCategory(Base):
+  __tablename__ = "student_category"
+
+
+  id: Mapped[int] = mapped_column(Integer, primary_key=True)
+  category: Mapped["ModuleCategory"] = relationship(back_populates="student_categories")
+  category_id: Mapped[int] = mapped_column(ForeignKey("module_category.id"))
+
+  optional: Mapped[bool] = mapped_column(Boolean)
+  progress: Mapped[int] = mapped_column(Integer)
+  passed: Mapped[bool] = mapped_column(Boolean)
+
+  student_module: Mapped["StudentModule"] = relationship(back_populates="categories")
+  student_module_id: Mapped[int] = mapped_column(ForeignKey("student_module.id"))
+
 class Subject(Base):
   __tablename__ = "subject"
 
@@ -82,6 +99,16 @@ class SubjectModule(Base):
   title: Mapped[str] = mapped_column(String)
 
   student_modules: Mapped[List["StudentModule"]] = relationship(back_populates="subject")
+  categories: Mapped[List["ModuleCategory"]] = relationship(back_populates="parent_module")
+
+class ModuleCategory(Base):
+  __tablename__ = "module_category"
+  id: Mapped[int] = mapped_column(Integer, primary_key=True)
+  parent_module: Mapped[List["SubjectModule"]] = relationship(back_populates="categories")
+  parent_id: Mapped[int] = mapped_column(ForeignKey("module.id"))
+
+  title: Mapped[str] = mapped_column(String)
+  student_categories: Mapped[List["StudentCategory"]] = relationship(back_populates="category")
 
 class UsersTable(Base):
   __tablename__ = "users"

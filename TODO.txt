@@ -5,3 +5,11 @@ Teacher :
   - Add comments to students
   - Prevent modifying other's
 
+  - Better modules
+
+Students :
+  - Birth dates / age
+
+General stuff:
+  - Sort UI
+
