@@ -258,11 +258,11 @@ def update_student_module_progress(mod_id: str):
 
   return redirect(f"/courses/{module.subject.subject.id}/{module.student_course_id}?success")
 
-
 @app.route("/add-to-course/<course_id>", methods=["POST", "GET"])
 @login_required
 def add_to_course(course_id: str):
-
+  if not is_correct_teacher(course_id):
+    return redirect("/courses/" + str(course_id) + "?auth=False")
   if request.method == "POST":
     database.add_student_to_course(str(course_id), request.form["student"])
     return redirect("/courses/" + str(course_id))
@@ -271,6 +271,8 @@ def add_to_course(course_id: str):
 @app.route("/add-course-module/<course_id>", methods=["POST", "GET"])
 @login_required
 def add_course_module(course_id: str):
+  if not is_correct_teacher(course_id):
+    return redirect("/courses/" + str(course_id) + "?auth=False")
   if request.method == "POST":
     database.add_course_module(str(course_id), request.form["title"])
     return redirect("/courses/" + str(course_id))
@@ -279,6 +281,9 @@ def add_course_module(course_id: str):
 @app.route("/add-module-category/<course_id>/<module_id>/", methods=["POST", "GET"])
 @login_required
 def add_module_category(course_id: str, module_id: str):
+  if not is_correct_teacher(course_id):
+    return redirect("/courses/" + str(course_id) + "?auth=False")
+
   if request.method == "POST":
     database.add_module_category(str(module_id), str(course_id), request.form["title"])
     return redirect("/courses/" + str(course_id))
@@ -294,6 +299,9 @@ def hide_student_course(course_id: str):
   database.hide_student_course(str(course_id), request.form.get("hide") == "true")
 
   return redirect(f"/courses/{student_course.subject_id}/{student_course.id}?success")
+
+def is_correct_teacher(course_id: str) -> bool:
+  return flask_login.current_user.type == "Teacher" and flask_login.current_user.id == database.get_course(course_id).teacher.user_email
 
 if __name__ == "__main__":
   app.run(host="0.0.0.0", port=8080, debug=True)
