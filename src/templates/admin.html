@@ -17,12 +17,22 @@
     <input type="text" name="surname" required></input>
 
     <label for="type">User type<span style="color: #ff0000">*</span></label>
-    <select name="type" required>
+    <select name="type" id="user_type" required>
       <option value="Student">Student</option>
+      <option value="Parent">Parent</option>
       <option value="Teacher">Teacher</option>
       <option value="Direction">Direction</option>
       <option value="Admin">Admin</option>
     </select>
+
+    <div id="student_id_div" style="display:none;">
+      <label for="student_id">Child</label>
+      <select name="student_id" id="student_id">
+        {% for student in students %}
+        <option value="{{ student.id }}">{{ student.user.name }} {{ student.user.firstname }}</option>
+        {% endfor %}
+      </select>
+    </div>
 
     <label for="email">Email<span style="color: #ff0000">*</span></label>
     <input type="email" name="email" required></input>
@@ -33,6 +43,16 @@
     <input id="submit" type="submit" name="submit" value="Add User">
   </form>
 </div>
+<script>
+  document.getElementById("user_type").addEventListener("input", () => {
+    if (document.getElementById("user_type").value == "Parent") {
+      document.getElementById("student_id_div").style.display = "block";
+    } else {
+
+      document.getElementById("student_id_div").style.display = "none";
+    }
+  })
+</script>
 <div>
 {% endblock %}
 

@@ -136,14 +136,14 @@ def admin():
   if flask_login.current_user.type != "Admin":
     return redirect("/home")
 
-  return render_template("admin.html")
+  return render_template("admin.html", students=database.all_students())
 
 @app.route("/users")
 @login_required
 def users_dash():
   if flask_login.current_user.type != "Admin":
     return redirect("/home")
-  return render_template("users.html", users=database.get_users())
+  return render_template("users.html", users=database.get_users(), students=database.all_students())
 
 @app.route("/update-user", methods=["POST", "GET"])
 @login_required
@@ -174,9 +174,24 @@ def create_user():
   email = request.form["email"]
   passw = request.form["password"]
 
-  database.create_user(name, surname, utype, passw, email)
+  stud_id = 0
+
+  if utype == "Parent":
+    stud_id = request.form["student_id"]
+
+  database.create_user(name, surname, utype, passw, email, stud_id)
 
   return redirect("/admin?success")
+
+@app.route("/add-child/<parent_id>/<child_id>", methods=["POST"])
+@login_required
+def add_child(parent_id: str, child_id: int):
+  if flask_login.current_user.type != "Admin":
+    return "not an admin", 403
+
+  database.add_child(parent_id, child_id)
+
+  return "added child"
 
 @app.route("/new-course")
 @login_required

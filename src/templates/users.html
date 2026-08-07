@@ -14,6 +14,32 @@
     <form id="form" action="/update-user" method="POST" style="margin: 10px;">
       <h2>{{ user.email }}</h2>
       <p><i>{{ user.role }}</i></p>
+      {% if user.role == "Parent" %}
+        <h3>Children:</h3>
+        <ul>
+          {% for child_id in user.student_id %}
+            {% for c in students %}
+              {% if c.id|string == child_id %}
+              <li>{{ c.user.name }} {{ c.user.firstname }}</li>
+              {% endif %}
+            {% endfor %}
+          {% endfor %}
+        </ul>
+        <div style="display: flex;flex-direction: column;box-shadow: 2px 2px 2px 2px var(--shadow);padding: 5px;border-radius: 15px;">
+        <select id="add_child_{{ user.email }}">
+          {% for stud in students %}
+          <option value="{{stud.id}}">{{ stud.user.name }} {{ stud.user.firstname }}</option>
+          {% endfor %}
+        </select>
+        <script>
+          const selector = document.getElementById("add_child_{{ user.email }}");
+          document.getElementById("add_child_button_{{ user.email }}").addEventListener("click", () => {
+            fetch("/add-child/{{ user.email }}/" + selector.value, {method: "POST"});
+          });
+        </script>
+        <a class="button" id="add_child_button_{{ user.email }}">Add child</a>
+        </div>
+      {% endif %}
       <label for="password">New password<span style="color: #ff0000">*</span></label>
       <input type="text" name="password" id="password_{{ user.email }}" value="" required>
       <a class="button" href="#" onclick="function hexS() { return Math.floor((Math.random() * 0.9 + 0.1) * 4294967295).toString(16); };function gen(){ document.getElementById('password_{{ user.email }}').value = hexS() + '-' + hexS() }; gen();">Generate</a>

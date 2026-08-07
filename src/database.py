@@ -33,6 +33,8 @@ class StudentData(Base):
   courses: Mapped[List["StudentCourse"]] = relationship(back_populates="student")
   user: Mapped["UsersTable"] = relationship(back_populates="student_data")
   user_email: Mapped[str] = mapped_column(ForeignKey("users.email"))
+  parent_email: Mapped[Optional[str]] = mapped_column(String)
+  parent2_email: Mapped[Optional[str]] = mapped_column(String)
   birthdate: Mapped[str] = mapped_column(String)
 
 class StudentCourse(Base):
@@ -125,6 +127,7 @@ class UsersTable(Base):
 
   student_data: Mapped[Optional["StudentData"]] = relationship(back_populates="user")
   teacher_data: Mapped[Optional["Teacher"]] = relationship(back_populates="user")
+  student_id: Mapped[List[int]] = mapped_column(JSON)
 
 db = SQLAlchemy(model_class=Base)
 
@@ -158,7 +161,7 @@ def get_login(user: str, pw: bytes) -> bool:
 def get_type(user: str) -> str:
   return get_user(user).role
 
-def create_user(name: str, surname: str, utype: str, pw: str, email: str):
+def create_user(name: str, surname: str, utype: str, pw: str, email: str, provided_id: int):
   n = name.lower()
   s = surname.lower()
 
@@ -189,13 +192,16 @@ def create_user(name: str, surname: str, utype: str, pw: str, email: str):
       role=typ,
       reset=True,
       name=surname,
-      firstname=name
+      firstname=name,
+      student_id=list()
     )
 
   if utype == "Student":
     user.student_data = StudentData(user_email=email, birthdate="")
   if typ == "Teacher":
     user.teacher_data = Teacher(user_email=email, super=False)
+  if utype == "Parent":
+    user.student_id.append(provided_id)
 
   db.session.add(user)
   db.session.commit()
@@ -223,6 +229,18 @@ def update_password(email: str, pw: str):
 
 def get_deprecation(user: str) -> bool:
   return get_user(user).reset
+
+def add_child(user: str, child: int):
+  get_user(user).student_id.append(child)
+
+  s = get_student(child)
+
+  if s.parent_email == None:
+    s.parent_email = user
+  else:
+    s.parent2_email = user
+
+  db.session.commit()
 
 def create_course(owner: str, name: str, grade: str, color: int):
   user = get_user(owner)
@@ -259,6 +277,9 @@ def get_course(id: str) -> Subject:
 
 def get_module(id: str) -> SubjectModule:
   return db.session.get(SubjectModule, id)
+
+def get_student(id: int) -> StudentData:
+  return db.session.get(StudentData, id)
 
 def get_student_course(id: str) -> StudentCourse:
   return db.session.get(StudentCourse, id)

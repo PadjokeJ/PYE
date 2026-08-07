@@ -26,5 +26,6 @@ with app.app_context():
     "",             # User surname, not needed
     "Admin",        # User type
     admin_passw,         # User password
-    admin_email # User email -> main identifier
+    admin_email, # User email -> main identifier
+    0 # Admin is not parent
   )
