@@ -33,6 +33,7 @@ class StudentData(Base):
   courses: Mapped[List["StudentCourse"]] = relationship(back_populates="student")
   user: Mapped["UsersTable"] = relationship(back_populates="student_data")
   user_email: Mapped[str] = mapped_column(ForeignKey("users.email"))
+  birthdate: Mapped[str] = mapped_column(String)
 
 class StudentCourse(Base):
   __tablename__ = "student_course"

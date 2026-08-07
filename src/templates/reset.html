@@ -30,9 +30,19 @@
           <input class="login-input" id="password" name="password" type="password" required pattern="^.{8}.*$">
           <label class="login-label" for="password">Confirm password</label>
           <input class="login-input" id="confirm" name="confirm" type="password" required pattern="^.{8}.*$">
-          <button class="login-input" id="submit" name="submit" type="submit">Reset</button>
+          <button class="login-input" id="submit" name="submit" type="submit" disabled>Reset</button>
         </form>
       </div>
+      <script>
+        const password = document.getElementById("password");
+        const confirm = document.getElementById("confirm");
+
+        const submit = document.getElementById("submit");
+
+        password.addEventListener("input", () => submit.disabled = password.value != confirm.value);
+
+        confirm.addEventListener("input", () => submit.disabled = password.value != confirm.value);
+      </script>
     </div>
   </body>
 </html>
