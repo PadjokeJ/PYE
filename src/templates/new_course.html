@@ -11,8 +11,11 @@
     <label for="name">Course name<span style="color: #ff0000">*</span></label>
     <input type="text" name="name" required></input>
 
-    <label for="grade">Student Grade (eg. 10H)<span style="color: #ff0000">*</span></label>
+    <label for="grade">Student grade (eg. 10H)<span style="color: #ff0000">*</span></label>
     <input type="text" name="grade" pattern="^([1-9]H|1[0-1]H)$" required></input>
+
+    <label for="color">Course color</label>
+    <input type="color" name="color"></input>
 
     <input id="submit" type="submit" name="submit" value="Add course">
   </form>

@@ -82,6 +82,7 @@ class Subject(Base):
   __tablename__ = "subject"
 
   id: Mapped[int] = mapped_column(Integer, primary_key=True)
+  color: Mapped[int] = mapped_column(Integer)
   name: Mapped[str] = mapped_column(String)
   grade: Mapped[str] = mapped_column(String)
   teacher_id: Mapped[int] = mapped_column(ForeignKey("teacher.id"))
@@ -222,12 +223,13 @@ def update_password(email: str, pw: str):
 def get_deprecation(user: str) -> bool:
   return get_user(user).reset
 
-def create_course(owner: str, name: str, grade: str):
+def create_course(owner: str, name: str, grade: str, color: int):
   user = get_user(owner)
   subject = Subject(
     teacher=user.teacher_data,
     name=name,
-    grade=grade
+    grade=grade,
+    color=color
   )
   db.session.add(subject)
   db.session.commit()

@@ -198,7 +198,12 @@ def create_course():
   name = request.form["name"]
   grade = request.form["grade"]
 
-  database.create_course(flask_login.current_user.id, name, grade)
+  color = 0;
+
+  if "color" in request.form.keys():
+    color = int(request.form["color"][1:], 16)
+
+  database.create_course(flask_login.current_user.id, name, grade, color)
 
   return redirect("/new-course?success")
 

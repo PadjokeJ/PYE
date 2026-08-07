@@ -8,7 +8,7 @@
 {% block content %}
 <div style="display:flex; justify-content:center; width:100%;">
   <div style="flex-direction: column;">
-    <h1>{{ course.name }} -- {{ course.grade }}</h1>
+    <h1 style="color:#{{ "%0.6x" % course.color }}">{{ course.name }} -- {{ course.grade }}</h1>
     <i class="left_grad">{{ course.teacher.user.name }} {{ course.teacher.user.firstname }}</i>
 
     <div style="flex-direction: column;">
@@ -99,13 +99,14 @@
           <h3 style="margin-top: 0;">{{ mod.subject.title }}{% if mod.passed %}: <i>passed!</i>{% endif %}</h3>
           <div class="course_progress">
             <progress value="{{ mod.progress }}" max="100" {% if mod.passed %}class="class-passed" {% endif %}></progress>
-            <p style="margin: 0;margin-left: 5px;">{{ mod.progress }}%</p>
+            <p style="margin: 0;margin-left: 5px;">{% if mod.passed %}{{ mod.progress }}%{% endif %}</p>
           </div>
           <div style="margin: 8px; padding: 10px; border-radius: 20px; box-shadow: var(--shadow) 4px 4px 20px">
             {% for category in mod.categories %}
             <div style="margin:5px;">
               {{ category.category.title }}{% if category.passed %} -- <i>passed!</i>{% endif %}<br>
               <progress value="{{ category.progress }}" max="100" {% if category.passed %}class="class-passed" {% endif %}></progress>
+            <p style="margin: 0;margin-left: 5px;">{% if category.passed %}{{ category.progress }}%{% endif %}</p>
             </div>
             {% endfor %}
           </div>
