@@ -193,7 +193,7 @@ def create_user(name: str, surname: str, utype: str, pw: str, email: str):
     )
 
   if utype == "Student":
-    user.student_data = StudentData(user_email=email)
+    user.student_data = StudentData(user_email=email, birthdate="")
   if typ == "Teacher":
     user.teacher_data = Teacher(user_email=email, super=False)
 
