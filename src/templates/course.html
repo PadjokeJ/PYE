@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
-{% block title %}Courses -- {{ course.name }}{% endblock %}
-{% block ogtitle %}Courses -- {{ course.name }}{% endblock %}
+{% block title %}Cours -- {{ course.name }}{% endblock %}
+{% block ogtitle %}Cours -- {{ course.name }}{% endblock %}
 
 {% block cactive %}active{% endblock %}
 
@@ -13,7 +13,7 @@
 
     <div style="flex-direction: column;">
       {% if current_user.type == "Teacher" %}
-      <h2>Students:</h2>
+      <h2>Étudiants :</h2>
       <ul>
         {% for c in course.students %}
         {% if not c.hidden %}
@@ -27,15 +27,15 @@
         {% endfor %}
       </ul>
       <form id="form" method="post" action="/add-to-course/{{ course.id }}">
-        <label style="margin-top: 0;" for="student">Select a student to add</label>
+        <label style="margin-top: 0;" for="student">Ajouter un étudiant</label>
         <select id="student" name="student" required>
           {% for s in all_students %}
           <option value="{{ s.id }}">{{ s.user.firstname }} {{ s.user.name }}</option>
           {% endfor %}
         </select>
-        <input id="submit" type="submit" name="submit" value="Add Student">
+        <input id="submit" type="submit" name="submit" value="Ajouter l'étudiant">
       </form>
-      <h2>Modules:</h2>
+      <h2>Modules :</h2>
       <ul class="modules">
         {% for mod in course.modules|sort(attribute='title') %}
         <li class="module">
@@ -46,22 +46,22 @@
             {% endfor %}
           </ul>
           <form id="form" method="post" action="/add-module-category/{{ course.id }}/{{ mod.id }}">
-            <h3>Create a new category for <i>{{ mod.title }}</i></h2>
-              <label style="margin-top: 0;" for="title">Category title</label>
+            <h3>Créer une nouvelle catégorie pour <i>{{ mod.title }}</i></h2>
+              <label style="margin-top: 0;" for="title">Titre</label>
               <input id="title" name="title" required>
-              <input id="submit" type="submit" name="submit" value="Add Module">
+              <input id="submit" type="submit" name="submit" value="Ajouter la catégorie">
           </form>
         </li>
         {% endfor %}
       </ul>
       <form id="form" method="post" action="/add-course-module/{{ course.id }}">
-        <h3>Create a new module for {{ course.name }}</h3>
-        <label style="margin-top: 0;" for="title">Module title</label>
+        <h3>Ajouter un nouveau module pour {{ course.name }}</h3>
+        <label style="margin-top: 0;" for="title">Titre</label>
         <input id="title" name="title" required>
-        <input id="submit" type="submit" name="submit" value="Add Module">
+        <input id="submit" type="submit" name="submit" value="Ajouter le module">
       </form>
 
-      <h2>Previous students:</h2>
+      <h2>Étudiants précédents :</h2>
       <ul>
         {% for c in course.students %}
         {% if c.hidden %}
@@ -84,19 +84,19 @@
         <p style="margin: 0; margin-left: 5px;">{{ c.progress }}%</p>
       </div>
       {% if c.comments|length > 0 %}
-      <h2>Comments:</h2>
+      <h2>Commentaires :</h2>
       <ul>
         {% for com in c.comments %}
-        <li><i>com</i></li>
+        <li><i>{{ com }}</i></li>
         {% endfor %}
       </ul>
       {% endif %}
-      <h2>Modules:</h2>
+      <h2>Modules :</h2>
       <div style="display: grid; grid-template-columns: auto auto;">
         {% for mod in c.modules %}
         {% if not mod.optional %}
         <div style="margin: 8px; padding: 20px; border-radius: 40px; box-shadow: var(--shadow) 4px 4px 20px">
-          <h3 style="margin-top: 0;">{{ mod.subject.title }}{% if mod.passed %}: <i>passed!</i>{% endif %}</h3>
+          <h3 style="margin-top: 0;">{{ mod.subject.title }}{% if mod.passed %}: <i>réussi !</i>{% endif %}</h3>
           <div class="course_progress">
             <progress value="{{ mod.progress }}" max="100" {% if mod.passed %}class="class-passed" {% endif %}></progress>
             <p style="margin: 0;margin-left: 5px;">{% if mod.passed %}{{ mod.progress }}%{% endif %}</p>
@@ -104,7 +104,7 @@
           <div style="margin: 8px; padding: 10px; border-radius: 20px; box-shadow: var(--shadow) 4px 4px 20px">
             {% for category in mod.categories %}
             <div style="margin:5px;">
-              {{ category.category.title }}{% if category.passed %} -- <i>passed!</i>{% endif %}<br>
+              {{ category.category.title }}{% if category.passed %} -- <i>réussi !</i>{% endif %}<br>
               <progress value="{{ category.progress }}" max="100" {% if category.passed %}class="class-passed" {% endif %}></progress>
             <p style="margin: 0;margin-left: 5px;">{% if category.passed %}{{ category.progress }}%{% endif %}</p>
             </div>

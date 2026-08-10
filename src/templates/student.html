@@ -13,7 +13,7 @@
   <h1 style="margin-bottom:0;">{{ student.student.user.firstname }} {{ student.student.user.name }}</h1>
   <i>{{ student.subject.name }}</i>
   <div style="margin-top:20px;">
-    <label for="hide">Hide course</label>
+    <label for="hide">Cacher le cours</label>
     <input style="min-width:0;" type="checkbox" name="hide" value="hide" id="hide" {% if student.hidden %}checked{%
       endif %}>
     <script>
@@ -33,18 +33,18 @@
           <h2 style="text-align: center;">Total</h2>
           
           <div style="align-items:center; display:flex;">
-            <label style="margin-top:0; width:30%;" for="progress">Progress: <span id="span-{{ mod.id }}">{{
+            <label style="margin-top:0; width:30%;" for="progress">Progrès: <span id="span-{{ mod.id }}">{{
                 mod.progress }}</span>%</label>
             <input style="margin: 0 5px; min-width:0; width:70%;" type="range" name="progress"
               id="progress-{{ mod.id }}" value="{{ mod.progress }}">
           </div>
           <div style="align-items:center; display:flex;">
-            <label for="passed">Has passed</label>
+            <label for="passed">Cours réussi</label>
             <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="passed"
               name="passed" value="passed" {% if mod.passed %}checked{% endif %}>
           </div>
           <div style="align-items:center; display:flex;">
-            <label for="optional">Optional</label>
+            <label for="optional">Cours pas étudié</label>
             <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="optional"
               name="optional" value="optional" {% if mod.optional %}checked{% endif %}>
           </div>
@@ -54,18 +54,18 @@
         <form action="/student/category/{{ category.id }}" method="POST" class="student_inner">
           <h2 style="text-align: center;">{{ category.category.title }}</h2>
           <div style="align-items:center; display:flex;">
-            <label style="margin-top:0; width:30%;" for="progress">Progress: <span id="span-cat-{{ category.id }}">{{
+            <label style="margin-top:0; width:30%;" for="progress">Progrès: <span id="span-cat-{{ category.id }}">{{
                 category.progress }}</span>%</label>
             <input style="margin: 0 5px; min-width:0; width:70%;" type="range" name="progress"
               id="progress-cat-{{ category.id }}" value="{{ category.progress }}">
           </div>
           <div style="align-items:center; display:flex;">
-            <label for="passed">Has passed</label>
+            <label for="passed">Cours réussi</label>
             <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="passed"
               name="passed" value="passed" {% if category.passed %}checked{% endif %}>
           </div>
           <div style="align-items:center; display:flex;">
-            <label for="optional">Optional</label>
+            <label for="optional">Module pas étudié</label>
             <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="optional"
               name="optional" value="optional" {% if category.optional %}checked{% endif %}>
           </div>

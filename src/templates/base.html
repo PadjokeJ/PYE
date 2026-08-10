@@ -8,7 +8,7 @@
     
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
-    <meta name="description" content="PYE homepage">
+    <meta name="description" content="PYE">
     <meta name="locale" content="en-us">
     <meta name="keywords" content="website tags">
     
@@ -17,22 +17,22 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ request.base_url }}">
     <meta property="og:image" content="{{ request.host_url }}images/favicon.webp">
-    <meta property="og:description" content="PYE Homepage">
+    <meta property="og:description" content="PYE">
   </head>
             
   <body>
     <nav class="no-print">
-      <a class="tab" id="{% block homeactive %}{% endblock %}" href="/home">Home</a>
+      <a class="tab" id="{% block homeactive %}{% endblock %}" href="/home">Accueil</a>
       {% if current_user.type == "Teacher" or current_user.type == "Student" %}
-        <a class="tab" id="{% block cactive %}{% endblock %}" href="/courses">Courses</a>
+        <a class="tab" id="{% block cactive %}{% endblock %}" href="/courses">Cours</a>
       {% endif %}
       {% if current_user.type == "Teacher" %}
-        <a class="tab" id="{% block acactive %}{% endblock %}" href="/new-course">Create course</a>
+        <a class="tab" id="{% block acactive %}{% endblock %}" href="/new-course">Créer un cours</a>
       {% endif %}
       {% if current_user.type == "Admin" %}
-        <a class="tab" id="{% block admactive %}{% endblock %}" href="/admin">Admin</a>
+        <a class="tab" id="{% block admactive %}{% endblock %}" href="/admin">Console d'administrateur</a>
       {% endif %}
-      <a id="logout" href="/logout">Logout</a>
+      <a id="logout" href="/logout">Déconnexion</a>
     </nav>
     <div id="content">
       {% block content %}{% endblock %}

@@ -1,26 +1,26 @@
 {% extends 'base.html' %}
 
-{% block title %}Admin dashboard{% endblock %}
-{% block ogtitle %}Admin dashboard{% endblock %}
+{% block title %}Console d'administrateur{% endblock %}
+{% block ogtitle %}Console d'administrateur{% endblock %}
 
 {% block admactive %}active{% endblock %}
 
 {% block content %}
 <div style="display: flex;flex-direction: column;align-items: center; width:100%;">
-<a style="margin: 20px; box-shadow: var(--shadow) 2px 2px 10px; padding: 10px; border-radius: 15px;" href="/users">Modify users</a>
+<a style="margin: 20px; box-shadow: var(--shadow) 2px 2px 10px; padding: 10px; border-radius: 15px;" href="/users">Modifier les utilisateurs</a>
 <div class="island">
   <form id="form" action="/add-user" method="post">
-    <label for="name">Name<span style="color: #ff0000">*</span></label>
+    <label for="name">Prénom<span style="color: #ff0000">*</span></label>
     <input type="text" name="name" required></input>
 
-    <label for="surname">Surname<span style="color: #ff0000">*</span></label>
+    <label for="surname">Nom<span style="color: #ff0000">*</span></label>
     <input type="text" name="surname" required></input>
 
-    <label for="type">User type<span style="color: #ff0000">*</span></label>
+    <label for="type">Type<span style="color: #ff0000">*</span></label>
     <select name="type" id="user_type" required>
-      <option value="Student">Student</option>
+      <option value="Student">Étudiant</option>
       <option value="Parent">Parent</option>
-      <option value="Teacher">Teacher</option>
+      <option value="Teacher">Prof</option>
       <option value="Direction">Direction</option>
       <option value="Admin">Admin</option>
     </select>
@@ -37,10 +37,10 @@
     <label for="email">Email<span style="color: #ff0000">*</span></label>
     <input type="email" name="email" required></input>
 
-    <label for="surname">Password<span style="color: #ff0000">*</span></label>
+    <label for="surname">Mot de passe<span style="color: #ff0000">*</span></label>
     <input type="text" name="password" id="pw" required></input>
-    <a class="button" href="#" onclick="function hexS() { return Math.floor((Math.random() * 0.9 + 0.1) * 4294967295).toString(16); };function gen(){ document.getElementById('pw').value = hexS() + '-' + hexS() }; gen();">Generate</a>
-    <input id="submit" type="submit" name="submit" value="Add User">
+    <a class="button" href="#" onclick="function hexS() { return Math.floor((Math.random() * 0.9 + 0.1) * 4294967295).toString(16); };function gen(){ document.getElementById('pw').value = hexS() + '-' + hexS() }; gen();">Générer</a>
+    <input id="submit" type="submit" name="submit" value="Ajouter l'utilisateur">
   </form>
 </div>
 <script>
