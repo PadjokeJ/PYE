@@ -39,6 +39,7 @@ def user_loader(email):
   user.id = email
   user.type = database.get_type(email)
   user.reset = database.get_deprecation(email)
+  user.data = database.get_user(email)
 
   return user
 

@@ -3,13 +3,22 @@
 
 Teacher :
   - Add comments to students
-  - Prevent modifying other's
-
-  - Better modules
+  - Delete modules
+  - Delete categories
+  - Change color
+  ! Module en cours => Cadre du module (+ shadow ?)
 
 Students :
   - Birth dates / age
+  ! Change percentage to modules réussis / total modules published
+  ! Remove total progress
+
+Parents :
+  - Show progress
+  - Absences
 
 General stuff:
-  - Sort UI
+  - Hide total
+  - Hide percentage
+  - Texte sur les boutons
 

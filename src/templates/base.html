@@ -23,7 +23,7 @@
   <body>
     <nav class="no-print">
       <a class="tab" id="{% block homeactive %}{% endblock %}" href="/home">Accueil</a>
-      {% if current_user.type == "Teacher" or current_user.type == "Student" %}
+      {% if current_user.type == "Teacher" or current_user.type == "Student" or current_user.type == "Parent" %}
         <a class="tab" id="{% block cactive %}{% endblock %}" href="/courses">Cours</a>
       {% endif %}
       {% if current_user.type == "Teacher" %}

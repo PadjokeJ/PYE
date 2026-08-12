@@ -48,7 +48,7 @@
             <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="optional"
               name="optional" value="optional" {% if mod.optional %}checked{% endif %}>
           </div>
-          <input id="submit" type="submit" name="submit" value="Update module">
+          <input id="submit" type="submit" name="submit" value="Mettre à jour">
         </form>
         {% for category in mod.categories|sort(attribute='category.title') %}
         <form action="/student/category/{{ category.id }}" method="POST" class="student_inner">
@@ -60,7 +60,7 @@
               id="progress-cat-{{ category.id }}" value="{{ category.progress }}">
           </div>
           <div style="align-items:center; display:flex;">
-            <label for="passed">Cours réussi</label>
+            <label for="passed">Cours réussi :</label>
             <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="passed"
               name="passed" value="passed" {% if category.passed %}checked{% endif %}>
           </div>
@@ -69,7 +69,7 @@
             <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="optional"
               name="optional" value="optional" {% if category.optional %}checked{% endif %}>
           </div>
-          <input id="submit" type="submit" name="submit" value="Update category">
+          <input id="submit" type="submit" name="submit" value="Mettre à jour">
         </form>
         <script>
       document.getElementById("progress-cat-{{ category.id }}").addEventListener("input", () => {

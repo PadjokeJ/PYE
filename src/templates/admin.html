@@ -26,7 +26,7 @@
     </select>
 
     <div id="student_id_div" style="display:none;">
-      <label for="student_id">Child</label>
+      <label for="student_id">Enfants</label>
       <select name="student_id" id="student_id">
         {% for student in students %}
         <option value="{{ student.id }}">{{ student.user.name }} {{ student.user.firstname }}</option>
