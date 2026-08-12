@@ -29,27 +29,6 @@
     <div>
       <h2>{{ mod.subject.title }}</h2>
       <div class="student_outer">
-        <form action="/student/module/{{ mod.id }}" method="POST" class="student_inner">
-          <h2 style="text-align: center;">Total</h2>
-          
-          <div style="align-items:center; display:flex;">
-            <label style="margin-top:0; width:30%;" for="progress">Progrès: <span id="span-{{ mod.id }}">{{
-                mod.progress }}</span>%</label>
-            <input style="margin: 0 5px; min-width:0; width:70%;" type="range" name="progress"
-              id="progress-{{ mod.id }}" value="{{ mod.progress }}">
-          </div>
-          <div style="align-items:center; display:flex;">
-            <label for="passed">Cours réussi</label>
-            <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="passed"
-              name="passed" value="passed" {% if mod.passed %}checked{% endif %}>
-          </div>
-          <div style="align-items:center; display:flex;">
-            <label for="optional">Cours pas étudié</label>
-            <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="optional"
-              name="optional" value="optional" {% if mod.optional %}checked{% endif %}>
-          </div>
-          <input id="submit" type="submit" name="submit" value="Mettre à jour">
-        </form>
         {% for category in mod.categories|sort(attribute='category.title') %}
         <form action="/student/category/{{ category.id }}" method="POST" class="student_inner">
           <h2 style="text-align: center;">{{ category.category.title }}</h2>

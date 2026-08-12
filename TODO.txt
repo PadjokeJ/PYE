@@ -11,7 +11,6 @@ Teacher :
 Students :
   - Birth dates / age
   ! Change percentage to modules réussis / total modules published
-  ! Remove total progress
 
 Parents :
   - Show progress

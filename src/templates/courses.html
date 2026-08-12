@@ -17,14 +17,6 @@
         {% if current_user.type == "Student" %}
         {% for s in c.students %}
         {% if s.student.user_email == current_user.id %}
-        : {{ s.progress }}%
-        {% endif %}
-        {% endfor %}
-        {% endif %}
-        {% if current_user.type == "Parent" %}
-        {% for s in c.students %}
-        {% if s.student.id in current_user.data.student_id %}
-        : {{ s.progress }}%
         {% endif %}
         {% endfor %}
         {% endif %}

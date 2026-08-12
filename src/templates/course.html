@@ -78,11 +78,6 @@
       {% if current_user.type == "Student" or current_user.type == "Parent" %}
       {% for c in course.students %}
       {% if c.student.user.email == current_user.id or current_user.id == s.student.parent_email or current_user.id == s.student.parent2_email %}
-      <h2>Progress:</h2>
-      <div class="course_progress">
-        <progress value="{{ c.progress }}" max="100" style="width: 90%;"></progress>
-        <p style="margin: 0; margin-left: 5px;">{{ c.progress }}%</p>
-      </div>
       {% if c.comments|length > 0 %}
       <h2>Commentaires :</h2>
       <ul>
