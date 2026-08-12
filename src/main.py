@@ -226,7 +226,7 @@ def create_course():
 @app.route("/courses")
 @login_required
 def course_access():
-  courses = database.get_courses(flask_login.current_user.id)
+  courses = database.get_courses(flask_login.current_user.id) # TODO : parents access
 
   return render_template("courses.html", courses=courses)
 
@@ -274,8 +274,9 @@ def update_student_module_progress(mod_id: str):
       pro = 0
 
   pas = True if "passed" in request.form.keys() and request.form["passed"] == "passed" else False
+  foc = True if "focussed" in request.form.keys() and request.form["focussed"] == "focussed" else False
 
-  database.modify_student_module(str(mod_id), opt, pro, pas)
+  database.modify_student_module(str(mod_id), opt, pro, pas, foc)
 
   return redirect(f"/courses/{module.subject.subject.id}/{module.student_course_id}?success")
 

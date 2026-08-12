@@ -58,6 +58,7 @@ class StudentModule(Base):
   subject_id: Mapped[int] = mapped_column(ForeignKey("module.id"))
 
   optional: Mapped[bool] = mapped_column(Boolean)
+  focussed: Mapped[bool] = mapped_column(Boolean)
   progress: Mapped[int] = mapped_column(Integer)
   passed: Mapped[bool] = mapped_column(Boolean)
 
@@ -290,16 +291,15 @@ def get_student_module(id: str) -> StudentModule:
 def get_student_category(id: str) -> StudentCategory:
   return db.session.get(StudentCategory, id)
 
-def modify_student_module(id: str, optional: bool, progress: int, passed: bool):
+def modify_student_module(id: str, optional: bool, progress: int, passed: bool, focussed: bool):
   module = get_student_module(id)
   
   module.optional = optional
   module.progress = progress
   module.passed   = passed
+  module.focussed = focussed
 
   db.session.commit()
-
-  update_progress(module.student_course)
 
 def modify_student_category(id: str, optional: bool, progress: int, passed: bool):
   cat = get_student_category(id)
@@ -307,18 +307,6 @@ def modify_student_category(id: str, optional: bool, progress: int, passed: bool
   cat.optional = optional
   cat.progress = progress
   cat.passed   = passed
-
-  db.session.commit()
-
-def update_progress(student_course: StudentCourse):
-  p = 0
-  i = 0
-  for module in student_course.modules:
-    if not module.optional:
-      p += module.progress
-      i += 1
-  
-  student_course.progress = p / i
 
   db.session.commit()
 
@@ -358,6 +346,7 @@ def add_student_to_course(course_id: str, id: str):
     data.modules.append(StudentModule(
       subject_id=module.id,
       optional=False,
+      focussed=False,
       progress=0,
       passed=False,
       student_course_id=data.id,
@@ -381,12 +370,12 @@ def add_course_module(course_id: str, title: str):
     smodule = StudentModule(
       subject_id=module.id,
       optional=False,
+      focussed=False,
       progress=0,
       passed=False,
       student_course_id=student.id
     )
     student.modules.append(smodule)
-    update_progress(student)
   db.session.commit()
 
 def add_module_category(module_id: str, course_id: str, title: str):

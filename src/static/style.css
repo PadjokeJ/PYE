@@ -3,6 +3,8 @@
   --background-2: #eaeaea;
   --main: #222233;
   --shadow: #00000055;
+  --green: #2a4;
+  --orange: #a81818;
 }
 
 html, body {
@@ -186,11 +188,11 @@ nav, footer {
 }
 
 progress.class-passed {
-  accent-color: #2a4;
+  accent-color: var(--green);
 }
 
 progress:not(.class-passed) {
-  accent-color: rgb(168, 24, 24);
+  accent-color: var(--orange);
 }
 
 .modules {
