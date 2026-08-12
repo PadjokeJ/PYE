@@ -6,7 +6,6 @@ Teacher :
   - Delete modules
   - Delete categories
   - Change color
-  ! Module en cours => Cadre du module (+ shadow ?)
 
 Students :
   - Birth dates / age
@@ -17,7 +16,5 @@ Parents :
   - Absences
 
 General stuff:
-  - Hide total
-  - Hide percentage
   - Texte sur les boutons
 
