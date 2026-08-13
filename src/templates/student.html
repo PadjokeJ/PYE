@@ -40,6 +40,11 @@
             <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="optional"
               name="optional" value="optional" {% if mod.optional %}checked{% endif %}>
           </div>
+          <div style="align-items:center; display:flex;">
+            <label for="optional">Module réussi</label>
+            <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="passed"
+              name="passed" value="passed" {% if mod.passed %}checked{% endif %}>
+          </div>
           <input id="submit" type="submit" name="submit" value="Mettre à jour">
         </form>
         {% for category in mod.categories|sort(attribute='category.title') %}

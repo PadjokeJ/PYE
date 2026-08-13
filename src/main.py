@@ -265,6 +265,8 @@ def update_student_module_progress(mod_id: str):
     return redirect("/courses")
 
   opt = True if "optional" in request.form.keys() and request.form["optional"] == "optional" else False
+  pas = True if "passed" in request.form.keys() and request.form["passed"] == "passed" else False
+  foc = True if "focussed" in request.form.keys() and request.form["focussed"] == "focussed" else False
 
   pro = 0
   if "progress" in request.form.keys():
@@ -272,9 +274,6 @@ def update_student_module_progress(mod_id: str):
       pro = int(request.form["progress"])
     except:
       pro = 0
-
-  pas = True if "passed" in request.form.keys() and request.form["passed"] == "passed" else False
-  foc = True if "focussed" in request.form.keys() and request.form["focussed"] == "focussed" else False
 
   database.modify_student_module(str(mod_id), opt, pro, pas, foc)
 
