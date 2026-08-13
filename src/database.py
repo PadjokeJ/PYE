@@ -332,26 +332,27 @@ def add_student_to_course(course_id: str, id: str):
   )
 
   for module in course.modules:
-    student_categories = []
-    for category in module.categories:
-      mcat = StudentCategory(
-        category_id=category.id,
-        optional=False,
-        progress=0,
-        passed=False,
-      )
-      category.student_categories.append(mcat)
-      student_categories.append(mcat)
-
-    data.modules.append(StudentModule(
+    smod = StudentModule(
       subject_id=module.id,
       optional=False,
       focussed=False,
       progress=0,
       passed=False,
       student_course_id=data.id,
-      categories=student_categories
-    ))
+      categories=list()
+    )
+    for category in module.categories:
+      mcat = StudentCategory(
+        category_id=category.id,
+        optional=False,
+        progress=0,
+        passed=False,
+        student_module=smod,
+      )
+      category.student_categories.append(mcat)
+      smod.categories.append(mcat)
+
+    data.modules.append()
 
   student.courses.append(data)
   course.students.append(data)
