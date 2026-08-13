@@ -352,7 +352,7 @@ def add_student_to_course(course_id: str, id: str):
       category.student_categories.append(mcat)
       smod.categories.append(mcat)
 
-    data.modules.append()
+    data.modules.append(smod)
 
   student.courses.append(data)
   course.students.append(data)
