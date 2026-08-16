@@ -185,7 +185,7 @@ def create_user():
   return redirect("/admin?success")
 
 @app.route("/privacy-policy")
-def privacy-policy():
+def privacy_policy():
   return render_template("privacy.html")
 
 @app.route("/add-child/<parent_id>/<child_id>", methods=["POST"])
