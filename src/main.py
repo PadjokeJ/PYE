@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 import flask_login
 from flask_login import login_required
+from flask_mail import Mail, Message
 
 from dotenv import load_dotenv
 from os import getenv
@@ -18,6 +19,17 @@ load_dotenv(".env")
 app = Flask(__name__)
 app.secret_key = bytes(str(getenv("SECRET")), "utf-8")
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://psql:"+ getenv("PSQL_PW") +"@postgres:5432/pyedb"
+
+# Mail
+mail_user = str(getenv("SERVICE_EMAIL"))
+admin_email = str(getenv("ADMIN_EMAIL"))
+app.config["MAIL_SERVER"] = str(getenv("SERVICE_SERVER"))
+app.config["MAIL_PORT"] = int(getenv("SERVICE_PORT"))
+app.config["MAIL_USERNAME"] = mail_user
+app.config["MAIL_PASSWORD"] = str(getenv("SERVICE_EMAIL_PASSWORD"))
+app.config["MAIL_USE_TLS"] = True
+app.config["MAIL_USE_SSL"] = False
+mail = Mail(app)
 
 # Login manager
 login_manager = flask_login.LoginManager()
@@ -127,6 +139,17 @@ def reset_pass(token=None):
     flask_login.current_user.reset = False
 
     database.update_password(flask_login.current_user.id, request.form["password"])
+
+    msg = Message(
+      subject="PYE: Votre compte vient d'être mis à jour",
+      recipients=[flask_login.current_user.id],
+      sender=("PYE", mail_user),
+      reply_to=admin_email,
+      body=f"Votre mot de passe du compte sur { request.host_url } a été modifié.\n\nSi ce n'était pas vous, vous pouvez écrire à votre administateur { admin_email }, ou répondre à ce mail\n\nCeci est un mail automatique.",
+    )
+
+    mail.send(msg)
+
     return redirect("/home")
 
   return render_template("reset.html")
@@ -156,6 +179,16 @@ def user_pass():
   if request.method == "GET":
     return redirect("/users")
   database.update_password(str(email), request.form["password"])
+
+  msg = Message(
+    subject="PYE: Votre compte vient d'être mis à jour",
+    recipients=[email],
+    sender=("PYE", mail_user),
+    body=f"Votre mot de passe du compte sur { request.host_url } a été modifié par un administrateur.\n\nVous pouvez vous connecter avec le mot de passe :\n\n{ request.form["password"] }\n\nCeci est un mail automatique, veuillez ne pas y répondre.",
+  )
+
+  mail.send(msg)
+
   return redirect("/users?success")
 
 @app.route("/add-user", methods=["GET", "POST"])
@@ -181,6 +214,15 @@ def create_user():
     stud_id = request.form["student_id"]
 
   database.create_user(name, surname, utype, passw, email, stud_id)
+
+  msg = Message(
+    subject="PYE: Votre nouveau compte",
+    recipients=[email],
+    sender=("PYE", mail_user),
+    body=f"Votre compte sur { request.host_url } a été créé par votre administrateur { admin_email }.\n\nVous pouvez vous connecter avec votre addresse { email } et le mot de passe :\n\n{ passw }\n\nCeci est un mail automatique, veuillez ne pas y répondre.",
+  )
+
+  mail.send(msg)
 
   return redirect("/admin?success")
 
