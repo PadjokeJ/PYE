@@ -18,3 +18,4 @@ Parents :
 General stuff:
   - Texte sur les boutons
   - Page d'accueil
+  - Print important pages

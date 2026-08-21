@@ -14,6 +14,7 @@
       <img class="tile_img" src="https://ssl.gstatic.com/ui/v1/icons/mail/logo_loading.png" alt="GMAIL">
       <p>Mes mails</p>
     </a>
+    {% if current_user.type == "Teacher" or current_user.type == "Student" %}
     <a class="tile" href="/courses">
       <img class="tile_img" src="/static/pye.svg" alt="">
       <p>Mes cours</p>
@@ -26,6 +27,13 @@
       <img class="tile_img" src="https://www.biceps.ch/typo3conf/ext/template_biceps_frontend/Resources/Public/Images/avatar_biceps.svg" alt="">
       <p>Biceps.CH</p>
     </a>
+    {% endif %}
+    {% if current_user.type == "Admin" %}
+    <a class="tile" href="https://admin.google.com" target="_blank">
+      <img class="tile_img" src="https://fonts.gstatic.com/s/i/productlogos/admin_2020q4/v6/192px.svg" alt="">
+      <p>Google admin</p>
+    </a>
+    {% endif %}
     <!--TODO : QUIZLET-->
   </div>
 </div>

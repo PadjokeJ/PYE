@@ -78,7 +78,7 @@
       {% endif %}
       {% if current_user.type == "Student" or current_user.type == "Parent" %}
       {% for c in course.students %}
-      {% if c.student.user.email == current_user.id or current_user.id == s.student.parent_email or current_user.id == s.student.parent2_email %}
+      {% if c.student.user.email == current_user.id or current_user.id == c.student.parent_email or current_user.id == c.student.parent2_email %}
       {% if c.comments|length > 0 %}
       <h2>Commentaires :</h2>
       <ul>
