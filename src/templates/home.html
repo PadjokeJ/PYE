@@ -9,7 +9,25 @@
 
 <div style="display: flex; align-items: center; width: 100%; flex-direction: column;">
   <h1>Bonjour {{ username }} !</h1>
-  <!--TODO : add buttons for GMAIL, courses, etc...-->
+  <div class="tile_container">
+    <a class="tile" href="https://mail.google.com" target="_blank">
+      <img class="tile_img" src="https://ssl.gstatic.com/ui/v1/icons/mail/logo_loading.png" alt="GMAIL">
+      <p>Mes mails</p>
+    </a>
+    <a class="tile" href="/courses">
+      <img class="tile_img" src="/static/pye.svg" alt="">
+      <p>Mes cours</p>
+    </a>
+    <a class="tile" href="https://classroom.google.com/" target="_blank">
+      <img class="tile_img" src="https://www.gstatic.com/classroom/logo_square_rounded.svg" alt="">
+      <p>Google classroom</p>
+    </a>
+    <a class="tile" href="https://desktop.biceps.ch/prive/accueil.html" target="_blank">
+      <img class="tile_img" src="https://www.biceps.ch/typo3conf/ext/template_biceps_frontend/Resources/Public/Images/avatar_biceps.svg" alt="">
+      <p>Biceps.CH</p>
+    </a>
+    <!--TODO : QUIZLET-->
+  </div>
 </div>
 
 {% endblock %}

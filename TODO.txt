@@ -2,14 +2,14 @@
   - Delete accounts
 
 Teacher :
-  - Add comments to students
+  ! Add comments to students
   - Delete modules
   - Delete categories
   - Change color
 
 Students :
   - Birth dates / age
-  ! Change percentage to modules réussis / total modules published
+  - Horaires de mini cours (notified by mail)
 
 Parents :
   - Show progress
@@ -17,3 +17,4 @@ Parents :
 
 General stuff:
   - Texte sur les boutons
+  - Page d'accueil

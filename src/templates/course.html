@@ -35,7 +35,14 @@
         </select>
         <input id="submit" type="submit" name="submit" value="Ajouter l'étudiant">
       </form>
-      <h2>Modules :</h2>
+      <h2>Catégories :</h2>
+      <form id="form" method="post" action="/add-course-module/{{ course.id }}">
+        <h3>Ajouter une nouvelle catégorie pour {{ course.name }}</h3>
+        <label style="margin-top: 0;" for="title">Titre</label>
+        <input id="title" name="title" required>
+        <input id="submit" type="submit" name="submit" value="Ajouter le module">
+      </form>
+      <h3>Liste des catégories</h3>
       <ul class="modules">
         {% for mod in course.modules|sort(attribute='title') %}
         <li class="module">
@@ -46,20 +53,14 @@
             {% endfor %}
           </ul>
           <form id="form" method="post" action="/add-module-category/{{ course.id }}/{{ mod.id }}">
-            <h3>Créer une nouvelle catégorie pour <i>{{ mod.title }}</i></h2>
+            <h3>Créer un nouveau module pour <i>{{ mod.title }}</i></h2>
               <label style="margin-top: 0;" for="title">Titre</label>
               <input id="title" name="title" required>
-              <input id="submit" type="submit" name="submit" value="Ajouter la catégorie">
+              <input id="submit" type="submit" name="submit" value="Ajouter le module">
           </form>
         </li>
         {% endfor %}
       </ul>
-      <form id="form" method="post" action="/add-course-module/{{ course.id }}">
-        <h3>Ajouter un nouveau module pour {{ course.name }}</h3>
-        <label style="margin-top: 0;" for="title">Titre</label>
-        <input id="title" name="title" required>
-        <input id="submit" type="submit" name="submit" value="Ajouter le module">
-      </form>
 
       <h2>Étudiants précédents :</h2>
       <ul>

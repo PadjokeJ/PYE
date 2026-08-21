@@ -31,17 +31,17 @@
       <div class="student_outer">
          <form action="/student/module/{{ mod.id }}" method="POST" class="student_inner">
           <div style="align-items:center; display:flex;">
-            <label for="focussed">Module en cours</label>
+            <label for="focussed">Catégorie en cours</label>
             <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="focussed"
               name="focussed" value="focussed" {% if mod.focussed %}checked{% endif %}>
           </div>
           <div style="align-items:center; display:flex;">
-            <label for="optional">Module caché</label>
+            <label for="optional">Catégorie cachée</label>
             <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="optional"
               name="optional" value="optional" {% if mod.optional %}checked{% endif %}>
           </div>
           <div style="align-items:center; display:flex;">
-            <label for="optional">Module réussi</label>
+            <label for="optional">Catégorie réussie</label>
             <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="passed"
               name="passed" value="passed" {% if mod.passed %}checked{% endif %}>
           </div>
@@ -62,7 +62,7 @@
               name="passed" value="passed" {% if category.passed %}checked{% endif %}>
           </div>
           <div style="align-items:center; display:flex;">
-            <label for="optional">Catégorie cachée :</label>
+            <label for="optional">Module caché :</label>
             <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="optional"
               name="optional" value="optional" {% if category.optional %}checked{% endif %}>
           </div>
