@@ -10,6 +10,7 @@ Teacher :
 Students :
   - Birth dates / age
   - Horaires de mini cours (notified by mail)
+  ! Page par catégorie
 
 Parents :
   - Show progress
