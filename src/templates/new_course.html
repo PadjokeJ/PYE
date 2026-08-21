@@ -11,8 +11,8 @@
     <label for="name">Nom du cours<span style="color: #ff0000">*</span></label>
     <input type="text" name="name" required></input>
 
-    <label for="grade">Niveau (eg. 10H)<span style="color: #ff0000">*</span></label>
-    <input type="text" name="grade" pattern="^(([1-9]|1[0-1])H|(C|c)ycle [1-9][a-b]?)$" required></input>
+    <label for="grade">Niveau (eg. 10H, Cycle 3, Cycle 2 8H, Cycle 1 3-4H)<span style="color: #ff0000">*</span></label>
+    <input type="text" name="grade" pattern="^((C|c)ycle [1-9]? ?)?(([1-9]-|1[0-1]-)?([1-9]|1[0-1]))H$" required></input>
 
     <label for="color">Code couleur</label>
     <input type="color" name="color"></input>
@@ -21,4 +21,3 @@
   </form>
 </div>
 {% endblock %}
-
