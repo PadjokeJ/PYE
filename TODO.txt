@@ -17,4 +17,3 @@ Parents :
 
 General stuff:
   - Texte sur les boutons
-
