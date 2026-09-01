@@ -220,6 +220,10 @@ li.module {
   border-radius: 40px;
 
   background-color: var(--background);
+
+  margin:20px;
+  padding: 20px;
+  min-width: 300px;
 }
 
 .student_inner {

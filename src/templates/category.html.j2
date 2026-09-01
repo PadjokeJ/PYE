@@ -1,0 +1,70 @@
+{% extends 'base.html.j2' %}
+
+{% block title %}{{ student.student.user.firstname }} {{ student.subject.name }}{% endblock %}
+{% block ogtitle %}{{ student.student.user.firstname }} {{ student.subject.name }}{% endblock %}
+
+{% block cactive %}active{% endblock %}
+
+{% block content %}
+
+<div style="display: flex; align-items: center; width: 100%; flex-direction: column;">
+  <a style="margin-top:20px;padding: 5px 20%;box-shadow: var(--shadow) 2px 2px 10px;border-radius: 15px;"
+    href="/courses/{{ student.subject_id }}/{{ student.id }}">Back</a>
+  <h1 style="margin-bottom:0;">{{ student.student.user.firstname }} {{ student.student.user.name }}</h1>
+  <i>{{ student.subject.name }}/{{ category.subject.title }}</i>
+  <div style="display: flex; justify-content:center;">
+    <div style="justify-content: center;">
+      <form action="/student/module/{{ category.id }}" method="POST" class="student_inner">
+        <div style="align-items:center; display:flex;">
+          <label for="focussed">Catégorie en cours</label>
+          <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="focussed"
+            name="focussed" value="focussed" {% if category.focussed %}checked{% endif %}>
+        </div>
+        <div style="align-items:center; display:flex;">
+          <label for="optional">Catégorie cachée</label>
+          <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="optional"
+            name="optional" value="optional" {% if category.optional %}checked{% endif %}>
+        </div>
+        <div style="align-items:center; display:flex;">
+          <label for="optional">Catégorie réussie</label>
+          <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="passed"
+            name="passed" value="passed" {% if category.passed %}checked{% endif %}>
+        </div>
+        <input id="submit" type="submit" name="submit" value="Mettre à jour">
+      </form>
+    </div>
+  </div>div>
+  <h2 style="text-align: center;">Catégories</h2>
+  <div class="tile_container">
+    {% for c in category.categories|sort(attribute='category.title') %}
+    <form action="/student/category/{{ c.id }}" method="POST" class="student_inner">
+      <h2 style="text-align: center;">{{ c.category.title }}</h2>
+      <div style="align-items:center; display:flex;">
+        <label style="margin-top:0; width:30%;" for="progress">Progrès: <span id="span-cat-{{ category.id }}">{{
+            c.progress }}</span>%</label>
+        <input style="margin: 0 5px; min-width:0; width:70%;" type="range" name="progress" id="progress-cat-{{ c.id }}"
+          value="{{ c.progress }}">
+      </div>
+      <div style="align-items:center; display:flex;">
+        <label for="passed">Module réussi :</label>
+        <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="passed"
+          name="passed" value="passed" {% if c.passed %}checked{% endif %}>
+      </div>
+      <div style="align-items:center; display:flex;">
+        <label for="optional">Module caché :</label>
+        <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="optional"
+          name="optional" value="optional" {% if c.optional %}checked{% endif %}>
+      </div>
+      <input id="submit" type="submit" name="submit" value="Mettre à jour">
+    </form>
+    <script>
+      document.getElementById("progress-cat-{{ c.id }}").addEventListener("input", () => {
+        document.getElementById("span-cat-{{ c.id }}").innerHTML = document.getElementById("progress-cat-{{ category.id }}").value;
+      });
+    </script>
+    {% endfor %}
+  </div>
+</div>
+</div>
+
+{% endblock %}

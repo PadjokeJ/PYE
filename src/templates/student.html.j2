@@ -12,7 +12,7 @@
     href="/courses/{{ student.subject_id }}">Back</a>
   <h1 style="margin-bottom:0;">{{ student.student.user.firstname }} {{ student.student.user.name }}</h1>
   <i>{{ student.subject.name }}</i>
-  <div style="margin-top:20px;">
+  <div style="margin:20px;">
     <label for="hide">Cacher le cours</label>
     <input style="min-width:0;" type="checkbox" name="hide" value="hide" id="hide" {% if student.hidden %}checked{%
       endif %}>
@@ -24,55 +24,22 @@
       })
     </script>
   </div>
-  <div>
+  <div class="tile_container">
     {% for mod in student.modules %}
     <div>
-      <h2>{{ mod.subject.title }}</h2>
       <div class="student_outer">
-        <form action="/student/module/{{ mod.id }}" method="POST" class="student_inner">
-          <div style="align-items:center; display:flex;">
-            <label for="focussed">Catégorie en cours</label>
-            <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="focussed"
-              name="focussed" value="focussed" {% if mod.focussed %}checked{% endif %}>
-          </div>
-          <div style="align-items:center; display:flex;">
-            <label for="optional">Catégorie cachée</label>
-            <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="optional"
-              name="optional" value="optional" {% if mod.optional %}checked{% endif %}>
-          </div>
-          <div style="align-items:center; display:flex;">
-            <label for="optional">Catégorie réussie</label>
-            <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="passed"
-              name="passed" value="passed" {% if mod.passed %}checked{% endif %}>
-          </div>
-          <input id="submit" type="submit" name="submit" value="Mettre à jour">
-        </form>
+        <h2 style="margin:0;text-align:center;">{{ mod.subject.title }}</h2>
+
+        <a href="/courses/{{ student.subject_id }}/{{ mod.student_course_id }}/{{ mod.id }}"
+          style="padding: 5px 20%;box-shadow: var(--shadow) 2px 2px 10px;border-radius: 15px;text-align:center;margin-top:20px;">Voir les détails</a>
         {% for category in mod.categories|sort(attribute='category.title') %}
-        <form action="/student/category/{{ category.id }}" method="POST" class="student_inner">
-          <h2 style="text-align: center;">{{ category.category.title }}</h2>
-          <div style="align-items:center; display:flex;">
-            <label style="margin-top:0; width:30%;" for="progress">Progrès: <span id="span-cat-{{ category.id }}">{{
-                category.progress }}</span>%</label>
-            <input style="margin: 0 5px; min-width:0; width:70%;" type="range" name="progress"
-              id="progress-cat-{{ category.id }}" value="{{ category.progress }}">
-          </div>
-          <div style="align-items:center; display:flex;">
-            <label for="passed">Cours réussi :</label>
-            <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="passed"
-              name="passed" value="passed" {% if category.passed %}checked{% endif %}>
-          </div>
-          <div style="align-items:center; display:flex;">
-            <label for="optional">Module caché :</label>
-            <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="optional"
-              name="optional" value="optional" {% if category.optional %}checked{% endif %}>
-          </div>
-          <input id="submit" type="submit" name="submit" value="Mettre à jour">
-        </form>
-        <script>
-          document.getElementById("progress-cat-{{ category.id }}").addEventListener("input", () => {
-            document.getElementById("span-cat-{{ category.id }}").innerHTML = document.getElementById("progress-cat-{{ category.id }}").value;
-          });
-        </script>
+        <p><b>{{ category.category.title }} :</b></p>
+        <div style="align-items:center; display:flex;">
+          <label style="margin-top:0; width:30%;" for="progress">Progrès: <span id="span-cat-{{ category.id }}">{{
+              category.progress }}</span>%</label>
+          <progress value="{{ category.progress }}" max="100" {% if category.passed %}class="class-passed" {% endif
+            %}></progress>
+        </div>
         {% endfor %}
       </div>
     </div>

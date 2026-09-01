@@ -285,6 +285,21 @@ def get_course_student(course_id: str, stud_id: str):
 
   return render_template("student.html.j2", student=stud)
 
+@app.route("/courses/<course_id>/<stud_id>/<cat_id>")
+@login_required
+def get_course_student_category(course_id: str, stud_id: str, cat_id: str):
+  if not flask_login.current_user.type == "Teacher":
+    return redirect("/course/" + str(course_id))
+
+  course = database.get_course(str(course_id))
+  stud   = database.get_student_course(str(stud_id))
+  catego = database.get_student_module(str(cat_id))
+
+  if not stud in course.students:
+    return redirect("/course/" + str(course_id))
+
+  return render_template("category.html.j2", student=stud, category=catego)
+
 @app.route("/student/module/<mod_id>", methods=["POST", "GET"])
 @login_required
 def update_student_module_progress(mod_id: str):
