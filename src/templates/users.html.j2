@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base.html.j2' %}
 
 {% block title %}Utilisateurs{% endblock %}
 {% block ogtitle %}Utilisateurs{% endblock %}
@@ -10,22 +10,23 @@
 <div style="display: flex; align-items: center; width: 100%; flex-direction: column;">
   <h1>Modifier les utilisateurs</h1>
   <div style="display: grid; grid-template-columns: auto auto;">
-  {% for user in users %}
+    {% for user in users %}
     <form id="form" action="/update-user" method="POST" style="margin: 10px;">
       <h2>{{ user.email }}</h2>
       <p><i>{{ user.role }}</i></p>
       {% if user.role == "Parent" %}
-        <h3>Enfants :</h3>
-        <ul>
-          {% for child_id in user.student_id %}
-            {% for c in students %}
-              {% if c.id|string == child_id %}
-              <li>{{ c.user.name }} {{ c.user.firstname }}</li>
-              {% endif %}
-            {% endfor %}
-          {% endfor %}
-        </ul>
-        <div style="display: flex;flex-direction: column;box-shadow: 2px 2px 2px 2px var(--shadow);padding: 5px;border-radius: 15px;">
+      <h3>Enfants :</h3>
+      <ul>
+        {% for child_id in user.student_id %}
+        {% for c in students %}
+        {% if c.id|string == child_id %}
+        <li>{{ c.user.name }} {{ c.user.firstname }}</li>
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+      </ul>
+      <div
+        style="display: flex;flex-direction: column;box-shadow: 2px 2px 2px 2px var(--shadow);padding: 5px;border-radius: 15px;">
         <select id="add_child_{{ user.email }}">
           {% for stud in students %}
           <option value="{{stud.id}}">{{ stud.user.name }} {{ stud.user.firstname }}</option>
@@ -34,21 +35,21 @@
         <script>
           const selector = document.getElementById("add_child_{{ user.email }}");
           document.getElementById("add_child_button_{{ user.email }}").addEventListener("click", () => {
-            fetch("/add-child/{{ user.email }}/" + selector.value, {method: "POST"});
+            fetch("/add-child/{{ user.email }}/" + selector.value, { method: "POST" });
           });
         </script>
         <a class="button" id="add_child_button_{{ user.email }}">Ajouter l'enfant</a>
-        </div>
+      </div>
       {% endif %}
       <label for="password">Nouveau mot de passe<span style="color: #ff0000">*</span></label>
       <input type="text" name="password" id="password_{{ user.email }}" value="" required>
-      <a class="button" href="#" onclick="function hexS() { return Math.floor((Math.random() * 0.9 + 0.1) * 4294967295).toString(16); };function gen(){ document.getElementById('password_{{ user.email }}').value = hexS() + '-' + hexS() }; gen();">Générer</a>
+      <a class="button" href="#"
+        onclick="function hexS() { return Math.floor((Math.random() * 0.9 + 0.1) * 4294967295).toString(16); };function gen(){ document.getElementById('password_{{ user.email }}').value = hexS() + '-' + hexS() }; gen();">Générer</a>
       <input style="display:none;" type="email" name="email" value="{{ user.email }}">
       <input type="submit" name="reset" value="Réinitialiser le mot de passe" class="button">
     </form>
-  {% endfor %}
+    {% endfor %}
   </div>
 </div>
 
 {% endblock %}
-

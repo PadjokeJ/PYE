@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base.html.j2' %}
 
 {% block title %}Home{% endblock %}
 {% block ogtitle %}Home{% endblock %}
@@ -24,7 +24,9 @@
       <p>Google classroom</p>
     </a>
     <a class="tile" href="https://desktop.biceps.ch/prive/accueil.html" target="_blank">
-      <img class="tile_img" src="https://www.biceps.ch/typo3conf/ext/template_biceps_frontend/Resources/Public/Images/avatar_biceps.svg" alt="">
+      <img class="tile_img"
+        src="https://www.biceps.ch/typo3conf/ext/template_biceps_frontend/Resources/Public/Images/avatar_biceps.svg"
+        alt="">
       <p>Biceps.CH</p>
     </a>
     {% endif %}

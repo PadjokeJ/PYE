@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base.html.j2' %}
 
 {% block title %}Politique de confidentialité{% endblock %}
 {% block ogtitle %}Politique de confidentialité{% endblock %}
@@ -7,13 +7,20 @@
 {% block content %}
 <div class="island" style="padding: 0 100px;flex-direction: column;">
   <h2>Politique de confidentialité</h2>
-  <p>Ce site peut collectionner vos données personnelles, voici une page décrivant ce que nous faisons avec vos données et pourquoi.</p>
+  <p>Ce site peut collectionner vos données personnelles, voici une page décrivant ce que nous faisons avec vos données
+    et pourquoi.</p>
   <h3>Hébergement</h3>
-  <p>Ce site est hébergé sur un serveur virtuel privé ("VPS") chez <a href="https://infomaniak.com">infomaniak</a>. Le VPS est situé à Plan-les-ouattes.</p>
+  <p>Ce site est hébergé sur un serveur virtuel privé ("VPS") chez <a href="https://infomaniak.com">infomaniak</a>. Le
+    VPS est situé à Plan-les-ouattes.</p>
   <h3>Quelles données sont collectées</h3>
-  <p>En créant un compte sur le site, votre adresse mail, nom et prénom sont stockés dans la base de données interne. Vous devez également choisir un mot de passe qui sera <a href="https://fr.wikipedia.org/wiki/SHA-2">haché par SHA-256</a> afin d'être rendu illisible, même par les administrateurs du site.</p>
-  <p>Tout cours, et ses données associées (par exemple les étudiants inscrits) sont stockés dans la base de données interne: les administrateurs du site peuvent y accéder.</p>
+  <p>En créant un compte sur le site, votre adresse mail, nom et prénom sont stockés dans la base de données interne.
+    Vous devez également choisir un mot de passe qui sera <a href="https://fr.wikipedia.org/wiki/SHA-2">haché par
+      SHA-256</a> afin d'être rendu illisible, même par les administrateurs du site.</p>
+  <p>Tout cours, et ses données associées (par exemple les étudiants inscrits) sont stockés dans la base de données
+    interne: les administrateurs du site peuvent y accéder.</p>
   <h3>Que faisons nous avec vos données</h3>
-  <p>Toute donnée qui est mise sur le site, reste sur le site. Elle ne sera jamais communiquées à des services tiers. Elle ne sera que mise à disposition des utilisateurs du site ayant les droits appropriés, c'est-à-dire certains enseignants, la direction, et les administrateurs.</p>
+  <p>Toute donnée qui est mise sur le site, reste sur le site. Elle ne sera jamais communiquées à des services tiers.
+    Elle ne sera que mise à disposition des utilisateurs du site ayant les droits appropriés, c'est-à-dire certains
+    enseignants, la direction, et les administrateurs.</p>
 </div>
 {% endblock %}

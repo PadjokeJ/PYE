@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base.html.j2' %}
 
 {% block title %}{{ student.student.user.firstname }} {{ student.subject.name }}{% endblock %}
 {% block ogtitle %}{{ student.student.user.firstname }} {{ student.subject.name }}{% endblock %}
@@ -29,7 +29,7 @@
     <div>
       <h2>{{ mod.subject.title }}</h2>
       <div class="student_outer">
-         <form action="/student/module/{{ mod.id }}" method="POST" class="student_inner">
+        <form action="/student/module/{{ mod.id }}" method="POST" class="student_inner">
           <div style="align-items:center; display:flex;">
             <label for="focussed">Catégorie en cours</label>
             <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="focussed"
@@ -69,10 +69,10 @@
           <input id="submit" type="submit" name="submit" value="Mettre à jour">
         </form>
         <script>
-      document.getElementById("progress-cat-{{ category.id }}").addEventListener("input", () => {
-        document.getElementById("span-cat-{{ category.id }}").innerHTML = document.getElementById("progress-cat-{{ category.id }}").value;
-      });
-    </script>
+          document.getElementById("progress-cat-{{ category.id }}").addEventListener("input", () => {
+            document.getElementById("span-cat-{{ category.id }}").innerHTML = document.getElementById("progress-cat-{{ category.id }}").value;
+          });
+        </script>
         {% endfor %}
       </div>
     </div>

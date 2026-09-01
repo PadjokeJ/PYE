@@ -100,27 +100,13 @@ def root():
 @app.route("/home")
 @login_required
 def home():
-  return render_template("home.html", username=database.get_user(flask_login.current_user.id).firstname)
-
-@app.route("/grades")
-@login_required
-def grades():
-  if flask_login.current_user.type == "Parent" or flask_login.current_user.type == "Teacher":
-    return render_template("grades.html")
-  return redirect("/home")
-
-@app.route("/grade/<student>")
-@login_required
-def grade(student):
-  if flask_login.current_user.type == "Teacher":
-    return render_template("grade_directory.html")
-  return redirect("/grades")
+  return render_template("home.html.j2", username=database.get_user(flask_login.current_user.id).firstname)
 
 @app.route("/feedback")
 @login_required
 def feedback():
   if flask_login.current_user.type == "Parent" or flask_login.current_user.type == "Teacher":
-    return render_template("feedback.html")
+    return render_template("feedback.html.j2")
   return redirect("/home")
 
 @app.route("/reset/<token>", methods=["GET", "POST"])
@@ -160,14 +146,14 @@ def admin():
   if flask_login.current_user.type != "Admin":
     return redirect("/home")
 
-  return render_template("admin.html", students=database.all_students())
+  return render_template("admin.html.j2", students=database.all_students())
 
 @app.route("/users")
 @login_required
 def users_dash():
   if flask_login.current_user.type != "Admin":
     return redirect("/home")
-  return render_template("users.html", users=database.get_users(), students=database.all_students())
+  return render_template("users.html.j2", users=database.get_users(), students=database.all_students())
 
 @app.route("/update-user", methods=["POST", "GET"])
 @login_required
@@ -228,7 +214,7 @@ def create_user():
 
 @app.route("/privacy-policy")
 def privacy_policy():
-  return render_template("privacy.html")
+  return render_template("privacy.html.j2")
 
 @app.route("/add-child/<parent_id>/<child_id>", methods=["POST"])
 @login_required
@@ -246,7 +232,7 @@ def dash_create_course():
   if flask_login.current_user.type != "Teacher":
     return redirect("/home")
   
-  return render_template("new_course.html")
+  return render_template("new_course.html.j2")
 
 @app.route("/add-course", methods=["GET", "POST"])
 @login_required
@@ -274,7 +260,7 @@ def create_course():
 def course_access():
   courses = database.get_courses(flask_login.current_user.id) # TODO : parents access
 
-  return render_template("courses.html", courses=courses)
+  return render_template("courses.html.j2", courses=courses)
 
 @app.route("/courses/<course_id>")
 @login_required
@@ -283,7 +269,7 @@ def get_course(course_id: str):
   course = database.get_course(str(course_id))
   if (course == None or not course in courses):
     return redirect("/courses")
-  return render_template("course.html", course=course, all_students=database.all_students())
+  return render_template("course.html.j2", course=course, all_students=database.all_students())
 
 @app.route("/courses/<course_id>/<stud_id>")
 @login_required
@@ -297,7 +283,7 @@ def get_course_student(course_id: str, stud_id: str):
   if not stud in course.students:
     return redirect("/course/" + str(course_id))
 
-  return render_template("student.html", student=stud)
+  return render_template("student.html.j2", student=stud)
 
 @app.route("/student/module/<mod_id>", methods=["POST", "GET"])
 @login_required

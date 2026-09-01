@@ -1,45 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}{% endblock %} -- PYE</title>
-    <link rel="icon" type="image/x-icon" href="/static/pye.svg">
-    <link rel="stylesheet" id="pagestyle" href="/static/style.css">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="color-scheme" content="light dark">
-    <meta name="description" content="PYE">
-    <meta name="locale" content="en-us">
-    <meta name="keywords" content="website tags">
-    
-    <meta property="og:title" content="{% block ogtitle %}{% endblock %}">
-    <meta property="og:site_name" content="PYE">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="{{ request.base_url }}">
-    <meta property="og:image" content="{{ request.host_url }}/static/pye.svg">
-    <meta property="og:description" content="PYE">
-  </head>
-            
-  <body>
-    <nav class="no-print">
-      <a class="tab" id="{% block homeactive %}{% endblock %}" href="/home">Accueil</a>
-      {% if current_user.type == "Teacher" or current_user.type == "Student" or current_user.type == "Parent" %}
-        <a class="tab" id="{% block cactive %}{% endblock %}" href="/courses">Cours</a>
-      {% endif %}
-      {% if current_user.type == "Teacher" %}
-        <a class="tab" id="{% block acactive %}{% endblock %}" href="/new-course">Créer un cours</a>
-      {% endif %}
-      {% if current_user.type == "Admin" %}
-        <a class="tab" id="{% block admactive %}{% endblock %}" href="/admin">Console d'administrateur</a>
-      {% endif %}
-      <a id="logout" href="/logout">Déconnexion</a>
-    </nav>
-    <div id="content">
-      {% block content %}{% endblock %}
-    </div>
-    <footer style="width:100%;padding:20px 0;margin-top:30px;justify-content:center;font-size:12px;" class="no-print">
-      <a href="https://github.com/PadjokeJ/PYE" style="margin-left: 10px;margin-right: 10px;" target="_blank">Source</a>
-      <a href="{{ request.host_url }}privacy-policy" style="margin-left: 10px;margin-right: 10px;" target="_blank">Privacy Policy</a>
-    </footer>
-  </body>
+
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}{% endblock %} -- PYE</title>
+  <link rel="icon" type="image/x-icon" href="/static/pye.svg">
+  <link rel="stylesheet" id="pagestyle" href="/static/style.css">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="PYE">
+  <meta name="locale" content="en-us">
+  <meta name="keywords" content="website tags">
+
+  <meta property="og:title" content="{% block ogtitle %}{% endblock %}">
+  <meta property="og:site_name" content="PYE">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ request.base_url }}">
+  <meta property="og:image" content="{{ request.host_url }}/static/pye.svg">
+  <meta property="og:description" content="PYE">
+</head>
+
+<body>
+  <nav class="no-print">
+    <a class="tab" id="{% block homeactive %}{% endblock %}" href="/home">Accueil</a>
+    {% if current_user.type == "Teacher" or current_user.type == "Student" or current_user.type == "Parent" %}
+    <a class="tab" id="{% block cactive %}{% endblock %}" href="/courses">Cours</a>
+    {% endif %}
+    {% if current_user.type == "Teacher" %}
+    <a class="tab" id="{% block acactive %}{% endblock %}" href="/new-course">Créer un cours</a>
+    {% endif %}
+    {% if current_user.type == "Admin" %}
+    <a class="tab" id="{% block admactive %}{% endblock %}" href="/admin">Console d'administrateur</a>
+    {% endif %}
+    <a id="logout" href="/logout">Déconnexion</a>
+  </nav>
+  <div id="content">
+    {% block content %}{% endblock %}
+  </div>
+  <footer style="width:100%;padding:20px 0;margin-top:30px;justify-content:center;font-size:12px;" class="no-print">
+    <a href="https://github.com/PadjokeJ/PYE" style="margin-left: 10px;margin-right: 10px;" target="_blank">Source</a>
+    <a href="{{ request.host_url }}privacy-policy" style="margin-left: 10px;margin-right: 10px;" target="_blank">Privacy
+      Policy</a>
+  </footer>
+</body>
+
 </html>
