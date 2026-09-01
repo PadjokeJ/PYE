@@ -1,48 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>Connexion</title>
-    <link rel="icon" type="image/x-icon" href="/static/pye.svg">
-    <link rel="stylesheet" id="pagestyle" href="/static/style.css">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="color-scheme" content="light dark">
-    <meta name="description" content="PYE homepage">
-    <meta name="locale" content="en-us">
-    <meta name="keywords" content="website tags">
-    
-    <meta property="og:title" content="PYE -- Home">
-    <meta property="og:site_name" content="PYE">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="{{ request.host_url }}">
-    <meta property="og:image" content="/static/pye.svg">
-    <meta property="og:description" content="PYE Homepage">
-  </head>
-            
-  <body>
-    <div id="content">
-      <div id="login-card">
-        <form action method="post" id="login-form">
-          <h1 style="margin-top:0;">Choisissez un nouveau mot de passe</h1>
-          <i>Votre mot de passe doit faire au moins 8 caractères</i>
-          <label class="login-label" for="password">Nouveau mot de passe</label>
-          <input class="login-input" id="password" name="password" type="password" required pattern="^.{8}.*$">
-          <label class="login-label" for="password">Confirmer le mot de passe</label>
-          <input class="login-input" id="confirm" name="confirm" type="password" required pattern="^.{8}.*$">
-          <button class="login-input" id="submit" name="submit" type="submit" disabled>Réinitialiser</button>
-        </form>
-      </div>
-      <script>
-        const password = document.getElementById("password");
-        const confirm = document.getElementById("confirm");
 
-        const submit = document.getElementById("submit");
+<head>
+  <meta charset="UTF-8">
+  <title>Connexion</title>
+  <link rel="icon" type="image/x-icon" href="/static/pye.svg">
+  <link rel="stylesheet" id="pagestyle" href="/static/style.css">
 
-        password.addEventListener("input", () => submit.disabled = password.value != confirm.value);
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="PYE homepage">
+  <meta name="locale" content="en-us">
+  <meta name="keywords" content="website tags">
 
-        confirm.addEventListener("input", () => submit.disabled = password.value != confirm.value);
-      </script>
+  <meta property="og:title" content="PYE -- Home">
+  <meta property="og:site_name" content="PYE">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ request.host_url }}">
+  <meta property="og:image" content="/static/pye.svg">
+  <meta property="og:description" content="PYE Homepage">
+</head>
+
+<body>
+  <div id="content">
+    <div id="login-card">
+      <form action method="post" id="login-form">
+        <h1 style="margin-top:0;">Choisissez un nouveau mot de passe</h1>
+        <i>Votre mot de passe doit faire au moins 8 caractères</i>
+        <label class="login-label" for="password">Nouveau mot de passe</label>
+        <input class="login-input" id="password" name="password" type="password" required pattern="^.{8}.*$">
+        <label class="login-label" for="password">Confirmer le mot de passe</label>
+        <input class="login-input" id="confirm" name="confirm" type="password" required pattern="^.{8}.*$">
+        <button class="login-input" id="submit" name="submit" type="submit" disabled>Réinitialiser</button>
+      </form>
     </div>
-  </body>
+    <script>
+      const password = document.getElementById("password");
+      const confirm = document.getElementById("confirm");
+
+      const submit = document.getElementById("submit");
+
+      password.addEventListener("input", () => submit.disabled = password.value != confirm.value);
+
+      confirm.addEventListener("input", () => submit.disabled = password.value != confirm.value);
+    </script>
+  </div>
+  <footer style="width:100%;padding:20px 0;margin-top:30px;justify-content:center;font-size:12px;" class="no-print">
+    <a href="https://github.com/PadjokeJ/PYE" style="margin-left: 10px;margin-right: 10px;" target="_blank">Source</a>
+    <a href="{{ request.host_url }}privacy-policy" style="margin-left: 10px;margin-right: 10px;" target="_blank">Privacy Policy</a>
+  </footer>
+</body>
+
 </html>

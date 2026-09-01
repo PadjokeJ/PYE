@@ -5,13 +5,13 @@
     <title>Connexion</title>
     <link rel="icon" type="image/x-icon" href="/static/pye.svg">
     <link rel="stylesheet" id="pagestyle" href="/static/style.css">
-    
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
     <meta name="description" content="PYE homepage">
     <meta name="locale" content="en-us">
     <meta name="keywords" content="website tags">
-    
+
     <meta property="og:title" content="PYE -- Home">
     <meta property="og:site_name" content="PYE">
     <meta property="og:type" content="website">
@@ -19,15 +19,15 @@
     <meta property="og:image" content="/static/pye.svg">
     <meta property="og:description" content="PYE Homepage">
   </head>
-            
+
   <body>
     <div id="content" style="min-height:calc(100% - 92px);">
       <div id="login-card">
         <form action method="post" id="login-form">
-          <label class="login-label"for="email">Email</label>
+          <label class="login-label" for="email">Email</label>
           <input class="login-input" id="email" name="email" type="email" required>
           <label class="login-label" for="password">Mot de passe</label>
-          <input class="login-input" id="password" name="password" type="password" required>
+          <input class="login-input" id="password" name="password" type="password" autocomplete="current-password" required>
           <input class="login-input" id="submit" name="submit" type="submit" value="Connexion">
         </form>
       </div>
