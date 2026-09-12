@@ -254,10 +254,11 @@ def create_course(owner: str, name: str, grade: str, color: int):
   db.session.add(subject)
   db.session.commit()
 
-def modify_course_color(id: str, color: str):
+def modify_course_title(id: str, color: str, title: str):
   c = get_course(id)
 
-  c.color=color
+  c.color = color
+  c.name = title
   
   db.session.commit()
 

@@ -8,25 +8,30 @@
 {% block content %}
 <div style="display:flex; justify-content:center; width:100%;">
   <div style="flex-direction: column;">
-    <h1 style="color: #{{ "%0.6x" % course.color }}" id="title">{{ course.name }} -- {{ course.grade }}
+    
     {% if current_user.type == "Teacher" %}
-    <div style="border-radius: 20px; box-shadow: var(--shadow) 2px 2px 10px; padding: 10px; display: flex; margin-bottom: 20px; width: min-content;">
+    <div style="border-radius: 20px; box-shadow: var(--shadow) 2px 2px 10px; padding: 10px; display: flex; margin-bottom: 20px; width: min-content; margin-top:20px; align-items:center;">
+      <input value="{{ course.name }}" type="text" id="title" style="color: #{{ "%0.6x" % course.color }}; font-size: 32px; padding: 5px 10px; min-width:0; width: 200px;">
+      <p style="font-size:32px;margin: 0; color: #{{ "%0.6x" % course.color }};" id="grade">{{ course.grade }}</p>
       <input type="color" id="title-color" value="#{{ "%0.6x" % course.color }}" style="width: 50px; padding: 0; height: 50px; min-width:0;">
       <input type="button" value="Ok" id="modify-color" class="button" style="width: 50px; height: 50px; min-width: 0;">
     </div>
     <script>
       document.getElementById("title-color").addEventListener("input", () => {
-        document.getElementById("title").style.color = document.getElementById("title-color").value;
+        let val = document.getElementById("title-color").value;
+        document.getElementById("title").style.color = val;
+        document.getElementById("grade").style.color = val;
       });
 
       document.getElementById("modify-color").addEventListener("click", () => {
-        fetch("{{ request.base_url }}/color/" + String(document.getElementById("title-color").value).slice(1), {
+        fetch("{{ request.base_url }}/title/" + String(document.getElementById("title-color").value).slice(1) + "/" + document.getElementById("title").value, {
           method: "POST"
         });
       });
     </script>
+    {% else %}
+    <h1 style="color: #{{ "%0.6x" % course.color }}" id="title">{{ course.name }} -- {{ course.grade }}</h1>
     {% endif %}
-    </h1>
     <i class="left_grad">{{ course.teacher.user.name }} {{ course.teacher.user.firstname }}</i>
 
     <div style="flex-direction: column;">

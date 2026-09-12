@@ -273,9 +273,9 @@ def get_course(course_id: str):
     return redirect("/courses")
   return render_template("course.html.j2", course=course, all_students=database.all_students())
 
-@app.route("/courses/<course_id>/color/<color>", methods=["GET", "POST"])
+@app.route("/courses/<course_id>/title/<color>/<title>", methods=["GET", "POST"])
 @login_required
-def modify_color(course_id: str, color: str):
+def modify_course_title(course_id: str, color: str, title: str):
   courses = database.get_courses(flask_login.current_user.id)
   course = database.get_course(str(course_id))
 
@@ -288,7 +288,7 @@ def modify_color(course_id: str, color: str):
   if not re.search("([0-9]|[a-f]){6}", color):
     return "Not a color", 400
 
-  database.modify_course_color(course_id, int(color, 16))
+  database.modify_course_title(course_id, int(color, 16), title)
   
   return render_template("course.html.j2", course=course, all_students=database.all_students())
 
