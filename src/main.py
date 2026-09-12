@@ -306,7 +306,7 @@ def update_student_module_progress(mod_id: str):
   module = database.get_student_module(str(mod_id))
 
   if request.method == "GET":
-    return redirect(f"/courses/{module.subject.subject.id}/{module.student_course_id}?success")
+    return redirect(f"/courses/{module.subject.subject.id}/{module.student_course_id}/{module.id}?success")
 
   if not module.subject.subject.teacher.user.email == flask_login.current_user.id:
     return redirect("/courses")
@@ -324,7 +324,7 @@ def update_student_module_progress(mod_id: str):
 
   database.modify_student_module(str(mod_id), opt, pro, pas, foc)
 
-  return redirect(f"/courses/{module.subject.subject.id}/{module.student_course_id}?success")
+  return redirect(f"/courses/{module.subject.subject.id}/{module.student_course_id}/{module.id}?success")
 
 @app.route("/student/category/<cat_id>", methods=["POST", "GET"])
 @login_required

@@ -94,6 +94,7 @@
         <div
           style="margin: 8px; padding: 20px; border-radius: 40px; box-shadow: var({% if mod.focussed %}--orange{% else %}--shadow{% endif %}) {% if mod.focussed %}0 0{% else %}4px 4px{% endif %} 20px">
           <h3 style="margin-top: 0;">{{ mod.subject.title }}{% if mod.passed %}: <i>réussi !</i>{% endif %}</h3>
+          {% if mod.categories|length > 0 %}
           <div style="margin: 8px; padding: 10px; border-radius: 20px; box-shadow: var(--shadow) 4px 4px 20px">
             {% for category in mod.categories %}
             <div style="margin:5px;">
@@ -103,6 +104,7 @@
             </div>
             {% endfor %}
           </div>
+          {% endif %}
         </div>
         {% endif %}
         {% endfor %}
