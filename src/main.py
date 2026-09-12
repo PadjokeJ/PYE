@@ -7,6 +7,8 @@ from dotenv import load_dotenv
 from os import getenv
 import json
 
+import re
+
 import password
 import database
 
@@ -269,6 +271,25 @@ def get_course(course_id: str):
   course = database.get_course(str(course_id))
   if (course == None or not course in courses):
     return redirect("/courses")
+  return render_template("course.html.j2", course=course, all_students=database.all_students())
+
+@app.route("/courses/<course_id>/color/<color>", methods=["GET", "POST"])
+@login_required
+def modify_color(course_id: str, color: str):
+  courses = database.get_courses(flask_login.current_user.id)
+  course = database.get_course(str(course_id))
+
+  if not flask_login.current_user.type == "Teacher":
+    return redirect("/course/" + str(course_id))
+
+  if course == None or not course in courses or request.method == "GET":
+    return redirect("/courses/" + course_id)
+
+  if not re.search("([0-9]|[a-f]){6}", color):
+    return "Not a color", 400
+
+  database.modify_course_color(course_id, int(color, 16))
+  
   return render_template("course.html.j2", course=course, all_students=database.all_students())
 
 @app.route("/courses/<course_id>/<stud_id>")

@@ -254,6 +254,13 @@ def create_course(owner: str, name: str, grade: str, color: int):
   db.session.add(subject)
   db.session.commit()
 
+def modify_course_color(id: str, color: str):
+  c = get_course(id)
+
+  c.color=color
+  
+  db.session.commit()
+
 def get_courses(email: str) -> list:
   user = get_user(email)
   user_role = get_type(email)
