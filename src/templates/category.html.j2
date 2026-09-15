@@ -34,7 +34,7 @@
       </form>
     </div>
   </div>
-  <h2 style="text-align: center;">Catégories</h2>
+  <h2 style="text-align: center;">Modules</h2>
   <div class="tile_container">
     {% for c in category.categories|sort(attribute='category.title') %}
     <form action="/student/category/{{ c.id }}" method="POST" class="student_inner">
@@ -54,6 +54,11 @@
         <label for="optional">Module caché :</label>
         <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="optional"
           name="optional" value="optional" {% if c.optional %}checked{% endif %}>
+      </div>
+      <div style="align-items:center; display:flex;">
+        <label for="focussed">Module en cours :</label>
+        <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="focussed"
+          name="focussed" value="focussed" {% if c.focussed %}checked{% endif %}>
       </div>
       <input id="submit" type="submit" name="submit" value="Mettre à jour">
     </form>

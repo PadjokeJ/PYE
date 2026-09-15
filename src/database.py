@@ -78,6 +78,7 @@ class StudentCategory(Base):
   optional: Mapped[bool] = mapped_column(Boolean)
   progress: Mapped[int] = mapped_column(Integer)
   passed: Mapped[bool] = mapped_column(Boolean)
+  focussed: Mapped[bool] = mapped_column(Boolean)
 
   student_module: Mapped["StudentModule"] = relationship(back_populates="categories")
   student_module_id: Mapped[int] = mapped_column(ForeignKey("student_module.id"))
@@ -312,12 +313,13 @@ def modify_student_module(id: str, optional: bool, progress: int, passed: bool, 
 
   db.session.commit()
 
-def modify_student_category(id: str, optional: bool, progress: int, passed: bool):
+def modify_student_category(id: str, optional: bool, progress: int, passed: bool, foccussed: bool):
   cat = get_student_category(id)
   
   cat.optional = optional
   cat.progress = progress
   cat.passed   = passed
+  cat.focussed = foccussed
 
   db.session.commit()
 
@@ -359,6 +361,7 @@ def add_student_to_course(course_id: str, id: str):
         optional=False,
         progress=0,
         passed=False,
+        foccussed=False,
         student_module=smod,
         student_module_id=smod.id,
       )
@@ -406,6 +409,7 @@ def add_module_category(module_id: str, course_id: str, title: str):
       optional=False,
       progress=0,
       passed=False,
+      foccussed=False,
       student_module_id=student.id
     )
     student.categories.append(scat)

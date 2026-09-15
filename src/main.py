@@ -369,8 +369,9 @@ def update_student_category_progress(cat_id: str):
       pro = 0
 
   pas = True if "passed" in request.form.keys() and request.form["passed"] == "passed" else False
+  foc = True if "passed" in request.form.keys() and request.form["focussed"] == "focussed" else False
 
-  database.modify_student_category(str(cat_id), opt, pro, pas)
+  database.modify_student_category(str(cat_id), opt, pro, pas, foc)
 
   return redirect(f"/courses/{module.subject.subject.id}/{module.student_course_id}?success")
 
