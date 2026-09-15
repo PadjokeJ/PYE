@@ -287,6 +287,9 @@ def get_course(id: str) -> Subject:
 def get_module(id: str) -> SubjectModule:
   return db.session.get(SubjectModule, id)
 
+def get_category(id: str) -> ModuleCategory:
+  return db.session.get(ModuleCategory, id)
+
 def get_student(id: int) -> StudentData:
   return db.session.get(StudentData, id)
 
@@ -406,6 +409,32 @@ def add_module_category(module_id: str, course_id: str, title: str):
       student_module_id=student.id
     )
     student.categories.append(scat)
+  db.session.commit()
+
+def build_del_cat(category: ModuleCategory):
+  for scat in category.student_categories:
+    db.session.delete(scat)
+
+  db.session.delete(category)
+
+def del_module_category(category_id: str):
+  category = get_category(category_id)
+  
+  build_del_cat(category)
+
+  db.session.commit()
+
+def del_module(module_id: str):
+  module = get_module(module_id)
+  
+  for category in module.categories:
+    build_del_cat(category)
+
+  for smod in module.student_modules:
+    db.session.delete(smod)
+
+  db.session.delete(module)
+
   db.session.commit()
 
 def hide_student_course(id: str, state: bool):

@@ -201,6 +201,7 @@ progress:not(.class-passed) {
 
 li.module {
   display: block;
+  position: relative;
 
   box-shadow: var(--shadow) 5px 5px 40px;
   padding:20px;
@@ -209,6 +210,45 @@ li.module {
   margin-bottom: 15px;
   background-color: var(--background);
   border-radius: 40px;
+}
+
+li.lsmodule {
+  box-shadow: var(--shadow) 5px 5px 15px;
+  border-radius: 20px;
+  padding:20px;
+  margin:20px;
+
+  position: relative;
+  background-color: var(--background);
+
+  display: flex;
+  align-items: center;
+  height: 36px;
+}
+
+li.lsmodule::marker {
+  content: "";
+}
+
+.delete_mod {
+  position: absolute;
+  right:20px;
+  top:20px;
+
+  padding: 5px;
+  width: 36px;
+  border-radius: 10px;
+  padding:10px;
+}
+
+ul.course {
+  padding: 0;
+}
+li.course::marker {
+  content: "";
+}
+li.course {
+  margin: 20px 0;
 }
 
 .student_outer {

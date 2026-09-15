@@ -394,6 +394,28 @@ def add_course_module(course_id: str):
     return redirect("/courses/" + str(course_id))
   return redirect("/courses/" + str(course_id) + "?success")
 
+@app.route("/del-module-category/<course_id>/<module_id>/<category_id>/", methods=["DELETE"])
+@login_required
+def del_module_category(course_id: str, module_id: str, category_id: str):
+  if not is_correct_teacher(course_id):
+    return redirect("/courses/" + str(course_id) + "?auth=False")
+
+  if request.method == "DELETE":
+    database.del_module_category(str(category_id))
+    return "deleted", 200
+  return redirect("/courses/" + str(course_id) + "?success")
+
+@app.route("/del-module/<course_id>/<module_id>/", methods=["DELETE"])
+@login_required
+def del_module(course_id: str, module_id: str):
+  if not is_correct_teacher(course_id):
+    return redirect("/courses/" + str(course_id) + "?auth=False")
+
+  if request.method == "DELETE":
+    database.del_module(str(module_id))
+    return "deleted", 200
+  return redirect("/courses/" + str(course_id) + "?success")
+
 @app.route("/add-module-category/<course_id>/<module_id>/", methods=["POST", "GET"])
 @login_required
 def add_module_category(course_id: str, module_id: str):
