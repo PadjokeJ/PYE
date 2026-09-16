@@ -10,6 +10,7 @@
 <div style="display: flex; align-items: center; width: 100%; flex-direction: column;">
   <a style="margin-top:20px;padding: 5px 20%;box-shadow: var(--shadow) 2px 2px 10px;border-radius: 15px;"
     href="/courses/{{ student.subject_id }}/{{ student.id }}">Back</a>
+  <div class="visual_break">
   <h1 style="margin-bottom:0;">{{ student.student.user.firstname }} {{ student.student.user.name }}</h1>
   <i>{{ student.subject.name }}/{{ category.subject.title }}</i>
   <div style="display: flex; justify-content:center;">
@@ -34,6 +35,8 @@
       </form>
     </div>
   </div>
+  </div>
+  <div class="visual_break">
   <h2 style="text-align: center;">Modules</h2>
   <div class="tile_container">
     {% for c in category.categories|sort(attribute='category.title') %}
@@ -68,6 +71,7 @@
       });
     </script>
     {% endfor %}
+  </div>
   </div>
 </div>
 </div>

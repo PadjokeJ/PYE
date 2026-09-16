@@ -325,3 +325,11 @@ li.course {
     display: none !important;
   }
 }
+
+.visual_break {
+  background-color: var(--background-2);
+  padding: 20px 200px;
+  box-shadow: inset var(--shadow) 5px 5px 20px;
+  margin: 20px 0;
+  border-radius: 80px;
+}
