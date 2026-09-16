@@ -1,8 +1,8 @@
 [project]
 name = "PYE_jpfister"
-version = "0.0.1"
+version = "beta1.0.0"
 authors = [
-  { name="Jonatan Pfister", email="" },
+  { name="Jonatan Pfister", email="spam@padjokej.dev" },
 ]
 description = "Tool for teachers and students to get information about their grades"
 readme = "README.md"
@@ -11,7 +11,7 @@ classifiers = [
   "Programming Language :: Python :: 3",
   "Operating System :: OS Independent",
 ]
-license = "MIT"
+license = "AGPL"
 license-files = ["LICENSE"]
 
 [project.urls]
