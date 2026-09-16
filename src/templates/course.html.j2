@@ -11,7 +11,7 @@
     
     {% if current_user.type == "Teacher" %}
     <div class="visual_break">
-
+    <h2>Titre et couleur :</h2>
     <div style="border-radius: 40px; box-shadow: var(--shadow) 2px 2px 10px; padding: 10px; display: flex; margin-bottom: 20px; width: min-content; margin-top:20px; align-items:center; background-color: var(--background)">
       <input value="{{ course.name }}" type="text" id="title" style="color: #{{ "%0.6x" % course.color }}; font-size: 25px; padding: 5px 10px; min-width:0; width: 200px; border-radius: 20px 5px 5px 20px;" autocomplete="off">
       <p style="font-size:32px;margin: 0; color: #{{ "%0.6x" % course.color }};" id="grade">{{ course.grade }}</p>
@@ -46,24 +46,50 @@
         });
       });
     </script>
+    </div>
     {% else %}
     <h1 style="color: #{{ "%0.6x" % course.color }}" id="title">{{ course.name }} -- {{ course.grade }}</h1>
-    {% endif %}
     <i class="left_grad">{{ course.teacher.user.name }} {{ course.teacher.user.firstname }}</i>
+
+    {% endif %}
 
     <div style="flex-direction: column;">
       {% if current_user.type == "Teacher" %}
       <div class="visual_break">
       <h2>Étudiants :</h2>
-      <ul>
+      <ul style="padding:0;">
         {% for c in course.students %}
         {% if not c.hidden %}
-        <li style="margin: 20px 0;">
-          <a style="padding: 5px 50px;border-radius: 15px;box-shadow: var(--shadow) 2px 2px 10px; background-color: var(--background);"
+        <li style="padding: 20px;border-radius: 40px;box-shadow: var(--shadow) 2px 2px 10px; background-color: var(--background);position: relative;height: 40px;display: flex;align-items: center;width: 400px; margin: 20px 0;">
+          <a style="width: calc(100% - 65px);background-color: var(--background-2);height: 40px;align-items: center;display: flex;padding: 0 10px;border-radius: 20px 5px 5px 20px;box-shadow: inset var(--shadow) -5px -5px 5px, var(--shadow) 1px 1px 3px; margin:0;"
+            class="button"
             href="{{ request.base_url }}/{{ c.id }}">
             {{ c.student.user.firstname }} {{ c.student.user.name }}
           </a>
+          <button class="button" id="rem_student_{{ c.id }}" style="position: absolute;right: 20px;height: 40px;width: 40px;border-radius: 5px 20px 20px 5px; min-width:0;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          </button>
         </li>
+        <script>
+          let rem_stud_{{ c.id }} = document.getElementById("rem_student_{{ c.id }}");
+
+          rem_stud_{{ c.id }}.addEventListener("click", () => {
+            let ok = confirm("Voulez vous vraiment enlever {{ c.student.user.firstname }} {{ c.student.user.name }} de ce cours ? Cette action est finale et irreversible.");
+            if (ok) {
+              fetch("{{ request.base_url }}/{{ c.id }}", {
+                method: "DELETE"
+              }).then((res) => {
+                if (res.status === 200) {
+                  window.location.reload();
+                } else {
+                  alert(`Erreur ${res.status} en enlevant {{ c.student.user.firstname }} {{ c.student.user.name }} du cours`);
+                }
+              }).catch((e) => {
+                alert(`Erreur ${e} en enlevant {{ c.student.user.firstname }} {{ c.student.user.name }} du cours`);
+              });
+            }
+          });
+        </script>
         {% endif %}
         {% endfor %}
       </ul>
@@ -204,7 +230,10 @@
         {% endfor %}
       </ul>
       </div>
+
       {% endif %}
+      </div>
+
 
       {% if current_user.type == "Student" or current_user.type == "Parent" %}
       {% for c in course.students %}
@@ -228,8 +257,8 @@
       <div style="display: grid; grid-template-columns: auto auto;">
         {% for mod in c.modules %}
         {% if not mod.optional %}
-        <div
-          style="margin: 8px; padding: 20px; border-radius: 40px; box-shadow: var({% if mod.focussed %}--orange{% else %}--shadow{% endif %}) {% if mod.focussed %}0 0{% else %}4px 4px{% endif %} 20px">
+        <div class="category"
+          style="box-shadow: var({% if mod.focussed %}--orange{% else %}--shadow{% endif %}) {% if mod.focussed %}0 0{% else %}4px 4px{% endif %} 20px">
           <h3 style="margin-top: 0;">{{ mod.subject.title }}{% if mod.passed %}: <i>réussi !</i>{% endif %}</h3>
           {% if mod.categories|length > 0 %}
           <div style="margin: 8px; padding: 10px; border-radius: 20px; box-shadow: var(--shadow) 4px 4px 20px">

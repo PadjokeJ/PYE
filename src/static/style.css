@@ -123,7 +123,7 @@ nav, footer {
   padding: 20px;
   width: 400px;
 
-  box-shadow: var(--shadow) 5px 5px 40px;
+  box-shadow: var(--shadow) 5px 5px 20px;
   border-radius: 20px;
 
   background-color: var(--background);
@@ -203,11 +203,11 @@ li.module {
   display: block;
   position: relative;
 
-  box-shadow: var(--shadow) 5px 5px 40px;
+  box-shadow: var(--shadow) 5px 5px 20px;
   padding:20px;
 
-  margin-top:15px;
-  margin-bottom: 15px;
+  margin-top: 30px;
+  margin-bottom: 30px;
   background-color: var(--background);
   border-radius: 40px;
 }
@@ -332,4 +332,12 @@ li.course {
   box-shadow: inset var(--shadow) 5px 5px 20px;
   margin: 20px 0;
   border-radius: 80px;
+}
+
+.category {
+  margin: 8px;
+  padding: 20px;
+  border-radius: 40px;
+  box-shadow: var(--shadow) 4px 4px 20px;
+  background-color: var(--background);
 }

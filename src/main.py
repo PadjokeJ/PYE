@@ -298,10 +298,10 @@ def modify_course_title(course_id: str, color: str, title: str):
   
   return render_template("course.html.j2", course=course, all_students=database.all_students())
 
-@app.route("/courses/<course_id>/<stud_id>")
+@app.route("/courses/<course_id>/<stud_id>", methods=["GET"])
 @login_required
 def get_course_student(course_id: str, stud_id: str):
-  if not flask_login.current_user.type == "Teacher":
+  if not is_correct_teacher(course_id):
     return redirect("/course/" + str(course_id))
 
   course = database.get_course(str(course_id))
@@ -312,10 +312,18 @@ def get_course_student(course_id: str, stud_id: str):
 
   return render_template("student.html.j2", student=stud)
 
+@app.route("/courses/<course_id>/<stud_id>", methods=["DELETE"])
+@login_required
+def del_course_student(course_id: str, stud_id: str):
+  if not is_correct_teacher(course_id):
+    return "forbidden", 403
+  database.del_from_course(course_id, stud_id)
+  return "removed student", 200
+
 @app.route("/courses/<course_id>/<stud_id>/<cat_id>")
 @login_required
 def get_course_student_category(course_id: str, stud_id: str, cat_id: str):
-  if not flask_login.current_user.type == "Teacher":
+  if not is_correct_teacher(course_id):
     return redirect("/course/" + str(course_id))
 
   course = database.get_course(str(course_id))

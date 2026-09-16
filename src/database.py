@@ -433,6 +433,18 @@ def build_del_cat(category: ModuleCategory):
 
   db.session.delete(category)
 
+def del_from_course(course_id: str, student_id: str):
+  sc = get_student_course(student_id)
+
+  for sm in sc.modules:
+    for scat in sm.categories:
+      db.session.delete(scat)
+    db.session.delete(sm)
+  
+  db.session.delete(sc)
+
+  db.session.commit()
+
 def del_module_category(category_id: str):
   category = get_category(category_id)
   
