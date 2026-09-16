@@ -260,14 +260,20 @@ def create_course():
 @app.route("/courses")
 @login_required
 def course_access():
-  courses = database.get_courses(flask_login.current_user.id) # TODO : parents access
+  if flask_login.current_user.type != "Parent":
+    courses = database.get_courses(flask_login.current_user.id)
+  else:
+    courses = database.get_child_courses(flask_login.current_user.id)
 
   return render_template("courses.html.j2", courses=courses)
 
 @app.route("/courses/<course_id>")
 @login_required
 def get_course(course_id: str):
-  courses = database.get_courses(flask_login.current_user.id)
+  if flask_login.current_user.type != "Parent":
+    courses = database.get_courses(flask_login.current_user.id)
+  else:
+    courses = database.get_child_courses(flask_login.current_user.id)
   course = database.get_course(str(course_id))
   if (course == None or not course in courses):
     return redirect("/courses")

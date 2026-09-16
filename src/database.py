@@ -269,7 +269,7 @@ def modify_course_title(id: str, color: str, title: str):
   
   db.session.commit()
 
-def get_courses(email: str) -> list:
+def get_courses(email: str) -> list[StudentCourse]:
   user = get_user(email)
   user_role = get_type(email)
   query = db.session.query(Subject)
@@ -308,6 +308,12 @@ def get_student_module(id: str) -> StudentModule:
 
 def get_student_category(id: str) -> StudentCategory:
   return db.session.get(StudentCategory, id)
+
+def get_child_courses(email: str) -> StudentCourse:
+  courses = list()
+  for i in get_user(email).student_id:
+    courses.extend(get_courses(get_student(i).user_email))
+  return courses
 
 def modify_student_module(id: str, optional: bool, progress: int, passed: bool, focussed: bool):
   module = get_student_module(id)
