@@ -424,8 +424,19 @@ def add_module_category(course_id: str, module_id: str):
     return redirect("/courses/" + str(course_id) + "?auth=False")
 
   if request.method == "POST":
-    database.add_module_category(str(module_id), str(course_id), request.form["title"])
+    database.add_module_category(int(module_id), str(course_id), request.form["title"])
     return redirect("/courses/" + str(course_id))
+  return redirect("/courses/" + str(course_id) + "?success")
+
+@app.route("/edit-module-category/<course_id>/<category_id>/title/<title>", methods=["PUT", "GET"])
+@login_required
+def mod_module_category_title(course_id: int, category_id: int, title: str):
+  if not is_correct_teacher(course_id):
+    return redirect("/courses/" + str(course_id) + "?auth=False")
+
+  if request.method == "PUT":
+    database.edit_module_category_title(int(category_id), str(title))
+    return "edited with success", 200
   return redirect("/courses/" + str(course_id) + "?success")
 
 @app.route("/hide-course/<course_id>", methods=["POST"])

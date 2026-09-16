@@ -285,10 +285,10 @@ def get_courses(email: str) -> list:
 def get_course(id: str) -> Subject:
   return db.session.get(Subject, id)
 
-def get_module(id: str) -> SubjectModule:
+def get_module(id: int) -> SubjectModule:
   return db.session.get(SubjectModule, id)
 
-def get_category(id: str) -> ModuleCategory:
+def get_category(id: int) -> ModuleCategory:
   return db.session.get(ModuleCategory, id)
 
 def get_student(id: int) -> StudentData:
@@ -313,13 +313,13 @@ def modify_student_module(id: str, optional: bool, progress: int, passed: bool, 
 
   db.session.commit()
 
-def modify_student_category(id: str, optional: bool, progress: int, passed: bool, foccussed: bool):
+def modify_student_category(id: str, optional: bool, progress: int, passed: bool, focussed: bool):
   cat = get_student_category(id)
   
   cat.optional = optional
   cat.progress = progress
   cat.passed   = passed
-  cat.focussed = foccussed
+  cat.focussed = focussed
 
   db.session.commit()
 
@@ -361,7 +361,7 @@ def add_student_to_course(course_id: str, id: str):
         optional=False,
         progress=0,
         passed=False,
-        foccussed=False,
+        focussed=False,
         student_module=smod,
         student_module_id=smod.id,
       )
@@ -395,7 +395,7 @@ def add_course_module(course_id: str, title: str):
     student.modules.append(smodule)
   db.session.commit()
 
-def add_module_category(module_id: str, course_id: str, title: str):
+def add_module_category(module_id: int, course_id: str, title: str):
   module = get_module(module_id)
   category = ModuleCategory(
     parent_id=module.id,
@@ -409,7 +409,7 @@ def add_module_category(module_id: str, course_id: str, title: str):
       optional=False,
       progress=0,
       passed=False,
-      foccussed=False,
+      focussed=False,
       student_module_id=student.id
     )
     student.categories.append(scat)
@@ -428,7 +428,7 @@ def del_module_category(category_id: str):
 
   db.session.commit()
 
-def del_module(module_id: str):
+def del_module(module_id: int):
   module = get_module(module_id)
   
   for category in module.categories:
@@ -438,6 +438,12 @@ def del_module(module_id: str):
     db.session.delete(smod)
 
   db.session.delete(module)
+
+  db.session.commit()
+
+def edit_module_category_title(category_id: int, title: str):
+  category = get_category(category_id)
+  category.title = title
 
   db.session.commit()
 
