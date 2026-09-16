@@ -226,7 +226,7 @@ def add_child(parent_id: str, child_id: int):
 
   database.add_child(parent_id, child_id)
 
-  return "added child"
+  return "added child", 200
 
 @app.route("/new-course")
 @login_required

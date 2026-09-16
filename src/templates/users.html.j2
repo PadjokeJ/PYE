@@ -32,14 +32,23 @@
           <option value="{{stud.id}}">{{ stud.user.name }} {{ stud.user.firstname }}</option>
           {% endfor %}
         </select>
-        <script>
-          const selector = document.getElementById("add_child_{{ user.email }}");
-          document.getElementById("add_child_button_{{ user.email }}").addEventListener("click", () => {
-            fetch("/add-child/{{ user.email }}/" + selector.value, { method: "POST" });
-          });
-        </script>
         <a class="button" id="add_child_button_{{ user.email }}">Ajouter l'enfant</a>
       </div>
+      <script>
+          document.getElementById("add_child_button_{{ user.email }}").addEventListener("click", () => {
+            fetch("/add-child/{{ user.email }}/" + document.getElementById("add_child_{{ user.email }}").value, { 
+              method: "POST" 
+            }).then((res) => {
+              if (res.status === 200) {
+                window.location.reload();
+              } else {
+                alert(`Erreur ${res.status} en essayant d'ajouter un enfant`);
+              }
+            }).catch((e) => {
+              alert(`Erreur ${e} en essant d'ajouter un enfant`);
+            });
+          });
+        </script>
       {% endif %}
       <label for="password">Nouveau mot de passe<span style="color: #ff0000">*</span></label>
       <input type="text" name="password" id="password_{{ user.email }}" value="" required>

@@ -44,7 +44,7 @@ class StudentCourse(Base):
   data_id: Mapped[int] = mapped_column(ForeignKey("students.id"))
   progress: Mapped[int] = mapped_column(Integer)
   hidden: Mapped[bool] = mapped_column(Boolean)
-  comments: Mapped[List[str]] = mapped_column(JSON)
+  comments: Mapped[list[str]] = mapped_column(JSON)
   student: Mapped["StudentData"] = relationship(back_populates="courses")
   subject_id: Mapped[int] = mapped_column(ForeignKey("subject.id"))
   subject: Mapped["Subject"] = relationship(back_populates="students")
@@ -129,7 +129,7 @@ class UsersTable(Base):
 
   student_data: Mapped[Optional["StudentData"]] = relationship(back_populates="user")
   teacher_data: Mapped[Optional["Teacher"]] = relationship(back_populates="user")
-  student_id: Mapped[List[int]] = mapped_column(JSON)
+  student_id: Mapped[list[int]] = mapped_column(JSON)
 
 db = SQLAlchemy(model_class=Base)
 
@@ -195,7 +195,7 @@ def create_user(name: str, surname: str, utype: str, pw: str, email: str, provid
       reset=True,
       name=surname,
       firstname=name,
-      student_id=list()
+      student_id=dict()
     )
 
   if utype == "Student":
@@ -233,6 +233,12 @@ def get_deprecation(user: str) -> bool:
   return get_user(user).reset
 
 def add_child(user: str, child: int):
+  u = get_user(user)
+
+  if child in u.student_id:
+    return
+
+  u.student_id = list(u.student_id)
   get_user(user).student_id.append(child)
 
   s = get_student(child)
