@@ -209,8 +209,10 @@
       {% if current_user.type == "Student" or current_user.type == "Parent" %}
       {% for c in course.students %}
       {% if c.student.user.email == current_user.id or current_user.id == c.student.parent_email or current_user.id == c.student.parent2_email %}
-      <hr width="95%">
+      
+      {% if current_user.type == "Parent" %}
       <h1>{{ c.student.user.firstname }} {{ c.student.user.name }}</h1>
+      {% endif %}
       {% if c.comments|length > 0 %}
       <div class="visual_break">
       <h2>Commentaires :</h2>
@@ -245,6 +247,7 @@
         {% endfor %}
       </div>
       </div>
+      <hr width="95%">
       {% endif %}
       {% endfor %}
       {% endif %}
