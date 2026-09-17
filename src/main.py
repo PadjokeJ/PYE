@@ -320,7 +320,7 @@ def get_course_student(course_id: str, stud_id: str):
 
   return render_template("student.html.j2", student=stud)
 
-@app.route("/students")
+@app.route("/students", methods=["GET"])
 @login_required
 def get_child_students():
   if flask_login.current_user.type != "Parent":
@@ -481,6 +481,27 @@ def hide_student_course(course_id: str):
   database.hide_student_course(str(course_id), request.form.get("hide") == "true")
 
   return redirect(f"/courses/{student_course.subject_id}/{student_course.id}?success")
+
+@app.route("/comments/<student_id>", methods=["POST", "DELETE", "GET"])
+@login_required
+def update_student_comments(student_id: int):
+  course = database.get_student_course(student_id).subject
+
+  if not is_correct_teacher(course.id):
+    return "Not allowed to modify comments", 403
+  
+  if request.method == "POST":
+    if not "comment" in request.form.keys():
+      return "comment is empty", 400
+    database.add_comment(student_id, request.form["comment"])
+  elif request.method == "DELETE":
+    if not "comment_id" in request.form.keys():
+      return "no comment id provided", 400
+    database.del_comment(student_id, request.form["comment_id"])
+  else:
+    return redirect(f"/courses/{course.id}/{student_id}?success")
+  
+  return redirect(f"/courses/{course.id}/{student_id}?success")
 
 def is_correct_teacher(course_id: str) -> bool:
   return flask_login.current_user.type == "Teacher" and flask_login.current_user.id == database.get_course(course_id).teacher.user_email

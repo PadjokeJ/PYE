@@ -50,7 +50,6 @@
     {% else %}
     <h1 style="color: #{{ "%0.6x" % course.subject.color }}" id="title">{{ course.subject.name }} -- {{ course.subject.grade }}</h1>
     <i class="left_grad">{{ course.subject.teacher.user.name }} {{ course.subject.teacher.user.firstname }}</i>
-
     {% endif %}
 
     <div style="flex-direction: column;">

@@ -27,6 +27,7 @@
     </div>
   </div>
   <div class="visual_break">
+    <h1>Catégories :</h1>
     <div class="tile_container">
       {% for mod in student.modules %}
       <div>
@@ -48,13 +49,21 @@
           {% endfor %}
         </div>
       </div>
-      <script>
-        document.getElementById("progress-{{ mod.id }}").addEventListener("input", () => {
-          document.getElementById("span-{{ mod.id }}").innerHTML = document.getElementById("progress-{{ mod.id }}").value;
-        });
-      </script>
       {% endfor %}
     </div>
+  </div>
+  <div class="visual_break">
+    <h1>Commentaires :</h1>
+    {% for comment in student.comments %}
+    <div style="padding: 20px; border-radius: 40px; min-height: 40px; background-color: var(--background); margin: 20px 0; max-width: 400px;">
+      <p id="comment_{{ loop.index0 }}" style="margin:0;">{{ comment }}</p>
+    </div>
+    {% endfor %}
+    <form action="/comments/{{ student.id }}", method="post" id="form">
+      <h2>Écrire un nouveau commentaire</h2>
+      <textarea id="comment" name="comment" type="text" required autocomplete="off" style="min-width: calc(100% - 20px); padding: 10px; border-radius: 10px; border: 0px; box-shadow: inset var(--shadow) 5px 5px 10px; max-width: calc(100% - 20px); background-color: var(--background-2)"></textarea>
+      <input type="submit" class="button" value="Commenter">
+    </form>
   </div>
 </div>
 

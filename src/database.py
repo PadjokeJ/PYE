@@ -472,6 +472,22 @@ def del_module(module_id: int):
 
   db.session.commit()
 
+def add_comment(student_id, comment):
+  student_course = get_student_course(student_id)
+
+  student_course.comments = list(student_course.comments)
+  student_course.comments.append(comment)
+
+  db.session.commit()
+
+def del_comment(student_id, comment_id):
+  student_course = get_student_course(student_id)
+
+  student_course.comments = list(student_course.comments)
+  student_course.comments.pop(comment_id)
+
+  db.session.commit()
+
 def edit_module_category_title(category_id: int, title: str):
   category = get_category(category_id)
   category.title = title
