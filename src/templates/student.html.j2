@@ -55,13 +55,50 @@
   <div class="visual_break">
     <h1>Commentaires :</h1>
     {% for comment in student.comments %}
-    <div style="padding: 20px; border-radius: 40px; min-height: 40px; background-color: var(--background); margin: 20px 0; max-width: 400px;">
-      <p id="comment_{{ loop.index0 }}" style="margin:0;">{{ comment }}</p>
+    <div
+      style="padding: 20px; border-radius: 40px; min-height: 40px; background-color: var(--background); margin: 20px 0; max-width: 400px; position: relative;">
+      <p id="comment_{{ loop.index0 }}" style="margin:0; max-width: calc(100% - 45px);">{{ comment }}</p>
+      <button class="delete_mod" id="del_{{ loop.index0 }}"
+        style="border-radius: 5px 20px 20px 5px; height: calc(100% - 40px);">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-trash">
+          <path d="M10 11v6" />
+          <path d="M14 11v6" />
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+          <path d="M3 6h18" />
+          <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+        </svg>
+      </button>
+      <script>
+        document.getElementById("del_{{ loop.index0 }}").addEventListener("click", () => {
+          let ok = confirm("Voulez vous vraiment supprimer ce commentaire ? Cette action est finale et irreversible.");
+
+          if (ok) {
+            let form_data = new URLSearchParams();
+            form_data.append("comment_id", "{{ loop.index0 }}");
+
+            fetch(`/comments/{{ student.id }}`, {
+              method: "DELETE",
+              body: form_data
+            }).then((res) => {
+              if (res.status === 200) {
+                window.location.reload();
+              } else {
+                alert(`Erreur ${res.status} en essayant de supprimer un commentaire`);
+              }
+            }).catch((e) => {
+              alert(`Erreur ${e} en essayant de supprimer un commentaire`);
+            });
+          }
+        });
+      </script>
     </div>
     {% endfor %}
-    <form action="/comments/{{ student.id }}", method="post" id="form">
+    <form action="/comments/{{ student.id }}" , method="post" id="form">
       <h2>Écrire un nouveau commentaire</h2>
-      <textarea id="comment" name="comment" type="text" required autocomplete="off" style="min-width: calc(100% - 20px); padding: 10px; border-radius: 10px; border: 0px; box-shadow: inset var(--shadow) 5px 5px 10px; max-width: calc(100% - 20px); background-color: var(--background-2)"></textarea>
+      <textarea id="comment" name="comment" type="text" required autocomplete="off"
+        style="min-width: calc(100% - 20px); padding: 10px; border-radius: 10px; border: 0px; box-shadow: inset var(--shadow) 5px 5px 10px; max-width: calc(100% - 20px); background-color: var(--background-2)"></textarea>
       <input type="submit" class="button" value="Commenter">
     </form>
   </div>

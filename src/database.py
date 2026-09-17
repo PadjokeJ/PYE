@@ -472,7 +472,7 @@ def del_module(module_id: int):
 
   db.session.commit()
 
-def add_comment(student_id, comment):
+def add_comment(student_id: int, comment: str):
   student_course = get_student_course(student_id)
 
   student_course.comments = list(student_course.comments)
@@ -480,11 +480,12 @@ def add_comment(student_id, comment):
 
   db.session.commit()
 
-def del_comment(student_id, comment_id):
+def del_comment(student_id: int, comment_id: int):
   student_course = get_student_course(student_id)
 
-  student_course.comments = list(student_course.comments)
-  student_course.comments.pop(comment_id)
+  ls = list(student_course.comments)
+  ls.pop(comment_id)
+  student_course.comments = ls
 
   db.session.commit()
 

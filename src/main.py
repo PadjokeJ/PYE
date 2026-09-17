@@ -294,7 +294,7 @@ def modify_course_title(course_id: str, color: str, title: str):
   course = database.get_course(str(course_id))
 
   if not flask_login.current_user.type == "Teacher":
-    return redirect("/course/" + str(course_id))
+    return redirect("/courses/" + str(course_id))
 
   if course == None or not course in courses or request.method == "GET":
     return redirect("/courses/" + course_id)
@@ -310,13 +310,13 @@ def modify_course_title(course_id: str, color: str, title: str):
 @login_required
 def get_course_student(course_id: str, stud_id: str):
   if not is_correct_teacher(course_id):
-    return redirect("/course/" + str(course_id))
+    return redirect("/courses/" + str(course_id))
 
   course = database.get_course(str(course_id))
   stud   = database.get_student_course(str(stud_id))
 
   if not stud in course.students:
-    return redirect("/course/" + str(course_id))
+    return redirect("/courses/" + str(course_id))
 
   return render_template("student.html.j2", student=stud)
 
@@ -342,14 +342,14 @@ def del_course_student(course_id: str, stud_id: str):
 @login_required
 def get_course_student_category(course_id: str, stud_id: str, cat_id: str):
   if not is_correct_teacher(course_id):
-    return redirect("/course/" + str(course_id))
+    return redirect("/courses/" + str(course_id))
 
   course = database.get_course(str(course_id))
   stud   = database.get_student_course(str(stud_id))
   catego = database.get_student_module(str(cat_id))
 
   if not stud in course.students:
-    return redirect("/course/" + str(course_id))
+    return redirect("/courses/" + str(course_id))
 
   return render_template("category.html.j2", student=stud, category=catego)
 
@@ -497,7 +497,8 @@ def update_student_comments(student_id: int):
   elif request.method == "DELETE":
     if not "comment_id" in request.form.keys():
       return "no comment id provided", 400
-    database.del_comment(student_id, request.form["comment_id"])
+    database.del_comment(student_id, int(request.form["comment_id"]))
+    return "success deleting comment", 200
   else:
     return redirect(f"/courses/{course.id}/{student_id}?success")
   
