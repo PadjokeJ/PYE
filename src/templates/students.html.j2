@@ -1,0 +1,26 @@
+{% extends 'base.html.j2' %}
+
+{% block title %}Enfants{% endblock %}
+{% block ogtitle %}Enfants{% endblock %}
+
+{% block sactive %}active{% endblock %}
+
+{% block content %}
+
+<div style="display: flex; align-items: center; width: 100%; flex-direction: column;">
+{% for student in students %}
+<div class="visual_break">
+  <h2>{{ student.user.firstname }} {{ student.user.name }}</h2>
+  <div class="tile_container">
+  {% for course in student.courses %}
+  <a class="tile" style="box-shadow: #{{ "%0.6x" % course.subject.color }} 0 0 20px;"
+    href="/courses/{{ course.subject.id }}">
+  <p><strong style="color: #{{ "%0.6x" % course.subject.color }};">{{ course.subject.name }} -- {{ course.subject.grade }}</strong></p>
+  </a>
+  {% endfor %}
+  </div>
+</div>
+{% endfor %}
+</div>
+
+{% endblock content %}

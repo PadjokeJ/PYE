@@ -7,19 +7,13 @@
 
 {% block content %}
 <div style="display: flex; align-items: center; width: 100%; flex-direction: column;">
-  <h1>Mes cours :</h1>
+  <h1>{% if current_user.type == "Parent" %}Les{% else %}Mes{% endif %} cours :</h1>
   <ul class="course">
     {% for c in courses %}
     <li class="course">
       <a href="/courses/{{ c.id }}"
         style="padding: 5px 50px;border-radius: 15px;box-shadow: #{{ "%0.6x" % c.color }} 0 0 10px; background-color: var(--background);color:#{{ "%0.6x" % c.color }};font-weight:bolder;">
         {{ c.name }} -- {{ c.grade }}
-        {% if current_user.type == "Student" %}
-        {% for s in c.students %}
-        {% if s.student.user_email == current_user.id %}
-        {% endif %}
-        {% endfor %}
-        {% endif %}
       </a>
     </li>
     {% endfor %}

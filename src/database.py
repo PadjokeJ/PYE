@@ -129,7 +129,7 @@ class UsersTable(Base):
 
   student_data: Mapped[Optional["StudentData"]] = relationship(back_populates="user")
   teacher_data: Mapped[Optional["Teacher"]] = relationship(back_populates="user")
-  student_id: Mapped[list[int]] = mapped_column(JSON)
+  student_id: Mapped[list[str]] = mapped_column(JSON)
 
 db = SQLAlchemy(model_class=Base)
 
@@ -269,7 +269,7 @@ def modify_course_title(id: str, color: str, title: str):
   
   db.session.commit()
 
-def get_courses(email: str) -> list[StudentCourse]:
+def get_courses(email: str) -> list[Subject]:
   user = get_user(email)
   user_role = get_type(email)
   query = db.session.query(Subject)
@@ -309,11 +309,18 @@ def get_student_module(id: str) -> StudentModule:
 def get_student_category(id: str) -> StudentCategory:
   return db.session.get(StudentCategory, id)
 
-def get_child_courses(email: str) -> StudentCourse:
+def get_child_courses(email: str) -> list[Subject]:
   courses = list()
-  for i in get_user(email).student_id:
-    courses.extend(get_courses(get_student(i).user_email))
+  for i in get_children(email):
+    courses.extend(get_courses(i.user_email))
   return courses
+
+def get_children(email: str) -> list[StudentData]:
+  children = list()
+  for i in get_user(email).student_id:
+    children.append(get_student(i))
+  
+  return children
 
 def modify_student_module(id: str, optional: bool, progress: int, passed: bool, focussed: bool):
   module = get_student_module(id)

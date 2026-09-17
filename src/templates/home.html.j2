@@ -10,10 +10,12 @@
 <div style="display: flex; align-items: center; width: 100%; flex-direction: column;">
   <h1>Bonjour {{ username }} !</h1>
   <div class="tile_container">
+    {% if current_user.type == "Teacher" or current_user.type == "Student" or current_user.type == "Admin" %}
     <a class="tile" href="https://mail.google.com" target="_blank">
       <img class="tile_img" src="https://ssl.gstatic.com/ui/v1/icons/mail/logo_loading.png" alt="GMAIL">
       <p>Mes mails</p>
     </a>
+    {% endif %}
     {% if current_user.type == "Teacher" or current_user.type == "Student" %}
     <a class="tile" href="/courses">
       <img class="tile_img" src="/static/pye.svg" alt="">
@@ -34,6 +36,16 @@
     <a class="tile" href="https://admin.google.com" target="_blank">
       <img class="tile_img" src="https://fonts.gstatic.com/s/i/productlogos/admin_2020q4/v6/192px.svg" alt="">
       <p>Google admin</p>
+    </a>
+    {% endif %}
+    {% if current_user.type == "Parent" %}
+    <a class="tile" href="/courses">
+      <img class="tile_img" src="/static/pye.svg" alt="">
+      <p>Voir les cours</p>
+    </a>
+    <a class="tile" href="/students">
+      <img class="tile_img" src="/static/pye.svg" alt="">
+      <p>Voir mes enfants</p>
     </a>
     {% endif %}
     <!--TODO : QUIZLET-->

@@ -27,6 +27,9 @@
     {% if current_user.type == "Teacher" or current_user.type == "Student" or current_user.type == "Parent" %}
     <a class="tab" id="{% block cactive %}{% endblock %}" href="/courses">Cours</a>
     {% endif %}
+    {% if current_user.type == "Parent" %}
+    <a class="tab" id="{% block sactive %}{% endblock %}" href="/students">Enfants</a>
+    {% endif %}
     {% if current_user.type == "Teacher" %}
     <a class="tab" id="{% block acactive %}{% endblock %}" href="/new-course">Créer un cours</a>
     {% endif %}

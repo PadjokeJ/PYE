@@ -4,5 +4,5 @@ requires-python = ">=3.9"
 
 [[package]]
 name = "pye-jpfister"
-version = "0.0.1"
+version = "1.0.0"
 source = { virtual = "." }

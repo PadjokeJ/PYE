@@ -48,8 +48,8 @@
     </script>
     </div>
     {% else %}
-    <h1 style="color: #{{ "%0.6x" % course.color }}" id="title">{{ course.name }} -- {{ course.grade }}</h1>
-    <i class="left_grad">{{ course.teacher.user.name }} {{ course.teacher.user.firstname }}</i>
+    <h1 style="color: #{{ "%0.6x" % course.subject.color }}" id="title">{{ course.subject.name }} -- {{ course.subject.grade }}</h1>
+    <i class="left_grad">{{ course.subject.teacher.user.name }} {{ course.subject.teacher.user.firstname }}</i>
 
     {% endif %}
 
@@ -236,17 +236,15 @@
 
 
       {% if current_user.type == "Student" or current_user.type == "Parent" %}
-      {% for c in course.students %}
-      {% if c.student.user.email == current_user.id or current_user.id == c.student.parent_email or current_user.id == c.student.parent2_email %}
       
       {% if current_user.type == "Parent" %}
-      <h1>{{ c.student.user.firstname }} {{ c.student.user.name }}</h1>
+      <h1>{{ course.student.user.firstname }} {{ course.student.user.name }}</h1>
       {% endif %}
-      {% if c.comments|length > 0 %}
+      {% if course.comments|length > 0 %}
       <div class="visual_break">
       <h2>Commentaires :</h2>
       <ul>
-        {% for com in c.comments %}
+        {% for com in course.comments %}
         <li><i>{{ com }}</i></li>
         {% endfor %}
       </ul>
@@ -255,7 +253,7 @@
       <div class="visual_break">
       <h2>Catégories :</h2>
       <div style="display: grid; grid-template-columns: auto auto;">
-        {% for mod in c.modules %}
+        {% for mod in course.modules %}
         {% if not mod.optional %}
         <div class="category"
           style="box-shadow: var({% if mod.focussed %}--orange{% else %}--shadow{% endif %}) {% if mod.focussed %}0 0{% else %}4px 4px{% endif %} 20px">
@@ -277,8 +275,6 @@
       </div>
       </div>
       <hr width="95%">
-      {% endif %}
-      {% endfor %}
       {% endif %}
     </div>
   </div>

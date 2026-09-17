@@ -20,7 +20,7 @@ load_dotenv(".env")
 # APP
 app = Flask(__name__)
 app.secret_key = bytes(str(getenv("SECRET")), "utf-8")
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://psql:"+ getenv("PSQL_PW") +"@postgres:5432/pyedb"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://psql:"+ getenv("PSQL_PW") +"@" + getenv("PSQL_HOSTNAME") + ":5432/pyedb"
 
 # Mail
 mail_user = str(getenv("SERVICE_EMAIL"))
@@ -270,13 +270,21 @@ def course_access():
 @app.route("/courses/<course_id>")
 @login_required
 def get_course(course_id: str):
-  if flask_login.current_user.type != "Parent":
-    courses = database.get_courses(flask_login.current_user.id)
-  else:
-    courses = database.get_child_courses(flask_login.current_user.id)
-  course = database.get_course(str(course_id))
-  if (course == None or not course in courses):
-    return redirect("/courses")
+  subject = database.get_course(str(course_id))
+  match flask_login.current_user.type:
+    case "Teacher":
+      course = subject
+    case "Student":
+      for sc in subject.students:
+        if sc.student.user_email == flask_login.current_user.id:
+          course = sc
+    case "Parent":
+      for s in subject.students:
+        if str(s.student.id) in database.get_user(flask_login.current_user.id).student_id:
+          course = s
+    case _:
+      return "You can't access this course", 403
+  
   return render_template("course.html.j2", course=course, all_students=database.all_students())
 
 @app.route("/courses/<course_id>/title/<color>/<title>", methods=["GET", "POST"])
@@ -311,6 +319,16 @@ def get_course_student(course_id: str, stud_id: str):
     return redirect("/course/" + str(course_id))
 
   return render_template("student.html.j2", student=stud)
+
+@app.route("/students")
+@login_required
+def get_child_students():
+  if flask_login.current_user.type != "Parent":
+    return "You don't have access to this page", 403
+
+  children = database.get_children(flask_login.current_user.id)
+
+  return render_template("students.html.j2", students=children)
 
 @app.route("/courses/<course_id>/<stud_id>", methods=["DELETE"])
 @login_required

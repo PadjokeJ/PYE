@@ -14,3 +14,7 @@ docker compose build && docker compose up
 ```
 
 Make sure to change the default values from `dev.env`!
+
+## Development
+
+You can run `docker compose up postgres` and then once the database is up, run `uv run src/main.py`, to be able to test without having to deploy with every single change
