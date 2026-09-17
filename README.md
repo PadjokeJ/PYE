@@ -14,4 +14,3 @@ docker compose build && docker compose up
 ```
 
 Make sure to change the default values from `dev.env`!
-
