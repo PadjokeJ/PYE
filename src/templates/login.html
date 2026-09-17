@@ -1,40 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>Connexion</title>
-    <link rel="icon" type="image/x-icon" href="/static/pye.svg">
-    <link rel="stylesheet" id="pagestyle" href="/static/style.css">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="color-scheme" content="light dark">
-    <meta name="description" content="PYE homepage">
-    <meta name="locale" content="en-us">
-    <meta name="keywords" content="website tags">
+<head>
+  <meta charset="UTF-8">
+  <title>Connexion</title>
+  <link rel="icon" type="image/x-icon" href="/static/pye.svg">
+  <link rel="stylesheet" id="pagestyle" href="/static/style.css">
 
-    <meta property="og:title" content="PYE -- Home">
-    <meta property="og:site_name" content="PYE">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="{{ request.host_url }}">
-    <meta property="og:image" content="/static/pye.svg">
-    <meta property="og:description" content="PYE Homepage">
-  </head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="PYE homepage">
+  <meta name="locale" content="en-us">
+  <meta name="keywords" content="website tags">
 
-  <body>
-    <div id="content" style="min-height:calc(100% - 92px);">
-      <div id="login-card">
-        <form action method="post" id="login-form">
-          <label class="login-label" for="email">Email</label>
-          <input class="login-input" id="email" name="email" type="email" required>
-          <label class="login-label" for="password">Mot de passe</label>
-          <input class="login-input" id="password" name="password" type="password" autocomplete="current-password" required>
-          <input class="login-input" id="submit" name="submit" type="submit" value="Connexion">
-        </form>
-      </div>
+  <meta property="og:title" content="PYE -- Home">
+  <meta property="og:site_name" content="PYE">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ request.host_url }}">
+  <meta property="og:image" content="/static/pye.svg">
+  <meta property="og:description" content="PYE Homepage">
+</head>
+
+<body>
+  <div id="content" style="min-height:calc(100% - 92px);">
+    <div id="login-card">
+      <form action method="post" id="login-form">
+        <label class="login-label" for="email">Email</label>
+        <input class="login-input" id="email" name="email" type="email" required>
+        <label class="login-label" for="password">Mot de passe</label>
+        <div style="position: relative;">
+          <input class="login-input" id="password" name="password" type="password" autocomplete="current-password" style="height: 16px;"
+            required>
+          <a id="showhide" style="min-width: 0; width: 26px; height: 26px; position: absolute;right: 10px;box-shadow: none;background: none;display: flex;align-items: center;top: 5px;" href="#">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>
+          </a>
+          <script>
+            document.getElementById("showhide").addEventListener("click", () => {
+              let pw = document.getElementById("password");
+              if (pw.type == "password") {
+                pw.type = "text";
+              } else {
+                pw.type = "password";
+              }
+            });
+          </script>
+        </div>
+        <input class="login-input" id="submit" name="submit" type="submit" value="Connexion">
+      </form>
     </div>
-    <footer style="width:100%;padding:20px 0;margin-top:30px;justify-content:center;font-size:12px;" class="no-print">
-      <a href="https://github.com/PadjokeJ/PYE" style="margin-left: 10px;margin-right: 10px;" target="_blank">Source</a>
-      <a href="{{ request.host_url }}privacy-policy" style="margin-left: 10px;margin-right: 10px;" target="_blank">Privacy Policy</a>
-    </footer>
-  </body>
+  </div>
+  <footer style="width:100%;padding:20px 0;margin-top:30px;justify-content:center;font-size:12px;" class="no-print">
+    <a href="https://github.com/PadjokeJ/PYE" style="margin-left: 10px;margin-right: 10px;" target="_blank">Source</a>
+    <a href="{{ request.host_url }}privacy-policy" style="margin-left: 10px;margin-right: 10px;" target="_blank">Privacy
+      Policy</a>
+  </footer>
+</body>
+
 </html>
