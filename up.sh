@@ -1,4 +1,4 @@
 #!/bin/bash
 
-docker compose up postgress -d
+docker compose up postgres -d
 uv run src/main.py
