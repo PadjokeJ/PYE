@@ -11,7 +11,11 @@
   <a style="margin-top:20px;padding: 5px 20%;box-shadow: var(--shadow) 2px 2px 10px;border-radius: 15px;"
     href="/courses/{{ student.subject_id }}">Retour</a>
   <div class="visual_break">
-    <h1 style="margin-bottom:0;">{{ student.student.user.firstname }} {{ student.student.user.name }}</h1>
+    <h1 style="margin-bottom:0;">
+      <a href="mailto:{{ student.student.user.email }}">
+        {{ student.student.user.firstname }} {{ student.student.user.name }}
+      </a>
+    </h1>
     <i>{{ student.subject.name }}</i>
     <div style="margin:20px;">
       <label for="hide">Cacher le cours</label>
@@ -97,10 +101,21 @@
     {% endfor %}
     <form action="/comments/{{ student.id }}" , method="post" id="form">
       <h2>Écrire un nouveau commentaire</h2>
+      <span style="color: #ff0000; display:none;" id="span_forbidden">Le caractère '/' ne peut être utilisé</span>
       <textarea id="comment" name="comment" type="text" required autocomplete="off"
         style="min-width: calc(100% - 20px); padding: 10px; border-radius: 10px; border: 0px; box-shadow: inset var(--shadow) 5px 5px 10px; max-width: calc(100% - 20px); background-color: var(--background-2)"></textarea>
-      <input type="submit" class="button" value="Commenter">
+      <input type="submit" class="button" id="submit_comment" value="Commenter">
     </form>
+    <script>
+      let comment_box = document.getElementById("comment");
+      let sub_comment = document.getElementById("submit_comment");
+      let span_forbidden = document.getElementById("span_forbidden");
+
+      comment_box.addEventListener("input", () => {
+        sub_comment.disabled = comment_box.value.includes("/");
+        span_forbidden.style.display = comment_box.value.includes("/") ? "block" : "none";
+      });
+    </script>
   </div>
 </div>
 

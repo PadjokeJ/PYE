@@ -16,7 +16,7 @@
       <input value="{{ course.name }}" type="text" id="title" style="color: #{{ "%0.6x" % course.color }}; font-size: 25px; padding: 5px 10px; min-width:0; width: 200px; border-radius: 20px 5px 5px 20px;" autocomplete="off">
       <p style="font-size:32px;margin: 0; color: #{{ "%0.6x" % course.color }};" id="grade">{{ course.grade }}</p>
       <input type="color" id="title-color" value="#{{ "%0.6x" % course.color }}" style="width: 40px; padding: 0; height: 40px; min-width:0; border-radius: 5px;" autocomplete="off">
-      <button id="modify-color" class="button" style="width: 40px; height: 40px; min-width: 0; border-radius: 5px 20px 20px 5px;">
+      <button id="modify-color" class="button" style="width: 40px; height: 40px; min-width: 0; border-radius: 5px 20px 20px 5px; transition: color ease 0.25s;">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil">
           <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/>
         </svg>
@@ -27,6 +27,10 @@
         let val = document.getElementById("title-color").value;
         document.getElementById("title").style.color = val;
         document.getElementById("grade").style.color = val;
+      });
+
+      document.getElementById("title").addEventListener("input", () => {
+        document.getElementById("modify-color").disabled = document.getElementById("title").value.includes("/");
       });
 
       document.getElementById("modify-color").addEventListener("click", () => {
@@ -49,7 +53,9 @@
     </div>
     {% else %}
     <h1 style="color: #{{ "%0.6x" % course.subject.color }}" id="title">{{ course.subject.name }} -- {{ course.subject.grade }}</h1>
-    <i class="left_grad">{{ course.subject.teacher.user.name }} {{ course.subject.teacher.user.firstname }}</i>
+    <a href="mailto:{{ course.subject.teacher.user.email }}">
+      <i class="left_grad">{{ course.subject.teacher.user.name }} {{ course.subject.teacher.user.firstname }}</i>
+    </a>
     {% endif %}
 
     <div style="flex-direction: column;">
@@ -107,9 +113,20 @@
       <form id="form" method="post" action="/add-course-module/{{ course.id }}">
         <h3>Ajouter une nouvelle catégorie pour {{ course.name }}</h3>
         <label style="margin-top: 0;" for="title">Titre</label>
-        <input id="title" name="title" required autocomplete="off">
-        <input id="submit" type="submit" name="submit" value="Ajouter le module">
+        <span style="color: #ff0000; display:none;" id="span_forbidden_cat">Le caractère '/' ne peut être utilisé</span>
+        <input id="title_cat" name="title" required autocomplete="off">
+        <input id="submit_cat" class="button" type="submit" name="submit" value="Ajouter le module">
       </form>
+      <script>
+        let title_cat = document.getElementById("title_cat");
+        let sub_title_cat = document.getElementById("submit_cat");
+        let span_forbidden_cat = document.getElementById("span_forbidden_cat");
+
+        title_cat.addEventListener("input", () => {
+          sub_title_cat.disabled = title_cat.value.includes("/");
+          span_forbidden_cat.style.display = title_cat.value.includes("/") ? "block" : "none";
+        });
+      </script>
       <h3>Liste des catégories</h3>
       <ul class="modules">
         {% for mod in course.modules|sort(attribute='title') %}
@@ -141,8 +158,9 @@
           <form id="form" method="post" action="/add-module-category/{{ course.id }}/{{ mod.id }}">
             <h3>Créer un nouveau module pour <i>{{ mod.title }}</i></h3>
               <label style="margin-top: 0;" for="title">Titre</label>
-              <input id="title" name="title" required autocomplete="off">
-              <input id="submit" type="submit" name="submit" value="Ajouter le module">
+              <span style="color: #ff0000; display:none;" id="span_forbidden_mod_{{ mod.id }}">Le caractère '/' ne peut être utilisé</span>
+              <input id="title_mod_{{ mod.id }}" name="title" required autocomplete="off">
+              <input id="submit_mod_{{ mod.id }}" class="button" type="submit" name="submit" value="Ajouter le module">
           </form>
         </li>
         <script>
@@ -209,6 +227,14 @@
                 alert(`Erreur "${e}" en essayant de supprimer la catégorie {{ mod.title }}`);
               });
             }
+          });
+          let title_mod_{{ mod.id }} = document.getElementById("title_mod_{{mod.id}}");
+          let sub_mod_{{ mod.id }} = document.getElementById("submit_mod_{{ mod.id }}");
+          let span_forbidden_mod_{{ mod.id }} = document.getElementById("span_forbidden_mod_{{ mod.id }}");
+
+          title_mod_{{ mod.id }}.addEventListener("input", () => {
+            sub_mod_{{ mod.id }}.disabled = title_mod_{{ mod.id }}.value.includes("/");
+            span_forbidden_mod_{{ mod.id }}.style.display = title_mod_{{ mod.id }}.value.includes("/") ? "block" : "none";
           });
         </script>
         {% endfor %}

@@ -9,16 +9,27 @@
 <div class="island">
   <form id="form" action="/add-course" method="post">
     <label for="name">Nom du cours<span style="color: #ff0000">*</span></label>
-    <input type="text" name="name" required></input>
+    <span style="color: #ff0000; display:none;" id="span_forbidden">Le caractère '/' ne peut être utilisé.</span>
+    <input type="text" name="name" id="course_title" required>
 
     <label for="grade">Niveau (eg. 10H, Cycle 3, Cycle 2 8H, Cycle 1 3-4H)<span style="color: #ff0000">*</span></label>
     <input type="text" name="grade" pattern="^((C|c)ycle [1-9]? ?)?(([1-9]-|1[0-1]-)?([1-9]|1[0-1]))H$"
-      required></input>
+      required>
 
     <label for="color">Code couleur</label>
-    <input type="color" name="color" style="padding:0;"></input>
+    <input type="color" name="color" style="padding:0;">
 
     <input id="submit" type="submit" name="submit" value="Ajouter le cours">
   </form>
+  <script>
+    let course_title = document.getElementById("course_title");
+    let submit = document.getElementById("submit");
+    let span_forbidden = document.getElementById("span_forbidden");
+
+    course_title.addEventListener("input", () => {
+      submit.disabled = course_title.value.includes("/");
+      span_forbidden.style.display = course_title.value.includes("/") ? "block" : "none";
+    });
+  </script>
 </div>
 {% endblock %}
