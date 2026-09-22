@@ -81,7 +81,7 @@
           rem_stud_{{ c.id }}.addEventListener("click", () => {
             let ok = confirm("Voulez vous vraiment enlever {{ c.student.user.firstname }} {{ c.student.user.name }} de ce cours ? Cette action est finale et irreversible.");
             if (ok) {
-              fetch("/courses/{{ c.id }}", {
+              fetch("/courses/{{ course.id }}/{{ c.id }}", {
                 method: "DELETE"
               }).then((res) => {
                 if (res.status === 200) {
