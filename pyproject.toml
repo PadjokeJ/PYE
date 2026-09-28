@@ -1,6 +1,6 @@
 [project]
 name = "PYE_jpfister"
-version = "1.0.0"
+version = "2.0.0"
 authors = [
   { name="Jonatan Pfister", email="spam@padjokej.dev" },
 ]
@@ -17,4 +17,3 @@ license-files = ["LICENSE"]
 [project.urls]
 Homepage = "https://pye.padjokej.dev"
 Issues = "https://github.com/PadjokeJ/PYE/issues"
-

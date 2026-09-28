@@ -52,10 +52,17 @@
     </script>
     </div>
     {% else %}
-    <h1 style="color: #{{ "%0.6x" % course.subject.color }}" id="title">{{ course.subject.name }} -- {{ course.subject.grade }}</h1>
-    <a href="mailto:{{ course.subject.teacher.user.email }}">
-      <i class="left_grad">{{ course.subject.teacher.user.name }} {{ course.subject.teacher.user.firstname }}</i>
+    {% for teacher in course.teachers %}
+    <a href="mailto:{{ teacher.user.email }}">
+      <i class="left_grad">{{ teacher.user.name }} {{ teacher.user.firstname }}</i>
     </a>
+    {% endfor %}
+    <h1 style="color: #{{ "%0.6x" % course.subject.color }}" id="title">{{ course.subject.name }} -- {{ course.subject.grade }}</h1>
+    {% for teacher in course.subject.teachers %}
+    <a href="mailto:{{ teacher.user.email }}">
+      <i class="left_grad">{{ teacher.user.name }} {{ teacher.user.firstname }}</i>
+    </a>
+    {% endfor %}
     {% endif %}
 
     <div style="flex-direction: column;">

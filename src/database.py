@@ -1,7 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
 
-from sqlalchemy import Boolean, ForeignKey, Integer, String
+from sqlalchemy import Boolean, Integer, String
 from sqlalchemy import or_
+from sqlalchemy import Table, Column, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import relationship
@@ -16,13 +17,20 @@ import password
 class Base(DeclarativeBase):
   ...
 
+teacher_x_subject = Table(
+  "teacher_x_subject",
+  Base.metadata,
+  Column("teacher_id", ForeignKey("teacher.id"), primary_key=True),
+  Column("subject_id", ForeignKey("subject.id"), primary_key=True),
+)
+
 class Teacher(Base):
   __tablename__ = "teacher"
 
   id: Mapped[int] = mapped_column(Integer, primary_key=True)
   user_email: Mapped[str] = mapped_column(ForeignKey("users.email"))
-  subjects: Mapped[List["Subject"]] = relationship(back_populates="teacher")
-  user: Mapped["UsersTable"] = relationship(back_populates="teacher_data")
+  subjects: Mapped[List[Subject]] = relationship(secondary=teacher_x_subject, back_populates="teachers")
+  user: Mapped[UsersTable] = relationship(back_populates="teacher_data")
 
   super: Mapped[bool] = mapped_column(Boolean)
 
@@ -90,10 +98,9 @@ class Subject(Base):
   color: Mapped[int] = mapped_column(Integer)
   name: Mapped[str] = mapped_column(String)
   grade: Mapped[str] = mapped_column(String)
-  teacher_id: Mapped[int] = mapped_column(ForeignKey("teacher.id"))
-  students: Mapped[List["StudentCourse"]] = relationship(back_populates="subject")
-  teacher: Mapped["Teacher"] = relationship(back_populates="subjects")
-  modules: Mapped[List["SubjectModule"]] = relationship(back_populates="subject")
+  students: Mapped[List[StudentCourse]] = relationship(back_populates="subject")
+  teachers: Mapped[List[Teacher]] = relationship(secondary=teacher_x_subject, back_populates="subjects")
+  modules: Mapped[List[SubjectModule]] = relationship(back_populates="subject")
 
 class SubjectModule(Base):
   __tablename__ = "module"
@@ -252,8 +259,10 @@ def add_child(user: str, child: int):
 
 def create_course(owner: str, name: str, grade: str, color: int):
   user = get_user(owner)
+  teachers = list()
+  teachers.append(user.teacher_data)
   subject = Subject(
-    teacher=user.teacher_data,
+    teachers=teachers,
     name=name,
     grade=grade,
     color=color
@@ -275,7 +284,13 @@ def get_courses(email: str) -> list[Subject]:
   query = db.session.query(Subject)
 
   if (user_role == "Teacher"):
-    return query.filter(or_(Subject.teacher.has(user_email=email), user.teacher_data.super)).all()
+    ls = list()
+    subjects = query.all()
+    for subject in subjects:
+      for teacher in subject.teachers:
+        if user.teacher_data.super or teacher.user_email == email:
+          ls.append(subject)
+    return ls
   elif (user_role == "Student"):
     student = get_user(email).student_data
     courses = student.courses

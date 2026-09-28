@@ -363,7 +363,7 @@ def update_student_module_progress(mod_id: str):
   if request.method == "GET":
     return redirect(f"/courses/{module.subject.subject.id}/{module.student_course_id}/{module.id}?success")
 
-  if not module.subject.subject.teacher.user.email == flask_login.current_user.id:
+  if not is_correct_teacher(module.student_course.subject_id):
     return redirect("/courses")
 
   opt = True if "optional" in request.form.keys() and request.form["optional"] == "optional" else False
@@ -383,7 +383,7 @@ def update_student_category_progress(cat_id: str):
   if request.method == "GET":
     return redirect(f"/courses/{module.subject.subject.id}/{module.student_course_id}?success")
 
-  if not module.subject.subject.teacher.user.email == flask_login.current_user.id:
+  if not is_correct_teacher(module.student_course.subject_id):
     return redirect("/courses")
 
   opt = True if "optional" in request.form.keys() and request.form["optional"] == "optional" else False
@@ -462,7 +462,7 @@ def mod_module_category_title(course_id: int, category_id: int, title: str):
 @login_required
 def hide_student_course(course_id: str):
   student_course = database.get_student_course(str(course_id))
-  if flask_login.current_user.type != "Teacher" or flask_login.current_user.id != student_course.subject.teacher.user_email:
+  if not is_correct_teacher(course_id):
     return redirect(f"/courses/{student_course.subject_id}/{student_course.id}")
   
   database.hide_student_course(str(course_id), request.form.get("hide") == "true")
@@ -497,10 +497,17 @@ def update_student_comments(student_id: int):
   return redirect(f"/courses/{course.id}/{student_id}?success")
 
 def is_correct_teacher(course_id: str) -> bool:
-  return (flask_login.current_user.type == "Teacher" \
-    and flask_login.current_user.id == database.get_course(course_id).teacher.user_email)\
-      or (database.get_teacher(flask_login.current_user.id) != None \
-        and database.get_teacher(flask_login.current_user.id).super)
+  if flask_login.current_user.type != "Teacher":
+    return False
+  
+  if database.get_teacher(flask_login.current_user.id).super:
+    return True
+  
+  for teacher in database.get_course(course_id).teachers:
+    if teacher.user_email == flask_login.current_user.id:
+      return True
+  
+  return False
 
 if __name__ == "__main__":
   app.run(host="0.0.0.0", port=8080, debug=True)

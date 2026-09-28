@@ -1,9 +1,6 @@
 - Admins :
   - Delete accounts
 
-Teacher :
-  - certains cours sont données par plusieurs enseignants
-
 Students :
   - Birth dates / age
   - Horaires de mini cours (notified by mail)
