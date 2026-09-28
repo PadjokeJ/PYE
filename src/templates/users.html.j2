@@ -13,7 +13,7 @@
     {% for user in users %}
     <form id="form" action="/update-user" method="POST" style="margin: 10px;">
       <h2>{{ user.email }}</h2>
-      <p><i>{{ user.role }}</i></p>
+      <p><i>{% if user.role != "Teacher" %}{{ user.role }}{% elif user.teacher_data.super %}Direction{% endif %}</i></p>
       {% if user.role == "Parent" %}
       <h3>Enfants :</h3>
       <ul>
