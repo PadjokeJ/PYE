@@ -254,12 +254,13 @@ li.lsmodule::marker {
 
 ul.course {
   padding: 0;
+  margin:0;
 }
 li.course::marker {
   content: "";
 }
 li.course {
-  margin: 20px 0;
+  margin: 40px 0;
 }
 
 .student_outer {

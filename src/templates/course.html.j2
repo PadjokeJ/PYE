@@ -59,7 +59,7 @@
     {% endfor %}
     <h1 style="color: #{{ "%0.6x" % course.subject.color }}" id="title">{{ course.subject.name }} -- {{ course.subject.grade }}</h1>
     {% for teacher in course.subject.teachers %}
-    <a href="mailto:{{ teacher.user.email }}">
+    <a href="mailto:{{ teacher.user.email }}" style="margin-right: 5px;">
       <i class="left_grad">{{ teacher.user.name }} {{ teacher.user.firstname }}</i>
     </a>
     {% endfor %}
