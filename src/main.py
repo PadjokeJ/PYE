@@ -274,6 +274,8 @@ def get_course(course_id: str):
   match flask_login.current_user.type:
     case "Teacher":
       course = subject
+      if not is_correct_teacher(str(course_id)):
+        return redirect("/courses")
     case "Student":
       for sc in subject.students:
         if sc.student.user_email == flask_login.current_user.id:
@@ -490,7 +492,10 @@ def update_student_comments(student_id: int):
   return redirect(f"/courses/{course.id}/{student_id}?success")
 
 def is_correct_teacher(course_id: str) -> bool:
-  return flask_login.current_user.type == "Teacher" and flask_login.current_user.id == database.get_course(course_id).teacher.user_email
+  return (flask_login.current_user.type == "Teacher" \
+    and flask_login.current_user.id == database.get_course(course_id).teacher.user_email)\
+      or (database.get_teacher(flask_login.current_user.id) != None \
+        and database.get_teacher(flask_login.current_user.id).super)
 
 if __name__ == "__main__":
   app.run(host="0.0.0.0", port=8080, debug=True)

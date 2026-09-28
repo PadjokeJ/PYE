@@ -2,10 +2,6 @@
   - Delete accounts
 
 Teacher :
-  - modules :
-    - code couleur selon progres, pas besoin de la ligne
-  - catégories :
-    - ligne de progres calculée à partir du nombres de modules réussis
   - commentaires éditer
   - certains cours sont données par plusieurs enseignants
 

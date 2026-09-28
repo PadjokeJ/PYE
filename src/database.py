@@ -297,6 +297,12 @@ def get_module(id: int) -> SubjectModule:
 def get_category(id: int) -> ModuleCategory:
   return db.session.get(ModuleCategory, id)
 
+def get_teacher(id: str) -> Teacher:
+  user = get_user(id)
+  if user.role == "Teacher":
+    return user.teacher_data
+  return None
+
 def get_student(id: int) -> StudentData:
   return db.session.get(StudentData, id)
 
