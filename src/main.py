@@ -469,7 +469,7 @@ def hide_student_course(course_id: str):
 
   return redirect(f"/courses/{student_course.subject_id}/{student_course.id}?success")
 
-@app.route("/comments/<student_id>", methods=["POST", "DELETE", "GET"])
+@app.route("/comments/<student_id>", methods=["POST", "DELETE", "GET", "PATCH"])
 @login_required
 def update_student_comments(student_id: int):
   course = database.get_student_course(student_id).subject
@@ -486,6 +486,11 @@ def update_student_comments(student_id: int):
       return "no comment id provided", 400
     database.del_comment(student_id, int(request.form["comment_id"]))
     return "success deleting comment", 200
+  elif request.method == "PATCH":
+    if not "comment_id" in request.form.keys() or not "content" in request.form.keys():
+      return "comment id or content not provided", 400
+    database.edit_comment(student_id, int(request.form["comment_id"]), request.form["content"])
+    return "success editing comment", 200
   else:
     return redirect(f"/courses/{course.id}/{student_id}?success")
   

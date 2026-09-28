@@ -2,7 +2,6 @@
   - Delete accounts
 
 Teacher :
-  - commentaires éditer
   - certains cours sont données par plusieurs enseignants
 
 Students :

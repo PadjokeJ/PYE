@@ -505,6 +505,15 @@ def del_comment(student_id: int, comment_id: int):
 
   db.session.commit()
 
+def edit_comment(student_id, comment_id, comment):
+  student_course = get_student_course(student_id)
+
+  ls = list(student_course.comments)
+  ls[comment_id] = comment
+  student_course.comments = ls
+
+  db.session.commit()
+
 def edit_module_category_title(category_id: int, title: str):
   category = get_category(category_id)
   category.title = title

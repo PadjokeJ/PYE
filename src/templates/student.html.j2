@@ -47,7 +47,8 @@
             Voir les détails
           </a>
           {% for category in mod.categories|sort(attribute='category.title') %}
-          <p><b>{{ category.category.title }}</b>{% if category.passed %} -- <strong style="color: var(--green);">réussi</strong> !{% else %}{% endif %}</p>
+          <p><b>{{ category.category.title }}</b>{% if category.passed %} -- <strong
+              style="color: var(--green);">réussi</strong> !{% else %}{% endif %}</p>
           {% endfor %}
         </div>
       </div>
@@ -59,7 +60,25 @@
     {% for comment in student.comments %}
     <div
       style="padding: 20px; border-radius: 40px; min-height: 40px; background-color: var(--background); margin: 20px 0; max-width: 400px; position: relative;">
-      <p id="comment_{{ loop.index0 }}" style="margin:0; max-width: calc(100% - 45px);">{{ comment }}</p>
+      <p id="comment_{{ loop.index0 }}" style="margin:0; max-width: calc(100% - 90px); word-break: break-all;">{{
+        comment }}</p>
+      <textarea id="inp_com_{{ loop.index0 }}"
+        style="max-width: calc(100% - 95px); min-width: calc(100% - 95px); display: none;">{{ comment }}</textarea>
+      <button class="delete_mod" id="mod_{{ loop.index0 }}"
+        style="border-radius: 5px; height: calc(100% - 40px); right: 65px;">
+        <svg id="button_submit_{{ loop.index0 }}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-check preview-icon" style="display:none;">
+          <path d="M20 6 9 17l-5-5" />
+        </svg>
+        <svg id="button_edit_{{ loop.index0 }}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-pencil preview-icon">
+          <path
+            d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
+          <path d="m15 5 4 4" />
+        </svg>
+      </button>
       <button class="delete_mod" id="del_{{ loop.index0 }}"
         style="border-radius: 5px 20px 20px 5px; height: calc(100% - 40px);">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -93,6 +112,33 @@
               alert(`Erreur ${e} en essayant de supprimer un commentaire`);
             });
           }
+        });
+        document.getElementById("mod_{{ loop.index0 }}").addEventListener("click", () => {
+          let display = document.getElementById("inp_com_{{ loop.index0 }}").style.display;
+          document.getElementById("inp_com_{{ loop.index0 }}").style.display = document.getElementById("comment_{{ loop.index0 }}").style.display;
+          document.getElementById("button_edit_{{ loop.index0 }}").style.display = display;
+          document.getElementById("button_submit_{{ loop.index0 }}").style.display = document.getElementById("comment_{{ loop.index0 }}").style.display;
+          document.getElementById("comment_{{ loop.index0 }}").style.display = display;
+
+          if (display !== "none") {
+            let form_data = new URLSearchParams();
+            form_data.append("comment_id", "{{ loop.index0 }}");
+            form_data.append("content", document.getElementById("inp_com_{{ loop.index0 }}").value);
+            console.log(form_data);
+            fetch(`/comments/{{ student.id }}`, {
+              method: "PATCH",
+              body: form_data
+            }).then((res) => {
+              if (res.status === 200) {
+                window.location.reload();
+              } else {
+                alert(`Erreur ${res.status} en essayant de modifier un commentaire`);
+              }
+            }).catch((e) => {
+              alert(`Erreur ${e} en essayant de modifier un commentaire`);
+            });
+          }
+
         });
       </script>
     </div>
