@@ -36,20 +36,18 @@
       {% for mod in student.modules %}
       <div>
         <div class="student_outer">
-          <h2 style="margin:0;text-align:center;">{{ mod.subject.title }}</h2>
-
+          <h2 style="margin:0;text-align:center;margin-bottom:10px;">{{ mod.subject.title }}</h2>
+          <div style="align-items:center; display:flex;">
+            <label style="margin-top:0; width:30%;" for="progress">Progrès:</label>
+            <progress value="{{ mod.progress }}" max="100" {% if mod.passed %}class="class-passed" {% endif
+              %}></progress>
+          </div>
           <a href="/courses/{{ student.subject_id }}/{{ mod.student_course_id }}/{{ mod.id }}"
             style="padding: 5px 20%;box-shadow: var(--shadow) 2px 2px 10px;border-radius: 15px;text-align:center;margin-top:20px;">
             Voir les détails
           </a>
           {% for category in mod.categories|sort(attribute='category.title') %}
-          <p><b>{{ category.category.title }} :</b></p>
-          <div style="align-items:center; display:flex;">
-            <label style="margin-top:0; width:30%;" for="progress">Progrès: <span id="span-cat-{{ category.id }}">{{
-                category.progress }}</span>%</label>
-            <progress value="{{ category.progress }}" max="100" {% if category.passed %}class="class-passed" {% endif
-              %}></progress>
-          </div>
+          <p><b>{{ category.category.title }}</b>{% if category.passed %} -- <strong style="color: var(--green);">réussi</strong> !{% else %}{% endif %}</p>
           {% endfor %}
         </div>
       </div>

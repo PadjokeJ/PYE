@@ -43,12 +43,6 @@
     <form action="/student/category/{{ c.id }}" method="POST" class="student_inner">
       <h2 style="text-align: center;">{{ c.category.title }}</h2>
       <div style="align-items:center; display:flex;">
-        <label style="margin-top:0; width:30%;" for="progress">Progrès: <span id="span-cat-{{ c.id }}">{{
-            c.progress }}</span>%</label>
-        <input style="margin: 0 5px; min-width:0; width:70%;" type="range" name="progress" id="progress-cat-{{ c.id }}"
-          value="{{ c.progress }}">
-      </div>
-      <div style="align-items:center; display:flex;">
         <label for="passed">Module réussi :</label>
         <input style="min-width: 20px; min-height: 20px; margin: 10px 0 0 10px;" type="checkbox" id="passed"
           name="passed" value="passed" {% if c.passed %}checked{% endif %}>

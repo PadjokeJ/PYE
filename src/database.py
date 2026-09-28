@@ -322,23 +322,33 @@ def get_children(email: str) -> list[StudentData]:
   
   return children
 
-def modify_student_module(id: str, optional: bool, progress: int, passed: bool, focussed: bool):
+def modify_student_module(id: str, optional: bool, passed: bool, focussed: bool):
   module = get_student_module(id)
   
   module.optional = optional
-  module.progress = progress
   module.passed   = passed
   module.focussed = focussed
 
   db.session.commit()
 
-def modify_student_category(id: str, optional: bool, progress: int, passed: bool, focussed: bool):
+def modify_student_category(id: str, optional: bool, passed: bool, focussed: bool):
   cat = get_student_category(id)
   
   cat.optional = optional
-  cat.progress = progress
   cat.passed   = passed
   cat.focussed = focussed
+
+  progress = 0
+  for c in cat.student_module.categories:
+    if c.passed:
+      progress += 1
+  
+  progress = float(progress) / len(cat.student_module.categories)
+  progress *= 100
+  progress = int(progress)
+
+  cat.student_module.progress = progress
+  print(f"update progress to {progress}")
 
   db.session.commit()
 
@@ -505,4 +515,3 @@ def make_teacher_super(user_id: str):
   user.teacher_data.super = True
 
   db.session.commit()
-
