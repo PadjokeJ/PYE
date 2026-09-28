@@ -176,7 +176,7 @@ def create_user(name: str, surname: str, utype: str, pw: str, email: str, provid
 
   passw = bytes(pw, "utf-8")
 
-  salt = password.generate_random_salt(64)
+  salt = password.generate_random_salt(16)
   pwdh, salt = password.salt(passw, salt)
 
   hpw = password.hash(pwdh)
@@ -221,7 +221,7 @@ def create_user(name: str, surname: str, utype: str, pw: str, email: str, provid
 def update_password(email: str, pw: str):
   passw = bytes(pw, "utf-8")
 
-  salt = password.generate_random_salt(64)
+  salt = password.generate_random_salt(16)
   pwdh, salt = password.salt(passw, salt)
 
   hpw = password.hash(pwdh)

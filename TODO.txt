@@ -2,14 +2,12 @@
   - Delete accounts
 
 Students :
-  - Birth dates / age
   - Horaires de mini cours (notified by mail)
 
 Parents :
   - Absences
 
 General stuff:
-  - Texte sur les boutons
   - Savoir quel compte on est
   - Print important pages :
     - janvier-ish : imprimer les pages progrès (une par eleve)
