@@ -14,7 +14,7 @@
   <div class="tile_container">
   {% for course in student.courses %}
   <a class="tile" style="box-shadow: #{{ "%0.6x" % course.subject.color }} 0 0 20px;"
-    href="/courses/{{ course.subject.id }}">
+    href="/courses/{{ course.subject.id }}/">
   <p><strong style="color: #{{ "%0.6x" % course.subject.color }};">{{ course.subject.name }} -- {{ course.subject.grade }}</strong></p>
   </a>
   {% endfor %}

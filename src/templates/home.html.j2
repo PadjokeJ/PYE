@@ -17,7 +17,7 @@
     </a>
     {% endif %}
     {% if current_user.type == "Teacher" or current_user.type == "Student" %}
-    <a class="tile" href="/courses">
+    <a class="tile" href="/courses/">
       <img class="tile_img" src="/static/pye.svg" alt="">
       <p>Mes cours</p>
     </a>
@@ -39,11 +39,11 @@
     </a>
     {% endif %}
     {% if current_user.type == "Parent" %}
-    <a class="tile" href="/courses">
+    <a class="tile" href="/courses/">
       <img class="tile_img" src="/static/pye.svg" alt="">
       <p>Voir les cours</p>
     </a>
-    <a class="tile" href="/students">
+    <a class="tile" href="/students/">
       <img class="tile_img" src="/static/pye.svg" alt="">
       <p>Voir mes enfants</p>
     </a>

@@ -64,13 +64,13 @@ def request_loader(request):
 
 @login_manager.unauthorized_handler
 def unauthorized_handler():
-    return redirect("/login")
+    return redirect("/login/")
 
-@app.route("/login", methods=["GET", "POST"])
+@app.route("/login/", methods=["GET", "POST"])
 def login():
   if request.method == "GET":
     if flask_login.current_user.is_authenticated:
-      return redirect("/home")
+      return redirect("/home/")
     return render_template("login.html")
   
   email = request.form["email"]
@@ -84,22 +84,22 @@ def login():
       token = str(password.generate_random_salt(64))[2:-1]
 
       return redirect("/reset/" + token)
-    return redirect("/home")
-  return redirect("/login?wrong")
+    return redirect("/home/")
+  return redirect("/login/?wrong")
 
-@app.route("/logout")
+@app.route("/logout/")
 @login_required
 def logout():
   flask_login.logout_user()
-  return redirect("/login")
+  return redirect("/login/")
 
 @app.route("/")
 def root():
   if flask_login.current_user.is_authenticated:
-    return redirect("/home")
-  return redirect("/login")
+    return redirect("/home/")
+  return redirect("/login/")
 
-@app.route("/home")
+@app.route("/home/")
 @login_required
 def home():
   return render_template("home.html.j2", username=database.get_user(flask_login.current_user.id).firstname)
@@ -109,16 +109,16 @@ def home():
 def feedback():
   if flask_login.current_user.type == "Parent" or flask_login.current_user.type == "Teacher":
     return render_template("feedback.html.j2")
-  return redirect("/home")
+  return redirect("/home/")
 
-@app.route("/reset/<token>", methods=["GET", "POST"])
+@app.route("/reset/<token>/", methods=["GET", "POST"])
 @login_required
 def reset_pass(token=None):
   if token == None:
-    return redirect("/logout") # this should probably give 404
+    return redirect("/logout/") # this should probably give 404
 
   if flask_login.current_user.reset == False:
-    return redirect("/home")
+    return redirect("/home/")
 
   if request.method == "POST":
     if request.form["password"] != request.form["confirm"]:
@@ -138,34 +138,34 @@ def reset_pass(token=None):
 
     mail.send(msg)
 
-    return redirect("/home")
+    return redirect("/home/")
 
   return render_template("reset.html")
 
-@app.route("/admin")
+@app.route("/admin/")
 @login_required
 def admin():
   if flask_login.current_user.type != "Admin":
-    return redirect("/home")
+    return redirect("/home/")
 
   return render_template("admin.html.j2", students=database.all_students())
 
-@app.route("/users")
+@app.route("/users/")
 @login_required
 def users_dash():
   if flask_login.current_user.type != "Admin":
-    return redirect("/home")
+    return redirect("/home/")
   return render_template("users.html.j2", users=database.get_users(), students=database.all_students())
 
-@app.route("/update-user", methods=["POST", "GET"])
+@app.route("/update-user/", methods=["POST", "GET"])
 @login_required
 def user_pass():
   email = request.form["email"]
   if flask_login.current_user.type != "Admin":
-    return redirect("/home")
+    return redirect("/home/")
   
   if request.method == "GET":
-    return redirect("/users")
+    return redirect("/users/")
   database.update_password(str(email), request.form["password"])
 
   msg = Message(
@@ -177,16 +177,16 @@ def user_pass():
 
   mail.send(msg)
 
-  return redirect("/users?success")
+  return redirect("/users/?success")
 
-@app.route("/add-user", methods=["GET", "POST"])
+@app.route("/add-user/", methods=["GET", "POST"])
 @login_required
 def create_user():
   if flask_login.current_user.type != "Admin":
-    return redirect("/home")
+    return redirect("/home/")
   
   if request.method == "GET":
-    return redirect("/admin?success")
+    return redirect("/admin/?success")
   
   name = request.form["name"]
   surname = request.form["surname"]
@@ -212,13 +212,13 @@ def create_user():
 
   mail.send(msg)
 
-  return redirect("/admin?success")
+  return redirect("/admin/?success")
 
-@app.route("/privacy-policy")
+@app.route("/privacy-policy/")
 def privacy_policy():
   return render_template("privacy.html.j2")
 
-@app.route("/add-child/<parent_id>/<child_id>", methods=["POST"])
+@app.route("/add-child/<parent_id>/<child_id>/", methods=["POST"])
 @login_required
 def add_child(parent_id: str, child_id: int):
   if flask_login.current_user.type != "Admin":
@@ -228,7 +228,7 @@ def add_child(parent_id: str, child_id: int):
 
   return "added child", 200
 
-@app.route("/new-course")
+@app.route("/new-course/")
 @login_required
 def dash_create_course():
   if flask_login.current_user.type != "Teacher":
@@ -236,14 +236,14 @@ def dash_create_course():
   
   return render_template("new_course.html.j2")
 
-@app.route("/add-course", methods=["GET", "POST"])
+@app.route("/add-course/", methods=["GET", "POST"])
 @login_required
 def create_course():
   if flask_login.current_user.type != "Teacher":
     return redirect("/home")
   
   if request.method == "GET":
-    return redirect("/new-course?success")
+    return redirect("/new-course/?success")
   
   name = request.form["name"]
   grade = request.form["grade"]
@@ -255,9 +255,9 @@ def create_course():
 
   database.create_course(flask_login.current_user.id, name, grade, color)
 
-  return redirect("/new-course?success")
+  return redirect("/new-course/?success")
 
-@app.route("/courses")
+@app.route("/courses/")
 @login_required
 def course_access():
   if flask_login.current_user.type != "Parent":
@@ -267,7 +267,7 @@ def course_access():
 
   return render_template("courses.html.j2", courses=courses)
 
-@app.route("/courses/<course_id>")
+@app.route("/courses/<course_id>/")
 @login_required
 def get_course(course_id: str):
   subject = database.get_course(str(course_id))
@@ -308,7 +308,7 @@ def modify_course_title(course_id: str, color: str, title: str):
   
   return render_template("course.html.j2", course=course, all_students=database.all_students())
 
-@app.route("/courses/<course_id>/<stud_id>", methods=["GET"])
+@app.route("/courses/<course_id>/<stud_id>/", methods=["GET"])
 @login_required
 def get_course_student(course_id: str, stud_id: str):
   if not is_correct_teacher(course_id):
@@ -322,7 +322,7 @@ def get_course_student(course_id: str, stud_id: str):
 
   return render_template("student.html.j2", student=stud)
 
-@app.route("/students", methods=["GET"])
+@app.route("/students/", methods=["GET"])
 @login_required
 def get_child_students():
   if flask_login.current_user.type != "Parent":
@@ -332,7 +332,7 @@ def get_child_students():
 
   return render_template("students.html.j2", students=children)
 
-@app.route("/courses/<course_id>/<stud_id>", methods=["DELETE"])
+@app.route("/courses/<course_id>/<stud_id>/", methods=["DELETE"])
 @login_required
 def del_course_student(course_id: str, stud_id: str):
   if not is_correct_teacher(course_id):
@@ -340,7 +340,7 @@ def del_course_student(course_id: str, stud_id: str):
   database.del_from_course(course_id, stud_id)
   return "removed student", 200
 
-@app.route("/courses/<course_id>/<stud_id>/<cat_id>")
+@app.route("/courses/<course_id>/<stud_id>/<cat_id>/")
 @login_required
 def get_course_student_category(course_id: str, stud_id: str, cat_id: str):
   if not is_correct_teacher(course_id):
@@ -355,7 +355,7 @@ def get_course_student_category(course_id: str, stud_id: str, cat_id: str):
 
   return render_template("category.html.j2", student=stud, category=catego)
 
-@app.route("/student/module/<mod_id>", methods=["POST", "GET"])
+@app.route("/student/module/<mod_id>/", methods=["POST", "GET"])
 @login_required
 def update_student_module_progress(mod_id: str):
   module = database.get_student_module(str(mod_id))
@@ -374,7 +374,7 @@ def update_student_module_progress(mod_id: str):
 
   return redirect(f"/courses/{module.subject.subject.id}/{module.student_course_id}/{module.id}?success")
 
-@app.route("/student/category/<cat_id>", methods=["POST", "GET"])
+@app.route("/student/category/<cat_id>/", methods=["POST", "GET"])
 @login_required
 def update_student_category_progress(cat_id: str):
   cat = database.get_student_category(str(cat_id))
@@ -394,7 +394,7 @@ def update_student_category_progress(cat_id: str):
 
   return redirect(f"/courses/{module.subject.subject.id}/{module.student_course_id}?success")
 
-@app.route("/add-to-course/<course_id>", methods=["POST", "GET"])
+@app.route("/add-to-course/<course_id>/", methods=["POST", "GET"])
 @login_required
 def add_to_course(course_id: str):
   if not is_correct_teacher(course_id):
@@ -404,7 +404,7 @@ def add_to_course(course_id: str):
     return redirect("/courses/" + str(course_id))
   return redirect("/courses/" + str(course_id) + "?success")
 
-@app.route("/add-course-module/<course_id>", methods=["POST", "GET"])
+@app.route("/add-course-module/<course_id>/", methods=["POST", "GET"])
 @login_required
 def add_course_module(course_id: str):
   if not is_correct_teacher(course_id):
@@ -447,7 +447,7 @@ def add_module_category(course_id: str, module_id: str):
     return redirect("/courses/" + str(course_id))
   return redirect("/courses/" + str(course_id) + "?success")
 
-@app.route("/edit-module-category/<course_id>/<category_id>/title/<title>", methods=["PUT", "GET"])
+@app.route("/edit-module-category/<course_id>/<category_id>/title/<title>/", methods=["PUT", "GET"])
 @login_required
 def mod_module_category_title(course_id: int, category_id: int, title: str):
   if not is_correct_teacher(course_id):
@@ -458,7 +458,7 @@ def mod_module_category_title(course_id: int, category_id: int, title: str):
     return "edited with success", 200
   return redirect("/courses/" + str(course_id) + "?success")
 
-@app.route("/hide-course/<course_id>", methods=["POST"])
+@app.route("/hide-course/<course_id>/", methods=["POST"])
 @login_required
 def hide_student_course(course_id: str):
   student_course = database.get_student_course(str(course_id))
@@ -469,7 +469,7 @@ def hide_student_course(course_id: str):
 
   return redirect(f"/courses/{student_course.subject_id}/{student_course.id}?success")
 
-@app.route("/comments/<student_id>", methods=["POST", "DELETE", "GET", "PATCH"])
+@app.route("/comments/<student_id>/", methods=["POST", "DELETE", "GET", "PATCH"])
 @login_required
 def update_student_comments(student_id: int):
   course = database.get_student_course(student_id).subject
@@ -492,9 +492,9 @@ def update_student_comments(student_id: int):
     database.edit_comment(student_id, int(request.form["comment_id"]), request.form["content"])
     return "success editing comment", 200
   else:
-    return redirect(f"/courses/{course.id}/{student_id}?success")
+    return redirect(f"/courses/{course.id}/{student_id}/?success")
   
-  return redirect(f"/courses/{course.id}/{student_id}?success")
+  return redirect(f"/courses/{course.id}/{student_id}/?success")
 
 def is_correct_teacher(course_id: str) -> bool:
   if flask_login.current_user.type != "Teacher":

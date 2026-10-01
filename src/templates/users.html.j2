@@ -11,7 +11,7 @@
   <h1>Modifier les utilisateurs</h1>
   <div style="display: grid; grid-template-columns: auto auto;">
     {% for user in users %}
-    <form id="form" action="/update-user" method="POST" style="margin: 10px;">
+    <form id="form" action="/update-user/" method="POST" style="margin: 10px;">
       <h2>{{ user.email }}</h2>
       <p><i>{% if user.role != "Teacher" %}{{ user.role }}{% elif user.teacher_data.super %}Direction{% endif %}</i></p>
       {% if user.role == "Parent" %}
@@ -36,7 +36,7 @@
       </div>
       <script>
           document.getElementById("add_child_button_{{ user.email }}").addEventListener("click", () => {
-            fetch("/add-child/{{ user.email }}/" + document.getElementById("add_child_{{ user.email }}").value, { 
+            fetch("/add-child/{{ user.email }}/" + document.getElementById("add_child_{{ user.email }}").value + "/", { 
               method: "POST" 
             }).then((res) => {
               if (res.status === 200) {

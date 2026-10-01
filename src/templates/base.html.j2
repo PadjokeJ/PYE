@@ -23,18 +23,18 @@
 
 <body>
   <nav class="no-print">
-    <a class="tab" id="{% block homeactive %}{% endblock %}" href="/home">Accueil</a>
+    <a class="tab" id="{% block homeactive %}{% endblock %}" href="/home/">Accueil</a>
     {% if current_user.type == "Teacher" or current_user.type == "Student" or current_user.type == "Parent" %}
-    <a class="tab" id="{% block cactive %}{% endblock %}" href="/courses">Cours</a>
+    <a class="tab" id="{% block cactive %}{% endblock %}" href="/courses/">Cours</a>
     {% endif %}
     {% if current_user.type == "Parent" %}
-    <a class="tab" id="{% block sactive %}{% endblock %}" href="/students">Enfants</a>
+    <a class="tab" id="{% block sactive %}{% endblock %}" href="/students/">Enfants</a>
     {% endif %}
     {% if current_user.type == "Teacher" %}
-    <a class="tab" id="{% block acactive %}{% endblock %}" href="/new-course">Créer un cours</a>
+    <a class="tab" id="{% block acactive %}{% endblock %}" href="/new-course/">Créer un cours</a>
     {% endif %}
     {% if current_user.type == "Admin" %}
-    <a class="tab" id="{% block admactive %}{% endblock %}" href="/admin">Console d'administrateur</a>
+    <a class="tab" id="{% block admactive %}{% endblock %}" href="/admin/">Console d'administrateur</a>
     {% endif %}
     <a id="logout" href="/logout">Déconnexion</a>
   </nav>
@@ -43,7 +43,7 @@
   </div>
   <footer style="width:100%;padding:20px 0;margin-top:30px;justify-content:center;font-size:12px;" class="no-print">
     <a href="https://github.com/PadjokeJ/PYE" style="margin-left: 10px;margin-right: 10px;" target="_blank">Source</a>
-    <a href="{{ request.host_url }}privacy-policy" style="margin-left: 10px;margin-right: 10px;" target="_blank">Privacy
+    <a href="/privacy-policy/" style="margin-left: 10px;margin-right: 10px;" target="_blank">Privacy
       Policy</a>
   </footer>
 </body>
