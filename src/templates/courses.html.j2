@@ -11,7 +11,7 @@
   <ul class="course">
     {% for c in courses %}
     <li class="course">
-      <a href="/courses/{{ c.id }}"
+      <a href="/courses/{{ c.id }}/"
         style="padding: 9px 50px;border-radius: 20px;box-shadow: #{{ "%0.6x" % c.color }} 0 0 10px; background-color: var(--background);color:#{{ "%0.6x" % c.color }};font-weight:bolder; margin: 10px 0;">
         {{ c.name }} -- {{ c.grade }}
       </a>
