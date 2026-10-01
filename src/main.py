@@ -83,7 +83,7 @@ def login():
     if user.reset:
       token = str(password.generate_random_salt(64))[2:-1]
 
-      return redirect("/reset/" + token)
+      return redirect(f"/reset/{token}/")
     return redirect("/home/")
   return redirect("/login/?wrong")
 
@@ -122,7 +122,7 @@ def reset_pass(token=None):
 
   if request.method == "POST":
     if request.form["password"] != request.form["confirm"]:
-      return redirect("/reset/" + token)
+      return redirect(f"/reset/{token}/")
     
     flask_login.current_user.reset = False
 
@@ -232,7 +232,7 @@ def add_child(parent_id: str, child_id: int):
 @login_required
 def dash_create_course():
   if flask_login.current_user.type != "Teacher":
-    return redirect("/home")
+    return redirect("/home/")
   
   return render_template("new_course.html.j2")
 
@@ -240,7 +240,7 @@ def dash_create_course():
 @login_required
 def create_course():
   if flask_login.current_user.type != "Teacher":
-    return redirect("/home")
+    return redirect("/home/")
   
   if request.method == "GET":
     return redirect("/new-course/?success")
@@ -275,7 +275,7 @@ def get_course(course_id: str):
     case "Teacher":
       course = subject
       if not is_correct_teacher(str(course_id)):
-        return redirect("/courses")
+        return redirect("/courses/")
     case "Student":
       for sc in subject.students:
         if sc.student.user_email == flask_login.current_user.id:
@@ -296,10 +296,10 @@ def modify_course_title(course_id: str, color: str, title: str):
   course = database.get_course(str(course_id))
 
   if not flask_login.current_user.type == "Teacher":
-    return redirect("/courses/" + str(course_id))
+    return redirect(f"/courses/{str(course_id)}/")
 
   if course == None or not course in courses or request.method == "GET":
-    return redirect("/courses/" + course_id)
+    return redirect(f"/courses/{course_id}/")
 
   if not re.search("([0-9]|[a-f]){6}", color):
     return "Not a color", 400
@@ -312,13 +312,13 @@ def modify_course_title(course_id: str, color: str, title: str):
 @login_required
 def get_course_student(course_id: str, stud_id: str):
   if not is_correct_teacher(course_id):
-    return redirect("/courses/" + str(course_id))
+    return redirect(f"/courses/{str(course_id)}/")
 
   course = database.get_course(str(course_id))
   stud   = database.get_student_course(str(stud_id))
 
   if not stud in course.students:
-    return redirect("/courses/" + str(course_id))
+    return redirect(f"/courses/{course_id}/")
 
   return render_template("student.html.j2", student=stud)
 
@@ -344,14 +344,14 @@ def del_course_student(course_id: str, stud_id: str):
 @login_required
 def get_course_student_category(course_id: str, stud_id: str, cat_id: str):
   if not is_correct_teacher(course_id):
-    return redirect("/courses/" + str(course_id))
+    return redirect(f"/courses/{str(course_id)}/")
 
   course = database.get_course(str(course_id))
   stud   = database.get_student_course(str(stud_id))
   catego = database.get_student_module(str(cat_id))
 
   if not stud in course.students:
-    return redirect("/courses/" + str(course_id))
+    return redirect(f"/courses/{str(course_id)}/")
 
   return render_template("category.html.j2", student=stud, category=catego)
 
@@ -361,10 +361,10 @@ def update_student_module_progress(mod_id: str):
   module = database.get_student_module(str(mod_id))
 
   if request.method == "GET":
-    return redirect(f"/courses/{module.subject.subject.id}/{module.student_course_id}/{module.id}?success")
+    return redirect(f"/courses/{module.subject.subject.id}/{module.student_course_id}/{module.id}/?success")
 
   if not is_correct_teacher(module.student_course.subject_id):
-    return redirect("/courses")
+    return redirect("/courses/")
 
   opt = True if "optional" in request.form.keys() and request.form["optional"] == "optional" else False
   pas = True if "passed" in request.form.keys() and request.form["passed"] == "passed" else False
@@ -372,7 +372,7 @@ def update_student_module_progress(mod_id: str):
 
   database.modify_student_module(str(mod_id), opt, pas, foc)
 
-  return redirect(f"/courses/{module.subject.subject.id}/{module.student_course_id}/{module.id}?success")
+  return redirect(f"/courses/{module.subject.subject.id}/{module.student_course_id}/{module.id}/?success")
 
 @app.route("/student/category/<cat_id>/", methods=["POST", "GET"])
 @login_required
@@ -381,10 +381,10 @@ def update_student_category_progress(cat_id: str):
   module = cat.student_module
 
   if request.method == "GET":
-    return redirect(f"/courses/{module.subject.subject.id}/{module.student_course_id}?success")
+    return redirect(f"/courses/{module.subject.subject.id}/{module.student_course_id}/?success")
 
   if not is_correct_teacher(module.student_course.subject_id):
-    return redirect("/courses")
+    return redirect("/courses/")
 
   opt = True if "optional" in request.form.keys() and request.form["optional"] == "optional" else False
   pas = True if "passed" in request.form.keys() and request.form["passed"] == "passed" else False
@@ -392,82 +392,82 @@ def update_student_category_progress(cat_id: str):
 
   database.modify_student_category(str(cat_id), opt, pas, foc)
 
-  return redirect(f"/courses/{module.subject.subject.id}/{module.student_course_id}?success")
+  return redirect(f"/courses/{module.subject.subject.id}/{module.student_course_id}/?success")
 
 @app.route("/add-to-course/<course_id>/", methods=["POST", "GET"])
 @login_required
 def add_to_course(course_id: str):
   if not is_correct_teacher(course_id):
-    return redirect("/courses/" + str(course_id) + "?auth=False")
+    return redirect(f"/courses/{str(course_id)}/?auth=False")
   if request.method == "POST":
     database.add_student_to_course(str(course_id), request.form["student"])
-    return redirect("/courses/" + str(course_id))
-  return redirect("/courses/" + str(course_id) + "?success")
+    return redirect(f"/courses/{course_id}/")
+  return redirect(f"/courses/{str(course_id)}/?success")
 
 @app.route("/add-course-module/<course_id>/", methods=["POST", "GET"])
 @login_required
 def add_course_module(course_id: str):
   if not is_correct_teacher(course_id):
-    return redirect("/courses/" + str(course_id) + "?auth=False")
+    return redirect(f"/courses/{str(course_id)}/?auth=False")
   if request.method == "POST":
     database.add_course_module(str(course_id), request.form["title"])
-    return redirect("/courses/" + str(course_id))
-  return redirect("/courses/" + str(course_id) + "?success")
+    return redirect(f"/courses/{course_id}/")
+  return redirect(f"/courses/{str(course_id)}/?success")
 
 @app.route("/del-module-category/<course_id>/<module_id>/<category_id>/", methods=["DELETE"])
 @login_required
 def del_module_category(course_id: str, module_id: str, category_id: str):
   if not is_correct_teacher(course_id):
-    return redirect("/courses/" + str(course_id) + "?auth=False")
+    return redirect(f"/courses/{str(course_id)}/?auth=False")
 
   if request.method == "DELETE":
     database.del_module_category(str(category_id))
     return "deleted", 200
-  return redirect("/courses/" + str(course_id) + "?success")
+  return redirect(f"/courses/{str(course_id)}/?success")
 
 @app.route("/del-module/<course_id>/<module_id>/", methods=["DELETE"])
 @login_required
 def del_module(course_id: str, module_id: str):
   if not is_correct_teacher(course_id):
-    return redirect("/courses/" + str(course_id) + "?auth=False")
+    return redirect(f"/courses/{str(course_id)}/?auth=False")
 
   if request.method == "DELETE":
     database.del_module(str(module_id))
     return "deleted", 200
-  return redirect("/courses/" + str(course_id) + "?success")
+  return redirect(f"/courses/{str(course_id)}/?success")
 
 @app.route("/add-module-category/<course_id>/<module_id>/", methods=["POST", "GET"])
 @login_required
 def add_module_category(course_id: str, module_id: str):
   if not is_correct_teacher(course_id):
-    return redirect("/courses/" + str(course_id) + "?auth=False")
+    return redirect(f"/courses/{str(course_id)}/?auth=False")
 
   if request.method == "POST":
     database.add_module_category(int(module_id), str(course_id), request.form["title"])
-    return redirect("/courses/" + str(course_id))
-  return redirect("/courses/" + str(course_id) + "?success")
+    return redirect(f"/courses/{course_id}/")
+  return redirect("/courses/" + str(course_id) + "/?success")
 
 @app.route("/edit-module-category/<course_id>/<category_id>/title/<title>/", methods=["PUT", "GET"])
 @login_required
 def mod_module_category_title(course_id: int, category_id: int, title: str):
   if not is_correct_teacher(course_id):
-    return redirect("/courses/" + str(course_id) + "?auth=False")
+    return redirect(f"/courses/{str(course_id)}/?auth=False")
 
   if request.method == "PUT":
     database.edit_module_category_title(int(category_id), str(title))
     return "edited with success", 200
-  return redirect("/courses/" + str(course_id) + "?success")
+  return redirect(f"/courses/{str(course_id)}/?success")
 
 @app.route("/hide-course/<course_id>/", methods=["POST"])
 @login_required
 def hide_student_course(course_id: str):
   student_course = database.get_student_course(str(course_id))
   if not is_correct_teacher(course_id):
-    return redirect(f"/courses/{student_course.subject_id}/{student_course.id}")
+    return redirect(f"/courses/{student_course.subject_id}/{student_course.id}/")
   
   database.hide_student_course(str(course_id), request.form.get("hide") == "true")
 
-  return redirect(f"/courses/{student_course.subject_id}/{student_course.id}?success")
+  return redirect(f"/courses/{student_course.subject_id}/{student_course.id}/?success")
 
 @app.route("/comments/<student_id>/", methods=["POST", "DELETE", "GET", "PATCH"])
 @login_required
