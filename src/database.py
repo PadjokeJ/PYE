@@ -202,7 +202,7 @@ def create_user(name: str, surname: str, utype: str, pw: str, email: str, provid
       reset=True,
       name=surname,
       firstname=name,
-      student_id=dict()
+      student_id=list()
     )
 
   if utype == "Student":
