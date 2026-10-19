@@ -48,7 +48,7 @@
           </a>
           {% for category in mod.categories|sort(attribute='category.title') %}
           <p><b>{{ category.category.title }}</b>{% if category.passed %} -- <strong
-              style="color: var(--green);">réussi</strong> !{% else %}{% endif %}</p>
+              style="color: var(--green);">réussi</strong> !{% elif mod.focussed %}: <i style="color: var(--orange);">en cours !</i>{% endif %}</p>
           {% endfor %}
         </div>
       </div>
