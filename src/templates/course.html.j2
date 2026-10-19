@@ -138,8 +138,25 @@
       <ul class="modules">
         {% for mod in course.modules|sort(attribute='title') %}
         <li class="module">
-          <h3 style="text-align: center;">{{ mod.title }}</h3>
-          <button class="delete_mod" id="del_mod_{{ mod.id }}" style="border-radius: 5px 20px 5px 5px"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+          <h3 style="text-align: center;" id="span_cat_{{ mod.id }}">{{ mod.title }}</h3>
+          <input class="module_title" id="inp_cat_{{ mod.id }}" style="display: none; width: calc(100% - 105px);border-radius: 20px 5px 5px 5px;font-size: 20px;text-align: center;" value="{{ mod.title }}" autocomplete="off">
+
+          <button class="delete_mod" id="del_mod_{{ mod.id }}" style="border-radius: 5px 20px 5px 5px">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash">
+            <path d="M10 11v6"/>
+            <path d="M14 11v6"/>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+            <path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            </svg>
+          </button>
+          <button class="delete_mod" id="edit_cat_{{ mod.id }}" style="border-radius: 5px;right: 65px;">
+            <svg id="edit_cat_label_{{ mod.id }}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil">
+              <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/>
+            </svg>
+            <svg style="display: none;" id="edit_cat_submit_{{ mod.id }}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+          </button>
           <ul style="padding:0;margin:0;">
             {% for category in mod.categories|sort(attribute='title') %}
             <li class="lsmodule">
@@ -235,6 +252,34 @@
               });
             }
           });
+
+          let edit_cat_{{ mod.id }} = document.getElementById("edit_cat_{{ mod.id }}");
+          edit_cat_{{ mod.id }}.addEventListener("click", () => {
+            let span = document.getElementById("span_cat_{{ mod.id }}");
+            let inp = document.getElementById("inp_cat_{{ mod.id }}");
+            
+            let display = span.style.display;
+            span.style.display = inp.style.display;
+            document.getElementById("edit_cat_label_{{ mod.id }}").style.display = inp.style.display;
+
+            inp.style.display = display;
+            document.getElementById("edit_cat_submit_{{ mod.id }}").style.display = display;
+
+            if (display === "none") {
+              fetch("/edit-module/{{ course.id }}/{{ mod.id }}/title/" + inp.value + "/", {
+                method: "PUT"
+              }).then((res) => {
+                if (res.status === 200) {
+                  window.location.reload();
+                } else {
+                  alert(`Erreur ${res.status} en essayant de modifier le nom du module` );
+                }
+              }).catch((e) => {
+                alert(`Erreur ${e} en essaynt de modifier le nom du module`);
+              });
+            }
+          });
+
           let title_mod_{{ mod.id }} = document.getElementById("title_mod_{{mod.id}}");
           let sub_mod_{{ mod.id }} = document.getElementById("submit_mod_{{ mod.id }}");
           let span_forbidden_mod_{{ mod.id }} = document.getElementById("span_forbidden_mod_{{ mod.id }}");

@@ -458,6 +458,17 @@ def mod_module_category_title(course_id: int, category_id: int, title: str):
     return "edited with success", 200
   return redirect(f"/courses/{str(course_id)}/?success")
 
+@app.route("/edit-module/<course_id>/<module_id>/title/<title>/", methods=["PUT", "GET"])
+@login_required
+def mod_module_title(course_id: int, module_id: int, title: str):
+  if not is_correct_teacher(course_id):
+    return redirect(f"/courses/{str(course_id)}/?auth=False")
+
+  if request.method == "PUT":
+    database.edit_module_title(int(module_id), str(title))
+    return "edited with success", 200
+  return redirect(f"/courses/{str(course_id)}/?success")
+
 @app.route("/hide-course/<course_id>/", methods=["POST"])
 @login_required
 def hide_student_course(course_id: str):

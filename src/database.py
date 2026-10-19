@@ -29,8 +29,8 @@ class Teacher(Base):
 
   id: Mapped[int] = mapped_column(Integer, primary_key=True)
   user_email: Mapped[str] = mapped_column(ForeignKey("users.email"))
-  subjects: Mapped[List[Subject]] = relationship(secondary=teacher_x_subject, back_populates="teachers")
-  user: Mapped[UsersTable] = relationship(back_populates="teacher_data")
+  subjects: Mapped[List["Subject"]] = relationship(secondary=teacher_x_subject, back_populates="teachers")
+  user: Mapped["UsersTable"] = relationship(back_populates="teacher_data")
 
   super: Mapped[bool] = mapped_column(Boolean)
 
@@ -98,9 +98,9 @@ class Subject(Base):
   color: Mapped[int] = mapped_column(Integer)
   name: Mapped[str] = mapped_column(String)
   grade: Mapped[str] = mapped_column(String)
-  students: Mapped[List[StudentCourse]] = relationship(back_populates="subject")
+  students: Mapped[List["StudentCourse"]] = relationship(back_populates="subject")
   teachers: Mapped[List[Teacher]] = relationship(secondary=teacher_x_subject, back_populates="subjects")
-  modules: Mapped[List[SubjectModule]] = relationship(back_populates="subject")
+  modules: Mapped[List["SubjectModule"]] = relationship(back_populates="subject")
 
 class SubjectModule(Base):
   __tablename__ = "module"
@@ -532,6 +532,12 @@ def edit_comment(student_id, comment_id, comment):
 def edit_module_category_title(category_id: int, title: str):
   category = get_category(category_id)
   category.title = title
+
+  db.session.commit()
+
+def edit_module_title(module_id: int, title: str):
+  module = get_module(module_id)
+  module.title = title
 
   db.session.commit()
 
