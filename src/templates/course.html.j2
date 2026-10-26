@@ -341,7 +341,7 @@
             {% for category in mod.categories %}
             {% if not category.optional %}
             <div style="margin:5px;">
-              {{ category.category.title }}{% if category.passed %} -- <strong style="color: var(--green);">réussi</strong> !{% elif mod.focussed %}: <i style="color: var(--orange);">en cours !</i>{% endif %}<br>
+              {{ category.category.title }}{% if category.passed %} -- <strong style="color: var(--green);">réussi</strong> !{% elif category.focussed %}: <i style="color: var(--orange);">en cours !</i>{% endif %}<br>
             </div>
             {% endif %}
             {% endfor %}
