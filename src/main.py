@@ -280,6 +280,9 @@ def get_course(course_id: str):
       for sc in subject.students:
         if sc.student.user_email == flask_login.current_user.id:
           course = sc
+
+      if sc.hidden:
+        return redirect("/courses/")
     case "Parent":
       for s in subject.students:
         if str(s.student.id) in database.get_user(flask_login.current_user.id).student_id:
