@@ -369,7 +369,7 @@
           <div style="margin: 8px; padding: 10px; border-radius: 20px; box-shadow: var(--shadow) 4px 4px 20px">
             {% for category in mod.categories %}
             {% if not category.optional %}
-            <div style="margin:5px;">
+            <div style="margin:15px; 0">
               {{ category.category.title }}{% if category.passed %} -- <strong style="color: var(--green);">réussi</strong> !{% elif category.focussed %}: <i style="color: var(--orange);">en cours !</i>{% endif %}<br>
             </div>
             {% endif %}
