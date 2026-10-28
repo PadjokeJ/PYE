@@ -503,6 +503,15 @@ def del_module(module_id: int):
 
   db.session.commit()
 
+def del_course(course_id: int):
+  course = get_course(course_id)
+
+  for module in course.modules:
+    del_module(module)
+  
+  db.session.delete(course)
+  db.session.commit()
+
 def add_comment(student_id: int, comment: str):
   student_course = get_student_course(student_id)
 

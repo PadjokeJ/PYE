@@ -308,6 +308,35 @@
       </ul>
       </div>
 
+      <div class="visual_break">
+        <div style="display: flex;flex-direction: column;align-self: center;padding: 20px;width: 400px;box-shadow: var(--shadow) 5px 5px 20px;border-radius: 20px;background-color: var(--background);margin: 30px 0;">
+          <h2 style="color: #ff0000; margin-top:0;">Zone dangereuse</h2>
+          <button style="color: #ff0000;" id="del_subject">Supprimer le cours</button>
+          <script>
+          let del_dangerous = document.getElementById("del_subject");
+
+          del_dangerous.addEventListener("click", () => {
+            let del_confirm = prompt("Veuillez écrire \"SUPPRIMER\" pour supprimer définitivement le cours {{ course.name }}");
+            if (del_confirm = "SUPPRIMER") {
+              fetch("/courses/{{ course.id }}/", {
+                method: "DELETE"
+              },)
+              .then((res) => {
+                if (res.status === 200) {
+                  window.location.href = "/courses/";
+                } else {
+                  alert(`Erreur ${res.status} en essayant de supprimer le cours` );
+                }
+              })
+              .catch((e) => {
+                alert(`Erreur ${e} en essaynt de supprimer le cours`);
+              });
+            }
+          });
+          </script>
+        </div>
+      </div>
+
       {% endif %}
       </div>
 

@@ -267,6 +267,16 @@ def course_access():
 
   return render_template("courses.html.j2", courses=courses)
 
+@app.route("/courses/<course_id>/", methods=["DELETE"])
+@login_required
+def del_course(course_id: int):
+  if not is_correct_teacher(str(course_id)):
+    return "You cannot delete this course", 403
+  
+  database.del_course(course_id)
+
+  return "course deleted successfully"
+
 @app.route("/courses/<course_id>/")
 @login_required
 def get_course(course_id: str):
