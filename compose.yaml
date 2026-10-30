@@ -1,6 +1,6 @@
 services:
   pye:
-    build: .
+    build: "https://github.com/PadjokeJ/PYE.git"
     restart: unless-stopped
     hostname: pye
     ports:
