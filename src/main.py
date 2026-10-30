@@ -394,7 +394,7 @@ def update_student_category_progress(cat_id: str):
   module = cat.student_module
 
   if request.method == "GET":
-    return redirect(f"/courses/{module.subject.subject.id}/{module.student_course_id}/?success")
+    return redirect(f"/courses/{module.subject.subject.id}/{module.student_course_id}/{module.id}/?success")
 
   if not is_correct_teacher(module.student_course.subject_id):
     return redirect("/courses/")
@@ -405,7 +405,7 @@ def update_student_category_progress(cat_id: str):
 
   database.modify_student_category(str(cat_id), opt, pas, foc)
 
-  return redirect(f"/courses/{module.subject.subject.id}/{module.student_course_id}/?success")
+  return redirect(f"/courses/{module.subject.subject.id}/{module.student_course_id}/{module.id}/?success")
 
 @app.route("/add-to-course/<course_id>/", methods=["POST", "GET"])
 @login_required
