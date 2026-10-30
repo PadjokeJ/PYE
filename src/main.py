@@ -302,7 +302,7 @@ def get_course(course_id: str):
   
   return render_template("course.html.j2", course=course, all_students=database.all_students())
 
-@app.route("/courses/<course_id>/title/<color>/<title>", methods=["GET", "POST"])
+@app.route("/courses/<course_id>/title/<color>/<title>/", methods=["GET", "POST"])
 @login_required
 def modify_course_title(course_id: str, color: str, title: str):
   courses = database.get_courses(flask_login.current_user.id)

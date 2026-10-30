@@ -46,6 +46,8 @@
 
               document.getElementById("modify-color").style.transition = "background-color ease 0.5s";
             }, 200);
+          } else {
+            alert(`Une erreur s'est produite en essayant de modifier la couleur : ${res.status}`);
           }
         });
       });
