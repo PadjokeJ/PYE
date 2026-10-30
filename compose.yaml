@@ -3,6 +3,16 @@ services:
     build: "https://github.com/PadjokeJ/PYE.git"
     restart: unless-stopped
     hostname: pye
+    environment:
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PW: ${ADMIN_PW}
+      SERVICE_EMAIL: ${SERVICE_EMAIL}
+      SERVICE_EMAIL_PASSWORD: ${SERVICE_EMAIL_PASSWORD}
+      SERVICE_SERVER: ${SERVICE_SERVER}
+      SERVICE_PORT: ${SERVICE_PORT}
+      PSQL_HOSTNAME: ${PSQL_HOSTNAME}
+      PSQL_PW: ${PSQL_PW}
+      SECRET: ${SECRET}
     ports:
       - "5000:8080"
     depends_on:
