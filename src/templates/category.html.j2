@@ -40,7 +40,7 @@
   <h2 style="text-align: center;">Modules</h2>
   <div class="tile_container">
     {% for c in category.categories|sort(attribute='category.title') %}
-    <form action="/student/category/{{ c.id }}/" method="POST" class="student_inner">
+    <form action="/student/category/{{ c.id }}/" method="POST" class="student_inner modules">
       <h2 style="text-align: center;">{{ c.category.title }}</h2>
       <div style="align-items:center; display:flex;">
         <label for="passed">Module réussi :</label>
@@ -66,6 +66,37 @@
     </script>
     {% endfor %}
   </div>
+  <div style="display: flex; justify-content: center;">
+    <div class="student_inner" style="border-radius:40px; height: 40px; justify-content: center;">
+      <button id="submit_all">Tout valider</button>
+    </div>
+  </div>
+  <script>
+  document.getElementById("submit_all").addEventListener("click", () => {
+    let targets = document.getElementsByClassName("modules");
+    for (let k = 0; k < targets.length; k++) {
+      let a = targets[k];
+      let formData = new FormData();
+      for (let i = 0; i < a.getElementsByTagName("input").length; i++) {
+        let j = (a.getElementsByTagName("input")[i]);
+        if (j.checked) {
+          formData.append(j.value, j.value);
+        }
+        formData.append("submit", "Mettre à jour");
+      }
+      fetch(a.action, {
+        method: "POST",
+        body: formData,
+      }).then((res) => {
+        if (res.status === 200) {
+          window.location.reload();
+        } else {
+          console.log("Une erreur c'est déroulée en validant tous les modules : " + res.status);
+        }
+      })
+    }
+  })
+</script>
   </div>
 </div>
 </div>
