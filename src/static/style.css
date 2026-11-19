@@ -5,6 +5,7 @@
   --shadow: #00000055;
   --green: #2a4;
   --orange: #a81818;
+  --yellow: #dbcc48;
 }
 
 html, body {
@@ -192,7 +193,7 @@ progress.class-passed {
 }
 
 progress:not(.class-passed) {
-  accent-color: var(--orange);
+  accent-color: var(--yellow);
 }
 
 .modules {
